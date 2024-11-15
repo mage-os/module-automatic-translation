@@ -42,8 +42,9 @@ class OpenAI implements TranslatorInterface
     {
         $apiKey = $this->moduleConfig->getOpenAIApiKey();
         $organization = $this->moduleConfig->getOpenAIOrgID();
+        $projectId = $this->moduleConfig->getOpenAIProjectID();
 
-        $this->translator = $this->openAITranslator::client($apiKey, $organization);
+        $this->translator = $this->openAITranslator::client($apiKey, $organization, !empty($projectId) ? $projectId : null);
     }
 
     /**

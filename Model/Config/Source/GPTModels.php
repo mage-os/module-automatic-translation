@@ -42,8 +42,9 @@ class GPTModels implements OptionSourceInterface
     {
         $apiKey = $this->moduleConfig->getOpenAIApiKey();
         $organization = $this->moduleConfig->getOpenAIOrgID();
+        $projectId = $this->moduleConfig->getOpenAIProjectID();
 
-        $this->openAIclient = $this->openAI::client($apiKey, $organization);
+        $this->openAIclient = $this->openAI::client($apiKey, $organization, !empty($projectId) ? $projectId : null);
     }
 
     /**

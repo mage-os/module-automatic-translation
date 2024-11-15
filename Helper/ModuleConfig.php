@@ -31,6 +31,7 @@ class ModuleConfig extends AbstractHelper
     const DEEPL_AUTH_KEY = self::ENGINE_GROUP . '/deepl_auth_key';
     const OPEN_AI_ORG_ID = self::ENGINE_GROUP . '/openai_org_id';
     const OPEN_AI_API_KEY = self::ENGINE_GROUP . '/openai_api_key';
+    const OPEN_AI_PROJECT_ID = self::ENGINE_GROUP . '/openai_project_id';
     const OPEN_AI_MODEL = self::ENGINE_GROUP . '/openai_model';
 
     /**
@@ -135,6 +136,14 @@ class ModuleConfig extends AbstractHelper
     public function getOpenAIApiKey(): string
     {
         return (string)$this->scopeConfig->getValue(self::OPEN_AI_API_KEY, ScopeInterface::SCOPE_STORE, 0);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOpenAIProjectId(): string
+    {
+        return (string)$this->scopeConfig->getValue(self::OPEN_AI_PROJECT_ID, ScopeInterface::SCOPE_STORE, 0);
     }
 
     /**
