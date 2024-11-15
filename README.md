@@ -87,4 +87,4 @@ The module provides several configuration options under **Stores > Configuration
 To add a new translation engine, you need to:
 1. Create a class implementing `MageOS\AutomaticTranslation\Api\TranslatorInterface`.
 2. Extend the module to add the new engine's API configuration in `system.xml`.
-3. Add am after plugin to modify the list of selectable engines in `\MageOS\AutomaticTranslation\Model\Config\Source\TranslationEngineList::toOptionArray`.
+3. Add an after plugin to modify the list of selectable engines in `\MageOS\AutomaticTranslation\Model\Config\Source\TranslationEngineList::toOptionArray`.

@@ -90,7 +90,7 @@
                 </field>
                 <field id="deepl_auth_key" translate="label comment" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>DeepL auth key</label>
-                    <comment>Get you auth key here: https://www.deepl.com/it/account/summary</comment>
+                    <comment>Get you auth key here: https://www.deepl.com/it/your-account/keys</comment>
                     <depends>
                         <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\DeepL</field>
                     </depends>
