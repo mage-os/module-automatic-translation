@@ -68,9 +68,8 @@ class ProductTranslator implements ProductTranslatorInterface
         /** @var $product DataObject|ProductInterface */
         $attributesToTranslate = $this->moduleConfig->getProductTxtAttributeToTranslate($storeId);
 
-        foreach ($attributesToTranslate as $attribute) {
-            $attributeCode = $attribute['value'];
-
+        foreach ($attributesToTranslate as $attributeCode) {
+            
             $textToTranslate = $product->getData($attributeCode);
 
             if (!empty($textToTranslate)) {
