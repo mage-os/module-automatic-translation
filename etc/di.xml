@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- SERVICE CONTRACT -->
+    <preference for="MageOS\AutomaticTranslation\Api\TranslatorInterface" type="MageOS\AutomaticTranslation\Model\Translator"/>
+    <preference for="MageOS\AutomaticTranslation\Api\ProductTranslatorInterface" type="MageOS\AutomaticTranslation\Service\ProductTranslator"/>
+    <preference for="MageOS\AutomaticTranslation\Api\TranslateProductsInterface" type="MageOS\AutomaticTranslation\Service\TranslateProducts"/>
+    <preference for="MageOS\AutomaticTranslation\Api\TranslateSelectAttributesInterface" type="MageOS\AutomaticTranslation\Service\TranslateSelectAttributes"/>
+
+    <!-- CRON VIRTUAL TYPE -->
+    <virtualType name="MageOS\AutomaticTranslation\Model\Config\SelectAttributeCron" type="MageOS\AutomaticTranslation\Model\Config\CatalogCron">
+        <arguments>
+            <argument name="expression" xsi:type="string">groups/catalog/fields/select_attribute_translation_cron/value</argument>
+            <argument name="cronStringPath" xsi:type="string">crontab/translate_select_attributes/jobs/mageos_translate_select_attributes/schedule/cron_expr</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- CONSOLE COMMAND FOR TEST -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="mageos_automatictranslation_test" xsi:type="object">MageOS\AutomaticTranslation\Console\Command\TestTranslation</item>
+                <item name="mageos_automatictranslation_test_procedure" xsi:type="object">MageOS\AutomaticTranslation\Console\Command\TestProcedure</item>
+                <item name="mageos_automatictranslation_select_attribute_test" xsi:type="object">MageOS\AutomaticTranslation\Console\Command\SelectAttributeTest</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- CUSTOM LOG -->
+    <virtualType name="MageOS\AutomaticTranslation\Product\LoggerHanlder" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/translate-product.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MageOS\AutomaticTranslation\Product\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">MageOS\AutomaticTranslation\Product\LoggerHanlder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="MageOS\AutomaticTranslation\Api\ProductTranslatorInterface">
+        <arguments>
+            <argument name="logger" xsi:type="object">MageOS\AutomaticTranslation\Product\Logger</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="MageOS\AutomaticTranslation\SelectAttribute\LoggerHanlder" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/translate-attribute.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MageOS\AutomaticTranslation\SelectAttribute\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">MageOS\AutomaticTranslation\SelectAttribute\LoggerHanlder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="MageOS\AutomaticTranslation\Api\TranslateSelectAttributesInterface">
+        <arguments>
+            <argument name="logger" xsi:type="object">MageOS\AutomaticTranslation\SelectAttribute\Logger</argument>
+        </arguments>
+    </type>
+    <type name="MageOS\AutomaticTranslation\Plugin\AdinhtmlProductBeforeSavePlugin">
+        <arguments>
+            <argument name="logger" xsi:type="object">MageOS\AutomaticTranslation\SelectAttribute\Logger</argument>
+        </arguments>
+    </type>
+
+</config>

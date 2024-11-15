@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <referenceContainer name="content">
+        <block class="MageOS\AutomaticTranslation\Block\Adminhtml\TranslationPopup"
+               name="mageos.translation.popup"
+               template="MageOS_AutomaticTranslation::translation-popup.phtml">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="mageos-translation-popup" xsi:type="array">
+                            <item name="component" xsi:type="string">MageOS_AutomaticTranslation/js/translation-popup</item>
+                            <item name="config" xsi:type="array">
+                                <item name="type" xsi:type="string">Page</item>
+                                <item name="scope" xsi:type="string">cms_page_form.cms_page_form</item>
+                                <item name="allowedFields" xsi:type="array">
+                                    <item name="title" xsi:type="string">Title</item>
+                                    <item name="content_heading" xsi:type="string">Content Heading</item>
+                                    <item name="content" xsi:type="string">Content</item>
+                                    <item name="meta_title" xsi:type="string">Meta Title</item>
+                                    <item name="meta_keywords" xsi:type="string">Meta Keywords</item>
+                                    <item name="meta_description" xsi:type="string">Meta Description</item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </block>
+    </referenceContainer>
+</layout>

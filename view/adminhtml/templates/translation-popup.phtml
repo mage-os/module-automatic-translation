@@ -1,0 +1,11 @@
+<?php
+/** @var TranslationPopup $block */
+use MageOS\AutomaticTranslation\Block\Adminhtml\TranslationPopup; ?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout();?>
+        }
+    }
+ </script>

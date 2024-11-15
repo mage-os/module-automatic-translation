@@ -1,0 +1,39 @@
+{
+    "name": "mage-os/module-automatic-translation",
+    "version": "1.0.0",
+    "description": "Automatic AI content translation for Mage-OS.",
+    "type": "magento2-module",
+    "license": [
+        "MIT"
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://mirror.mage-os.org"
+        }
+    ],
+    "require": {
+        "magento/framework": "*",
+        "magento/module-catalog": "104.0.*",
+        "deeplcom/deepl-php": "^1.4.0",
+        "openai-php/client": "^0.6.2"
+    },
+    "authors": [
+        {
+            "name": "Samuele Martini",
+            "email": "samuele.rw@gmail.com"
+        },
+        {
+            "name": "Davide Lunardon",
+            "email": "dadolun@gmail.com"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "MageOS\\AutomaticTranslation\\": ""
+        }
+    }
+}

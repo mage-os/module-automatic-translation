@@ -1,0 +1,47 @@
+<% if(data.languages){ %>
+<div class="languages">
+    <fieldset class="admin__fieldset" >
+        <div class="admin__field _required" >
+            <div class="admin__field-label">
+                <label for="mageos-translation-language">
+                    <span><%= data.languageLabel %></span>
+                </label>
+            </div>
+            <div class="admin__field-control">
+                <select class="admin__control-select" id="mageos-translation-language">
+                    <% _.each(data.languages, function(language) { %>
+                    <option
+                    <% if(language.selected){ %>selected <% } %>
+                    value="<%= language.value %>"><%= language.label %></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<% } %>
+
+<% if(data.fields){ %>
+<div class="fields">
+    <fieldset class="admin__fieldset" >
+        <div class="admin__field _required" >
+            <div class="admin__field-label">
+                <label for="mageos-translation-fields">
+                    <span><%= data.fieldLabel %></span>
+                </label>
+            </div>
+            <div class="admin__field-control">
+                <div id="mageos-translation-fields">
+                    <% _.each(data.fields, function(field, key) { %>
+                    <input type="checkbox"
+                    name="field[]" value="<%= key %>" />
+                    <label for="<%= key %>"><%= field %></label><br>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<% } %>
+
+<input type="hidden" name="scope" value="<%= data.scope %>" id="mageos-translation-scope" />
