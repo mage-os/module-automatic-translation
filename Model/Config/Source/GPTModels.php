@@ -64,7 +64,7 @@ class GPTModels implements OptionSourceInterface
                 foreach ($models['data'] as $model) {
                     $optionArray[] = [
                         'value' => $model['id'],
-                        'label' => $model['root']
+                        'label' => $model['id']
                     ];
                 }
             } catch (Exception $e) {
