@@ -4,7 +4,7 @@ namespace MageOS\AutomaticTranslation\Model;
 
 use MageOS\AutomaticTranslation\Api\TranslatorInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Magento\Framework\ObjectManagerInterface;
+use MageOS\AutomaticTranslation\Model\Translator\TranslatorFactory;
 
 class Translator implements TranslatorInterface
 {
@@ -14,20 +14,20 @@ class Translator implements TranslatorInterface
      */
     protected ModuleConfig $moduleConfig;
     /**
-     * @var ObjectManagerInterface
+     * @var TranslatorFactory
      */
-    protected ObjectManagerInterface $objectManager;
+    protected TranslatorFactory $translatorFactory;
 
     /**
      * @param ModuleConfig $moduleConfig
-     * @param ObjectManagerInterface $objectManager
+     * @param TranslatorFactory $translatorFactory
      */
     public function __construct(
         ModuleConfig $moduleConfig,
-        ObjectManagerInterface $objectManager
+        TranslatorFactory $translatorFactory
     ) {
         $this->moduleConfig = $moduleConfig;
-        $this->objectManager = $objectManager;
+        $this->translatorFactory = $translatorFactory;
     }
 
     /**
@@ -36,7 +36,7 @@ class Translator implements TranslatorInterface
     protected function initTranslator()
     {
         $engineClass = $this->moduleConfig->getEngineForTranslation();
-        $this->translator = $this->objectManager->create($engineClass);
+        $this->translator = $this->translatorFactory->create($engineClass);
     }
 
     /**
