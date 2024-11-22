@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **MageOS Automatic Translation** module allows you to automatically translate content in your Magento store, such as products, categories, pages, and static blocks, using AI-based translation engines. The module is natively integrated with DeepL and OpenAI, but it can be easily extended to support other translation engines.
+The **MageOS Automatic Translation** module allows you to automatically translate content in your Magento store, such as products, categories, pages, and static blocks, using AI-based translation engines. The module is natively integrated with DeepL, OpenAI and Google Gemini, but it can be easily extended to support other translation engines.
 
 ## Installation
 
@@ -58,7 +58,7 @@ However, if the merchant changes the basic content of the product after translat
 If, however, there are many products to be retranslated or the underlying content changes frequently, it may be useful to enable automatic retranslation. When enabled, this feature also includes products with the "skip translation" attribute set to "yes" in the translation process if the date in the "last translation date" attribute is older than a specified number of days, which can be configured in the settings.
 
 ### Translation Engines
-- **DeepL** and **OpenAI** are the supported engines by default. You can easily extend the module to support additional translation engines by creating a class that implements the `MageOS\AutomaticTranslation\Api\TranslatorInterface`.
+- **DeepL**, **OpenAI** and **Google Gemini** are the supported engines by default. You can easily extend the module to support additional translation engines by creating a class that implements the `MageOS\AutomaticTranslation\Api\TranslatorInterface`.
 - The engine is selected under **Stores > Configuration > MageOS > Automatic translation with AI > Translation engine**.
 
 ### Configuration Options
@@ -79,9 +79,9 @@ The module provides several configuration options under **Stores > Configuration
 - **Enable Periodic Retranslation & Retranslation Period (in days)**: Enables automatic retranslation for products if their translation is outdated (older than a set number of days).
 
 #### Translation Engine Configuration
-- **Engine**: Choose the translation engine (DeepL or OpenAI).
+- **Engine**: Choose the translation engine (DeepL or OpenAI or Google Gemini).
 - **API Credentials**: Configure API credentials for the selected engine.
-- **Model Language** (for OpenAI): This field is dynamic and will be populated once valid API credentials are entered.
+- **Model Language** (for OpenAI & Google Gemini): This field is dynamic and will be populated once valid API credentials are entered.
 
 ### Adding Additional Translation Engines
 To add a new translation engine, you need to:
