@@ -7,9 +7,11 @@
     ],
     "require": {
         "magento/framework": "*",
-        "magento/module-catalog": "104.0.*",
+        "magento/module-catalog": "^104.0.0",
         "deeplcom/deepl-php": "^1.4.0",
-        "openai-php/client": "^0.6.2"
+        "openai-php/client": "^0.6.2",
+        "google-gemini-php/client": "^1.0.14",
+        "guzzlehttp/guzzle": "^7.9"
     },
     "authors": [
         {
