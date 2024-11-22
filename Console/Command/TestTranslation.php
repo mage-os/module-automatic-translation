@@ -6,18 +6,18 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use MageOS\AutomaticTranslation\Model\Translator as DeepL;
+use MageOS\AutomaticTranslation\Model\Translator;
 use Exception;
 
 class TestTranslation extends Command
 {
-    protected DeepL $deepL;
+    protected Translator $translator;
 
     public function __construct(
-        DeepL $deepL,
+        Translator $translator,
         $name = null
     ) {
-        $this->deepL = $deepL;
+        $this->translator = $translator;
         parent::__construct($name);
     }
 
@@ -27,7 +27,7 @@ class TestTranslation extends Command
     protected function configure()
     {
         $this->setName('mage-os:translation:test');
-        $this->setDescription('Command to test Translation with DeepL');
+        $this->setDescription('Command to test Translation');
         $this->addOption(
             'text',
             't',
@@ -64,7 +64,7 @@ class TestTranslation extends Command
         $targetlang = $input->getOption('targetlang');
         $sourcelang = (!empty($input->getOption('sourcelang'))) ? $input->getOption('sourcelang') : null;
 
-        $output->writeln($this->deepL->translate($text, $targetlang, $sourcelang));
+        $output->writeln($this->translator->translate($text, $targetlang, $sourcelang));
 
         return 0;
     }
