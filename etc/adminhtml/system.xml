@@ -43,7 +43,8 @@
                         Options will always be translated for these types of attributes if they are empty.
                         The automatic retranslation enabled below has no effect on these attributes.
                         To retranslate options for these attributes you must go into the attribute management and empty the translation for the store view of interest.
-                        Attribute options will not be translated for store views where the module is disabled in the general configurations.</comment>
+                        Attribute options will not be translated for store views where the module is disabled in the general configurations.
+                    </comment>
                     <validate>required-entry validate-no-empty</validate>
                 </field>
 
@@ -58,7 +59,8 @@
                     <label>Retranslation period (in days)</label>
                     <comment>Indicate after how long a product should be translated again, even if it is flagged as "already translated."
                         The calculation is based on the "Last translation date" attribute,
-                        which indicates the date and time of the last translation for each product.</comment>
+                        which indicates the date and time of the last translation for each product.
+                    </comment>
                     <depends>
                         <field id="automatic_translation/catalog/enable_periodic_retranslation">1</field>
                     </depends>
@@ -122,11 +124,27 @@
                     </depends>
                 </field>
                 <field id="openai_model" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>OpenAI GPT model language</label>
+                    <label>OpenAI GPT model</label>
                     <source_model>MageOS\AutomaticTranslation\Model\Config\Source\GPTModels</source_model>
                     <comment>Insert api key and organization ID and save to see options. Refer to the documentation to understand which model you should select: https://platform.openai.com/docs/models/overview</comment>
                     <depends>
                         <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
+                    </depends>
+                </field>
+                <field id="gemini_api_key" translate="label comment" type="password" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Gemini API key</label>
+                    <comment>Get you API key here: https://aistudio.google.com/apikey</comment>
+                    <depends>
+                        <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
+                    </depends>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="gemini_model" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Google Gemini model</label>
+                    <source_model>MageOS\AutomaticTranslation\Model\Config\Source\GeminiModels</source_model>
+                    <comment>Insert API key and save to see options. Refer to the documentation to understand which model you should select: https://ai.google.dev/gemini-api/docs/models/gemini</comment>
+                    <depends>
+                        <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
                     </depends>
                 </field>
             </group>

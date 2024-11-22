@@ -33,6 +33,8 @@ class ModuleConfig extends AbstractHelper
     const OPEN_AI_API_KEY = self::ENGINE_GROUP . '/openai_api_key';
     const OPEN_AI_PROJECT_ID = self::ENGINE_GROUP . '/openai_project_id';
     const OPEN_AI_MODEL = self::ENGINE_GROUP . '/openai_model';
+    const GEMINI_API_KEY = self::ENGINE_GROUP . '/gemini_api_key';
+    const GEMINI_MODEL = self::ENGINE_GROUP . '/gemini_model';
 
     /**
      * @param int $storeId
@@ -160,5 +162,21 @@ class ModuleConfig extends AbstractHelper
     public function getOpenAIModel(): string
     {
         return (string)$this->scopeConfig->getValue(self::OPEN_AI_MODEL, ScopeInterface::SCOPE_STORE, 0);
+    }
+
+    /**
+     * @return string
+     */
+    public function getGeminiApiKey(): string
+    {
+        return (string)$this->scopeConfig->getValue(self::GEMINI_API_KEY, ScopeInterface::SCOPE_STORE, 0);
+    }
+
+    /**
+     * @return string
+     */
+    public function getGeminiModel(): string
+    {
+        return (string)$this->scopeConfig->getValue(self::GEMINI_MODEL, ScopeInterface::SCOPE_STORE, 0);
     }
 }

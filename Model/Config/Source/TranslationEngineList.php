@@ -22,7 +22,11 @@ class TranslationEngineList implements OptionSourceInterface
             ],
             [
                 'value' => \MageOS\AutomaticTranslation\Model\Translator\OpenAI::class,
-                'label' => __('OpenAI (GPT-3, GTP-4, ChatGPT, ecc..)')
+                'label' => __('OpenAI (GPT, ChatGPT, ecc..)')
+            ],
+            [
+                'value' => \MageOS\AutomaticTranslation\Model\Translator\GoogleGemini::class,
+                'label' => __('Google Gemini')
             ]
         ];
     }
