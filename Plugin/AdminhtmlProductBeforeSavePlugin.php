@@ -15,31 +15,30 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class AdminhtmlProductBeforeSavePlugin
 {
-
     /**
      * @var ModuleConfig
      */
-    private ModuleConfig $moduleConfig;
+    protected ModuleConfig $moduleConfig;
 
     /**
      * @var Service
      */
-    private Service $serviceHelper;
+    protected Service $serviceHelper;
 
     /**
      * @var Translator
      */
-    private Translator $translator;
+    protected Translator $translator;
 
     /**
      * @var ManagerInterface
      */
-    private ManagerInterface $messageManager;
+    protected ManagerInterface $messageManager;
 
     /**
      * @var Logger
      */
-    private Logger $logger;
+    protected Logger $logger;
 
     /**
      * AdminhtmlProductBeforeSavePlugin constructor.
@@ -55,8 +54,7 @@ class AdminhtmlProductBeforeSavePlugin
         Translator $translator,
         ManagerInterface $messageManager,
         Logger $logger
-    )
-    {
+    ) {
         $this->moduleConfig = $moduleConfig;
         $this->serviceHelper = $serviceHelper;
         $this->translator = $translator;
@@ -73,15 +71,21 @@ class AdminhtmlProductBeforeSavePlugin
         try {
             $request = $subject->getRequest();
             $requestPostValue = $request->getPostValue();
+
             if ($request->getParam('translate') === "true") {
                 $storeId = $request->getParam('store', 0);
                 $sourceLanguage = $this->moduleConfig->getSourceLanguage();
                 $destinationLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
+
                 if ($sourceLanguage !== $destinationLanguage) {
                     $txtAttributesToTranslate = $this->moduleConfig->getProductTxtAttributeToTranslate($storeId);
+
                     foreach ($txtAttributesToTranslate as $attributeCode) {
                         if (isset($requestPostValue["product"][$attributeCode]) && is_string($requestPostValue["product"][$attributeCode])) {
+                            $originalValue = $requestPostValue["product"][$attributeCode];
+
                             $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue["product"][$attributeCode]);
+
                             if (is_string($parsedContent)) {
                                 $requestPostValue["product"][$attributeCode] = $this->translator->translate(
                                     $parsedContent,
@@ -94,15 +98,25 @@ class AdminhtmlProductBeforeSavePlugin
                                         $parsedString["source"],
                                         $destinationLanguage
                                     );
+
                                     $requestPostValue["product"][$attributeCode] = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue["product"][$attributeCode]);
                                 }
+
                                 $requestPostValue["product"][$attributeCode] = $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue["product"][$attributeCode]);
                             }
+
                             if ($attributeCode === 'url_key') {
-                                $requestPostValue["product"][$attributeCode] = strtolower(preg_replace('#[^0-9a-z]+#i', '-',$requestPostValue["product"][$attributeCode]));
+                                $requestPostValue["product"][$attributeCode] = strtolower(preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue["product"][$attributeCode]));
+                            }
+
+                            $translatedValue = $requestPostValue["product"][$attributeCode];
+
+                            if ($originalValue !== $translatedValue) {
+                                $requestPostValue['use_default'][$attributeCode] = '0';
                             }
                         }
                     }
+
                     $request->setPostValue($requestPostValue);
                 }
             }

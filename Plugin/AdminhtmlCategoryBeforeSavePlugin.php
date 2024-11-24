@@ -15,7 +15,6 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class AdminhtmlCategoryBeforeSavePlugin
 {
-
     const CATEGORY_TRANSLATABLE_ATTRIBUTES = [
         'name',
         'description',
@@ -28,31 +27,32 @@ class AdminhtmlCategoryBeforeSavePlugin
     /**
      * @var ModuleConfig
      */
-    private ModuleConfig $moduleConfig;
+    protected ModuleConfig $moduleConfig;
 
     /**
      * @var Service
      */
-    private Service $serviceHelper;
+    protected Service $serviceHelper;
 
     /**
      * @var Translator
      */
-    private Translator $translator;
+    protected Translator $translator;
 
     /**
      * @var ManagerInterface
      */
-    private ManagerInterface $messageManager;
+    protected ManagerInterface $messageManager;
 
     /**
      * @var Logger
      */
-    private Logger $logger;
+    protected Logger $logger;
 
     /**
      * AdminhtmlProductBeforeSavePlugin constructor.
      * @param ModuleConfig $moduleConfig
+     * @param Service $serviceHelper
      * @param Translator $translator
      * @param ManagerInterface $messageManager
      * @param Logger $logger
@@ -81,15 +81,19 @@ class AdminhtmlCategoryBeforeSavePlugin
         try {
             $request = $subject->getRequest();
             $requestPostValue = $request->getPostValue();
+
             if ($request->getParam('translate') === "true") {
                 $storeId = $request->getParam('store_id', 0);
                 $sourceLanguage = $this->moduleConfig->getSourceLanguage();
                 $destinationLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
+
                 if ($sourceLanguage !== $destinationLanguage) {
                     $attributesToTranslate = self::CATEGORY_TRANSLATABLE_ATTRIBUTES;
+
                     foreach ($attributesToTranslate as $attributeCode) {
                         if (isset($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
                             $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue[$attributeCode]);
+
                             if (is_string($parsedContent)) {
                                 $requestPostValue[$attributeCode] = $this->translator->translate(
                                     $parsedContent,
@@ -102,18 +106,23 @@ class AdminhtmlCategoryBeforeSavePlugin
                                         $parsedString["source"],
                                         $destinationLanguage
                                     );
+
                                     $requestPostValue[$attributeCode] = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue[$attributeCode]);
                                 }
+
                                 $requestPostValue[$attributeCode] = $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue[$attributeCode]);
                             }
+
                             if ($attributeCode === 'url_key') {
                                 $requestPostValue[$attributeCode] = strtolower(preg_replace('#[^0-9a-z]+#i', '-',$requestPostValue[$attributeCode]));
                             }
+
                             if (isset($requestPostValue["use_default"][$attributeCode])) {
                                 $requestPostValue["use_default"][$attributeCode] = "0";
                             }
                         }
                     }
+
                     $request->setPostValue($requestPostValue);
                 }
             }

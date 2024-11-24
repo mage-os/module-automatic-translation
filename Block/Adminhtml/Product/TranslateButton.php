@@ -18,7 +18,7 @@ class TranslateButton extends Generic
     /**
      * @var ModuleConfig
      */
-    private ModuleConfig $moduleConfig;
+    protected ModuleConfig $moduleConfig;
 
     /**
      * TranslateButton constructor.
