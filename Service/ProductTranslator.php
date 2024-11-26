@@ -69,24 +69,27 @@ class ProductTranslator implements ProductTranslatorInterface
         $attributesToTranslate = $this->moduleConfig->getProductTxtAttributeToTranslate($storeId);
 
         foreach ($attributesToTranslate as $attributeCode) {
-            
             $textToTranslate = $product->getData($attributeCode);
 
             if (!empty($textToTranslate)) {
                 try {
                     $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($textToTranslate);
+
                     if (is_string($parsedContent)) {
                         $textTranslated = $this->translator->translate($textToTranslate, $targetLanguage, $sourceLanguage);
                     } else {
                         $textToTranslate = html_entity_decode(htmlspecialchars_decode($textToTranslate));
                         $textTranslated = $textToTranslate;
+
                         foreach ($parsedContent as $parsedString) {
                             $parsedString["translation"] = $this->translator->translate(
                                 $parsedString["source"],
                                 $targetLanguage
                             );
+
                             $textTranslated = str_replace($parsedString["source"], $parsedString["translation"], $textTranslated);
                         }
+
                         $textTranslated = $this->serviceHelper->encodePageBuilderHtmlBox($textTranslated);
                     }
 
