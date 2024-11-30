@@ -20,6 +20,9 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
 use Exception;
 
+/**
+ * Class TranslateSelectAttributes
+ */
 class TranslateSelectAttributes implements TranslateSelectAttributesInterface
 {
     /**
@@ -64,6 +67,7 @@ class TranslateSelectAttributes implements TranslateSelectAttributesInterface
     protected Logger $logger;
 
     /**
+     * TranslateSelectAttributes constructor.
      * @param ServiceHelper $serviceHelper
      * @param StoreManagerInterface $storeManager
      * @param ModuleConfig $moduleConfig

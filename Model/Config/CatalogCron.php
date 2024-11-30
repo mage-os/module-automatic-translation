@@ -12,6 +12,9 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\App\Config\ValueFactory;
 use Exception;
 
+/**
+ * Class CatalogCron
+ */
 class CatalogCron extends Value
 {
     /**
@@ -28,6 +31,7 @@ class CatalogCron extends Value
     protected $cronStringPath;
 
     /**
+     * CatalogCron constructor.
      * @param Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config

@@ -1,12 +1,16 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="translate_products">
-        <job name="mageos_translate_products" instance="MageOS\AutomaticTranslation\Cron\TranslateProducts" method="execute">
+        <job name="mageos_translate_products"
+             instance="MageOS\AutomaticTranslation\Cron\TranslateProducts"
+             method="execute">
             <config_path>crontab/translate_products/jobs/mageos_translate_products/schedule/cron_expr</config_path>
         </job>
     </group>
     <group id="translate_select_attributes">
-        <job name="mageos_translate_select_attributes" instance="MageOS\AutomaticTranslation\Cron\TranslateSelectAttributes" method="execute">
+        <job name="mageos_translate_select_attributes"
+             instance="MageOS\AutomaticTranslation\Cron\TranslateSelectAttributes"
+             method="execute">
             <config_path>crontab/translate_select_attributes/jobs/mageos_translate_select_attributes/schedule/cron_expr</config_path>
         </job>
     </group>

@@ -2,6 +2,9 @@
 
 namespace MageOS\AutomaticTranslation\Api;
 
+/**
+ * Interface TranslateSelectAttributesInterface
+ */
 interface TranslateSelectAttributesInterface
 {
     /**

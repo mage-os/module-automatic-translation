@@ -17,6 +17,9 @@ use Magento\Framework\DataObject;
 use Magento\Catalog\Api\Data\ProductInterface;
 use MageOS\AutomaticTranslation\Api\ProductTranslatorInterface;
 
+/**
+ * Class TranslateProducts
+ */
 class TranslateProducts implements TranslateProductsInterface
 {
     /**
@@ -49,6 +52,7 @@ class TranslateProducts implements TranslateProductsInterface
     protected ProductTranslatorInterface $productTranslator;
 
     /**
+     * TranslateProducts constructor.
      * @param StoreManagerInterface $storeManager
      * @param ModuleConfig $moduleConfig
      * @param ServiceHelper $serviceHelper

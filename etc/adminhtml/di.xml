@@ -3,11 +3,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <!-- adminhtml product save controller plugin -->
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Save">
-        <plugin name="mageos_adminhtml_product_translate_before_save" type="MageOS\AutomaticTranslation\Plugin\AdminhtmlProductBeforeSavePlugin" sortOrder="1" disabled="false" />
+        <plugin name="mageos_adminhtml_product_translate_before_save"
+                type="MageOS\AutomaticTranslation\Plugin\AdminhtmlProductBeforeSavePlugin"
+                sortOrder="1"
+                disabled="false" />
     </type>
 
     <!-- adminhtml product form modifier -->
-    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool"
+                 type="Magento\Ui\DataProvider\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="translation-stores" xsi:type="array">
@@ -20,7 +24,10 @@
 
     <!-- adminhtml category save controller plugin -->
     <type name="Magento\Catalog\Controller\Adminhtml\Category\Save">
-        <plugin name="mageos_adminhtml_category_translate_before_save" type="MageOS\AutomaticTranslation\Plugin\AdminhtmlCategoryBeforeSavePlugin" sortOrder="1" disabled="false" />
+        <plugin name="mageos_adminhtml_category_translate_before_save"
+                type="MageOS\AutomaticTranslation\Plugin\AdminhtmlCategoryBeforeSavePlugin"
+                sortOrder="1"
+                disabled="false" />
     </type>
 
     <!-- adminhtml category form modifier -->
@@ -29,7 +36,8 @@
             <argument name="pool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Category\Form\Modifier\Pool</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Ui\DataProvider\Category\Form\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Category\Form\Modifier\Pool"
+                 type="Magento\Ui\DataProvider\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="translation-stores" xsi:type="array">
@@ -42,9 +50,15 @@
 
     <!-- adminhtml cms block/page form modifier -->
     <type name="Magento\Cms\Controller\Adminhtml\Page\Save">
-        <plugin name="mageos_adminhtml_cms_page_translate_before_save" type="MageOS\AutomaticTranslation\Plugin\AdminhtmlCmsBeforeSavePlugin" sortOrder="1" disabled="false" />
+        <plugin name="mageos_adminhtml_cms_page_translate_before_save"
+                type="MageOS\AutomaticTranslation\Plugin\AdminhtmlCmsBeforeSavePlugin"
+                sortOrder="1"
+                disabled="false" />
     </type>
     <type name="Magento\Cms\Controller\Adminhtml\Block\Save">
-        <plugin name="mageos_adminhtml_cms_block_translate_before_save" type="MageOS\AutomaticTranslation\Plugin\AdminhtmlCmsBeforeSavePlugin" sortOrder="1" disabled="false" />
+        <plugin name="mageos_adminhtml_cms_block_translate_before_save"
+                type="MageOS\AutomaticTranslation\Plugin\AdminhtmlCmsBeforeSavePlugin"
+                sortOrder="1"
+                disabled="false" />
     </type>
 </config>

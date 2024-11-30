@@ -9,6 +9,9 @@ use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use DeepL\TextResult;
 use DeepL\DeepLException;
 
+/**
+ * Class DeepL
+ */
 class DeepL implements TranslatorInterface
 {
     /**
@@ -25,6 +28,7 @@ class DeepL implements TranslatorInterface
     protected ModuleConfig $moduleConfig;
 
     /**
+     * DeepL constructor.
      * @param DeepLTranslatorFactory $deepLTranslator
      * @param ModuleConfig $moduleConfig
      */

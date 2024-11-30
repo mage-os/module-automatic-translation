@@ -7,6 +7,9 @@ use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use Gemini as GeminiTranslator;
 use Gemini\Client as GeminiClient;
 
+/**
+ * Class GoogleGemini
+ */
 class GoogleGemini implements TranslatorInterface
 {
     /**
@@ -23,6 +26,7 @@ class GoogleGemini implements TranslatorInterface
     protected ?GeminiClient $translator = null;
 
     /**
+     * GoogleGemini constructor.
      * @param ModuleConfig $moduleConfig
      * @param GeminiTranslator $geminiTranslator
      */

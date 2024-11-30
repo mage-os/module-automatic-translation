@@ -7,10 +7,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use MageOS\AutomaticTranslation\Service\TranslateSelectAttributes;
 
+/**
+ * Class SelectAttributeTest
+ */
 class SelectAttributeTest extends Command
 {
     protected TranslateSelectAttributes $translateSelectAttributes;
 
+    /**
+     * SelectAttributeTest constructor.
+     * @param TranslateSelectAttributes $translateSelectAttributes
+     * @param $name
+     */
     public function __construct(
         TranslateSelectAttributes $translateSelectAttributes,
         $name = null
@@ -39,6 +47,6 @@ class SelectAttributeTest extends Command
     {
         $this->translateSelectAttributes->translateOptions();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -18,7 +18,6 @@ use Magento\Framework\Validator\ValidateException;
  */
 class AddLastTranslationDateProductAttribute implements DataPatchInterface
 {
-
     /**
      * @var ModuleDataSetupInterface
      */
@@ -30,6 +29,7 @@ class AddLastTranslationDateProductAttribute implements DataPatchInterface
     protected EavSetupFactory $eavSetupFactory;
 
     /**
+     * AddLastTranslationDateProductAttribute constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */

@@ -2,6 +2,7 @@
 
 namespace MageOS\AutomaticTranslation\Plugin;
 
+use Exception;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
@@ -120,7 +121,7 @@ class AdminhtmlProductBeforeSavePlugin
                     $request->setPostValue($requestPostValue);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->debug(__("An error translating product attributes: %s", $e->getMessage()));
             $this->messageManager->addErrorMessage(__("An error occurred translating product attributes. Try again later. %1", $e->getMessage()));
         }

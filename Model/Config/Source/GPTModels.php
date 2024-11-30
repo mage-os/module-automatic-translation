@@ -8,6 +8,9 @@ use OpenAI\Client as OpenAIClient;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use Exception;
 
+/**
+ * Class GPTModels
+ */
 class GPTModels implements OptionSourceInterface
 {
     /**
@@ -24,6 +27,7 @@ class GPTModels implements OptionSourceInterface
     protected ModuleConfig $moduleConfig;
 
     /**
+     * GPTModels constructor.
      * @param OpenAI $openAI
      * @param ModuleConfig $moduleConfig
      */

@@ -6,6 +6,9 @@ use MageOS\AutomaticTranslation\Api\TranslatorInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Model\Translator\TranslatorFactory;
 
+/**
+ * Class Translator
+ */
 class Translator implements TranslatorInterface
 {
     protected $translator;
@@ -19,6 +22,7 @@ class Translator implements TranslatorInterface
     protected TranslatorFactory $translatorFactory;
 
     /**
+     * Translator constructor.
      * @param ModuleConfig $moduleConfig
      * @param TranslatorFactory $translatorFactory
      */

@@ -3,7 +3,13 @@
 namespace MageOS\AutomaticTranslation\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
+use MageOS\AutomaticTranslation\Model\Translator\DeepL;
+use MageOS\AutomaticTranslation\Model\Translator\GoogleGemini;
+use MageOS\AutomaticTranslation\Model\Translator\OpenAI;
 
+/**
+ * Class TranslationEngineList
+ */
 class TranslationEngineList implements OptionSourceInterface
 {
     /**
@@ -17,15 +23,15 @@ class TranslationEngineList implements OptionSourceInterface
                 'label' => __('-- Please Select --')
             ],
             [
-                'value' => \MageOS\AutomaticTranslation\Model\Translator\DeepL::class,
+                'value' => DeepL::class,
                 'label' => __('DeepL (recommended)')
             ],
             [
-                'value' => \MageOS\AutomaticTranslation\Model\Translator\OpenAI::class,
+                'value' => OpenAI::class,
                 'label' => __('OpenAI (GPT, ChatGPT, ecc..)')
             ],
             [
-                'value' => \MageOS\AutomaticTranslation\Model\Translator\GoogleGemini::class,
+                'value' => GoogleGemini::class,
                 'label' => __('Google Gemini')
             ]
         ];

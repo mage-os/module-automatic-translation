@@ -4,6 +4,9 @@ namespace MageOS\AutomaticTranslation\Model\Translator;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class TranslatorFactory
+ */
 class TranslatorFactory
 {
     /**
@@ -12,6 +15,7 @@ class TranslatorFactory
     protected ?ObjectManagerInterface $objectManager = null;
 
     /**
+     * TranslatorFactory constructor.
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)

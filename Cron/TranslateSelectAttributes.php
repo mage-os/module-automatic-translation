@@ -4,6 +4,9 @@ namespace MageOS\AutomaticTranslation\Cron;
 
 use MageOS\AutomaticTranslation\Api\TranslateSelectAttributesInterface;
 
+/**
+ * Class TranslateSelectAttributes
+ */
 class TranslateSelectAttributes
 {
     /**
@@ -12,6 +15,7 @@ class TranslateSelectAttributes
     protected TranslateSelectAttributesInterface $translateSelectAttributes;
 
     /**
+     * TranslateSelectAttributes constructor.
      * @param TranslateSelectAttributesInterface $translateSelectAttributes
      */
     public function __construct(

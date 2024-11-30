@@ -7,10 +7,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use MageOS\AutomaticTranslation\Api\TranslateProductsInterface;
 
+/**
+ * Class TestProcedure
+ */
 class TestProcedure extends Command
 {
     protected TranslateProductsInterface $translateProducts;
 
+    /**
+     * TestProcedure constructor.
+     * @param TranslateProductsInterface $translateProducts
+     * @param $name
+     */
     public function __construct(
         TranslateProductsInterface $translateProducts,
         $name = null
@@ -38,6 +46,6 @@ class TestProcedure extends Command
     {
         $this->translateProducts->translateProducts();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

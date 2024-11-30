@@ -4,6 +4,9 @@ namespace MageOS\AutomaticTranslation\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Interface ProductTranslatorInterface
+ */
 interface ProductTranslatorInterface
 {
     /**
@@ -14,5 +17,11 @@ interface ProductTranslatorInterface
      * @param int $storeId
      * @return void
      */
-    public function translateProduct(ProductInterface $product, string $targetLanguage, string $sourceLanguage, string $storeName = 'Default Store View', int $storeId = 0): void;
+    public function translateProduct(
+        ProductInterface $product,
+        string $targetLanguage,
+        string $sourceLanguage,
+        string $storeName = 'Default Store View',
+        int $storeId = 0
+    ): void;
 }

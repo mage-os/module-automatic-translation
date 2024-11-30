@@ -22,6 +22,7 @@ class Service extends AbstractHelper
     protected ModuleConfig $moduleConfig;
 
     /**
+     * Service constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param ModuleConfig $moduleConfig

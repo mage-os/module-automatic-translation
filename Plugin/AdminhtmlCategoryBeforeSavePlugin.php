@@ -2,6 +2,7 @@
 
 namespace MageOS\AutomaticTranslation\Plugin;
 
+use Exception;
 use Magento\Catalog\Controller\Adminhtml\Category\Save;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
@@ -126,7 +127,7 @@ class AdminhtmlCategoryBeforeSavePlugin
                     $request->setPostValue($requestPostValue);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->debug(__("An error translating category attributes: %s", $e->getMessage()));
             $this->messageManager->addErrorMessage(__("An error occurred translating category attributes. Try again later."));
         }

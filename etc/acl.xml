@@ -6,7 +6,10 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_attributes">
-                        <resource id="MageOS_AutomaticTranslation::stores_stores" title="Product" translate="title" sortOrder="30"/>
+                        <resource id="MageOS_AutomaticTranslation::stores_stores"
+                                  title="Product"
+                                  translate="title"
+                                  sortOrder="30"/>
                     </resource>
                 </resource>
             </resource>
