@@ -2,6 +2,9 @@
 
 namespace MageOS\AutomaticTranslation\Api;
 
+/**
+ * Interface AttributeProviderInterface
+ */
 interface AttributeProviderInterface
 {
     const SKIP_TRANSLATION = 'skip_translation';

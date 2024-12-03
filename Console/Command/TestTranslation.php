@@ -9,10 +9,18 @@ use Symfony\Component\Console\Input\InputOption;
 use MageOS\AutomaticTranslation\Model\Translator;
 use Exception;
 
+/**
+ * Class TestTranslation
+ */
 class TestTranslation extends Command
 {
     protected Translator $translator;
 
+    /**
+     * TestTranslation constructor.
+     * @param Translator $translator
+     * @param $name
+     */
     public function __construct(
         Translator $translator,
         $name = null
@@ -66,6 +74,6 @@ class TestTranslation extends Command
 
         $output->writeln($this->translator->translate($text, $targetlang, $sourcelang));
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

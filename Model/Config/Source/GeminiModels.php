@@ -8,6 +8,9 @@ use Gemini\Client as GeminiClient;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use Exception;
 
+/**
+ * Class GeminiModels
+ */
 class GeminiModels implements OptionSourceInterface
 {
     /**
@@ -24,6 +27,7 @@ class GeminiModels implements OptionSourceInterface
     protected ModuleConfig $moduleConfig;
 
     /**
+     * GeminiModels constructor.
      * @param Gemini $gemini
      * @param ModuleConfig $moduleConfig
      */

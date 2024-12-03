@@ -5,7 +5,6 @@ namespace MageOS\AutomaticTranslation\Block\Adminhtml;
 use Magento\Backend\Block\Template;
 use Magento\Framework\Serialize\Serializer\Json;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 use MageOS\AutomaticTranslation\Helper\Service;
 
 /**
@@ -14,11 +13,6 @@ use MageOS\AutomaticTranslation\Helper\Service;
  */
 class TranslationPopup extends Template
 {
-    /**
-     * @var StoreOptions
-     */
-    private StoreOptions $storeOptions;
-
     /**
      * @var ModuleConfig
      */
@@ -37,7 +31,6 @@ class TranslationPopup extends Template
     /**
      * TranslationPopup constructor.
      * @param Template\Context $context
-     * @param StoreOptions $storeOptions
      * @param ModuleConfig $config
      * @param Service $service
      * @param Json $json
@@ -45,14 +38,12 @@ class TranslationPopup extends Template
      */
     public function __construct(
         Template\Context $context,
-        StoreOptions $storeOptions,
         ModuleConfig $config,
         Service $service,
         Json $json,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->storeOptions = $storeOptions;
         $this->config = $config;
         $this->service = $service;
         $this->json = $json;

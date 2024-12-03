@@ -8,6 +8,9 @@ use OpenAI\Client as OpenAIClient;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use Exception;
 
+/**
+ * Class OpenAI
+ */
 class OpenAI implements TranslatorInterface
 {
     /**
@@ -24,6 +27,7 @@ class OpenAI implements TranslatorInterface
     protected ModuleConfig $moduleConfig;
 
     /**
+     * OpenAI constructor.
      * @param OpenAITranslator $openAITranslator
      * @param ModuleConfig $moduleConfig
      */

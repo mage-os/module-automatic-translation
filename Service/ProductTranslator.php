@@ -13,6 +13,9 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Psr\Log\LoggerInterface as Logger;
 use Exception;
 
+/**
+ * Class ProductTranslator
+ */
 class ProductTranslator implements ProductTranslatorInterface
 {
     /**
@@ -37,7 +40,9 @@ class ProductTranslator implements ProductTranslatorInterface
     protected Logger $logger;
 
     /**
+     * ProductTranslator constructor.
      * @param ModuleConfig $moduleConfig
+     * @param ServiceHelper $serviceHelper
      * @param TranslatorInterface $translator
      * @param ProductResource $productResource
      * @param Logger $logger

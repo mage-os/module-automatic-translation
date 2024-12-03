@@ -2,6 +2,9 @@
 
 namespace MageOS\AutomaticTranslation\Api;
 
+/**
+ * Interface TranslateProductsInterface
+ */
 interface TranslateProductsInterface
 {
     /**

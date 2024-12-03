@@ -4,6 +4,9 @@ namespace MageOS\AutomaticTranslation\Api;
 
 use Exception;
 
+/**
+ * Interface TranslatorInterface
+ */
 interface TranslatorInterface
 {
     /**
@@ -13,5 +16,9 @@ interface TranslatorInterface
      * @return string
      * @throws Exception
      */
-    public function translate(string $text, string $targetLang, ?string $sourceLang = null): string;
+    public function translate(
+        string $text,
+        string $targetLang,
+        ?string $sourceLang = null
+    ): string;
 }

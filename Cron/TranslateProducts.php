@@ -4,6 +4,9 @@ namespace MageOS\AutomaticTranslation\Cron;
 
 use MageOS\AutomaticTranslation\Api\TranslateProductsInterface;
 
+/**
+ * Class TranslateProducts
+ */
 class TranslateProducts
 {
     /**
@@ -12,6 +15,7 @@ class TranslateProducts
     protected TranslateProductsInterface $translateProducts;
 
     /**
+     * TranslateProducts constructor.
      * @param TranslateProductsInterface $translateProducts
      */
     public function __construct(

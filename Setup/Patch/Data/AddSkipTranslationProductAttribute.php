@@ -19,7 +19,6 @@ use Magento\Framework\Validator\ValidateException;
  */
 class AddSkipTranslationProductAttribute implements DataPatchInterface
 {
-
     /**
      * @var ModuleDataSetupInterface
      */
@@ -31,6 +30,7 @@ class AddSkipTranslationProductAttribute implements DataPatchInterface
     protected EavSetupFactory $eavSetupFactory;
 
     /**
+     * AddSkipTranslationProductAttribute constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
