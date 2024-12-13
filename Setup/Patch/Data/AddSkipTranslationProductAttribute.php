@@ -71,6 +71,7 @@ class AddSkipTranslationProductAttribute implements DataPatchInterface
                 'is_filterable_in_grid' => true,
                 'sort_order' => 10,
                 'group' => 'Product Details',
+                'note' => AttributeProvider::SKIP_TRANSLATION_NOTE
             ]
         );
     }
