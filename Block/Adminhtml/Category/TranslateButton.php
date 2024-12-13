@@ -45,7 +45,7 @@ class TranslateButton extends Generic
             if ($this->moduleConfig->isEnable($currentStore)) {
                 return [
                     'label' => __('Translate'),
-                    'class' => 'save primary',
+                    'class' => 'save action-secondary',
                     'data_attribute' => [
                         'mage-init' => [
                             'buttonAdapter' => [
@@ -98,7 +98,7 @@ class TranslateButton extends Generic
 
         return [
             'label' => __('Translate'),
-            'class' => 'save primary',
+            'class' => 'save action-secondary',
             'data_attribute' => [
                 'mage-init' => [
                     'buttonAdapter' => [
