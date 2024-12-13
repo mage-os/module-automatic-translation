@@ -1,5 +1,10 @@
 # Automatic Translation
 
+## [1.4.0] - 13/12/2024
+### Added
+- Translate button as secondary type in product and category edit form
+- Uncheck instructions as an attribute note instead of in the label
+
 ## [1.3.0] - 30/11/2024
 ### Added
 - CHANGELOG file
