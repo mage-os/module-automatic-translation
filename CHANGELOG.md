@@ -1,5 +1,9 @@
 # Automatic Translation
 
+## [1.5.0] - 14/12/2024
+### Added
+- Product gallery images alt text translation
+
 ## [1.4.0] - 13/12/2024
 ### Added
 - Translate button as secondary type in product and category edit form
