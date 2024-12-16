@@ -46,7 +46,7 @@ class TranslateButton extends Generic
 
                 return [
                     'label' => __('Translate'),
-                    'class' => 'save action-secondary',
+                    'class' => 'save primary',
                     'data_attribute' => [
                         'mage-init' => [
                             'buttonAdapter' => [
@@ -89,6 +89,7 @@ class TranslateButton extends Generic
                         ]
                     ],
                     'dropdown_button_aria_label' => __('Save options'),
+                    'sort_order' => 100
                 ];
             } else {
                 return [];
