@@ -62,7 +62,7 @@ class GoogleGemini implements TranslatorInterface
         $prompt = 'Translate this text';
         $prompt .= (!empty($sourceLang)) ? ' from ' . $sourceLang : '';
         $prompt .= ' to ' . $targetLang;
-        $prompt .= ' writing the result directly without premise or conclusion or consideration, keeping the html code unchanged';
+        $prompt .= ' writing the result directly without premise or conclusion or consideration, keeping the html code unchanged, if i don\'t have initial html don\'t add it';
         $prompt .= ': ' . $text;
 
         $response = $this->translator
