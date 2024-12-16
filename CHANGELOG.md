@@ -1,5 +1,10 @@
 # Automatic Translation
 
+## [1.5.1] - 16/12/2024
+### Fixed
+- Restored translate button for store as primary
+- Fix Google Gemini prompt
+
 ## [1.5.0] - 14/12/2024
 ### Added
 - Product gallery images alt text translation
