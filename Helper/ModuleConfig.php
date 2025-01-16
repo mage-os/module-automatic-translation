@@ -26,6 +26,7 @@ class ModuleConfig extends AbstractHelper
     const ENABLE_PERIODIC = self::CATALOG_GROUP . '/enable_periodic_retranslation';
     const RETRANSLATION_PERIOD = self::CATALOG_GROUP . '/retranslation_period';
     const TRANSLATE_DISABLED = self::CATALOG_GROUP . 'translate_disabled';
+    const ENABLE_URL_REWRITE = self::CATALOG_GROUP . 'enable_url_rewrite';
 
     const ENGINE = self::ENGINE_GROUP . '/engine';
     const DEEPL_AUTH_KEY = self::ENGINE_GROUP . '/deepl_auth_key';
@@ -99,6 +100,15 @@ class ModuleConfig extends AbstractHelper
     public function translateDisabledProducts(int $storeId = 0): bool
     {
         return (bool)$this->scopeConfig->isSetFlag(self::TRANSLATE_DISABLED, ScopeInterface::SCOPE_STORE, $storeId);
+    }
+
+    /**
+     * @param int $storeId
+     * @return bool
+     */
+    public function enableUrlRewrite(int $storeId = 0): bool
+    {
+        return (bool)$this->scopeConfig->isSetFlag(self::ENABLE_URL_REWRITE, ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**

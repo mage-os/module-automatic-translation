@@ -2,6 +2,7 @@
 
 namespace MageOS\AutomaticTranslation\Service;
 
+use Magento\Framework\Exception\LocalizedException;
 use MageOS\AutomaticTranslation\Api\ProductTranslatorInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service as ServiceHelper;
@@ -13,6 +14,8 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\CatalogUrlRewrite\Model\Products\AppendUrlRewritesToProducts;
 use Exception;
 
 /**
@@ -41,6 +44,14 @@ class ProductTranslator implements ProductTranslatorInterface
      */
     protected Gallery $gallery;
     /**
+     * @var StoreManagerInterface
+     */
+    protected StoreManagerInterface $storeManager;
+    /**
+     * @var AppendUrlRewritesToProducts
+     */
+    protected AppendUrlRewritesToProducts $appendRewrites;
+    /**
      * @var Logger
      */
     protected Logger $logger;
@@ -51,6 +62,7 @@ class ProductTranslator implements ProductTranslatorInterface
      * @param TranslatorInterface $translator
      * @param ProductResource $productResource
      * @param Gallery $gallery
+     * @param StoreManagerInterface $storeManager
      * @param Logger $logger
      */
     public function __construct(
@@ -59,6 +71,8 @@ class ProductTranslator implements ProductTranslatorInterface
         TranslatorInterface $translator,
         ProductResource $productResource,
         Gallery $gallery,
+        StoreManagerInterface $storeManager,
+        AppendUrlRewritesToProducts $appendRewrites,
         Logger $logger
     ) {
         $this->moduleConfig = $moduleConfig;
@@ -66,6 +80,8 @@ class ProductTranslator implements ProductTranslatorInterface
         $this->translator = $translator;
         $this->productResource = $productResource;
         $this->gallery = $gallery;
+        $this->storeManager = $storeManager;
+        $this->appendRewrites = $appendRewrites;
         $this->logger = $logger;
     }
 
@@ -75,6 +91,7 @@ class ProductTranslator implements ProductTranslatorInterface
      * @param string $sourceLanguage
      * @param string $storeName
      * @param int $storeId
+     * @throws LocalizedException
      */
     public function translateProduct(
         ProductInterface $product,
@@ -172,6 +189,11 @@ class ProductTranslator implements ProductTranslatorInterface
                         if ($textToTranslate != $textTranslated) {
                             $product->setData($attributeCode, $textTranslated);
                             $this->productResource->saveAttribute($product, $attributeCode);
+
+                            if ($this->moduleConfig->enableUrlRewrite($storeId) && $attributeCode === 'url_key') {
+                                $storesToRewrite = [$this->storeManager->getStore($storeId)];
+                                $this->appendRewrites->execute([$product], $storesToRewrite);
+                            }
                         }
                     } catch (Exception $e) {
                         $this->logger->debug('Error when translating the product');

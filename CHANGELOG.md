@@ -1,5 +1,9 @@
 # Automatic Translation
 
+## [1.6.0] - 16/12/2024
+### Fixed
+- Added url rewrite generation after url translation in automatic procedure
+
 ## [1.5.1] - 16/12/2024
 ### Fixed
 - Restored translate button for store as primary
