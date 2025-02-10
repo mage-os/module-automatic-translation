@@ -102,8 +102,9 @@ class AdminhtmlProductBeforeSavePlugin
                             $requestPostValue["product"]["media_gallery"]["images"] = $mediaGalleryImages;
 
                         } else {
-                            if (isset($requestPostValue["product"][$attributeCode]) &&
-                                is_string($requestPostValue["product"][$attributeCode])) {
+                            if (!empty($requestPostValue["product"][$attributeCode]) &&
+                                is_string($requestPostValue["product"][$attributeCode]) &&
+                            ) {
                                 $originalValue = $requestPostValue["product"][$attributeCode];
 
                                 $parsedContent = $this->serviceHelper

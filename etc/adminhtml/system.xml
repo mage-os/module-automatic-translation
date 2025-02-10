@@ -73,9 +73,9 @@
                     <comment>This option is not considered in the translation button in product editing. It is used only for periodic automatic translation.</comment>
                 </field>
                 <field id="enable_url_rewrite" translate="label comment" type="select" sortOrder="47" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Translate disable products</label>
+                    <label>Generate url rewrites in automatic translation</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>If set to no, it allows you to disable url rewrite generation for translated urls, only during automatic retranslation, to save performance.
+                    <comment>If set to no, it allows you to disable url rewrite generation for translated urls, only during automatic translation, to save performance.
                         If set to no, you should consider regenerating the url rewrite using a module or external procedure, otherwise newly translated language urls will not be browsable.</comment>
                 </field>
                 <field id="product_translation_cron" type="text" translate="label comment" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">

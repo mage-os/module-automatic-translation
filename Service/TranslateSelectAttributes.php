@@ -129,7 +129,7 @@ class TranslateSelectAttributes implements TranslateSelectAttributesInterface
                         $targetLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
                         $sourceLanguage = $this->moduleConfig->getSourceLanguage();
 
-                        if ($sourceLanguage === $targetLanguage) {
+                        if ($sourceLanguage === $targetLanguage || empty(trim($origLangOptionLabel))) {
                             continue;
                         }
 

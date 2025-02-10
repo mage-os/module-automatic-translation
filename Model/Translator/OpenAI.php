@@ -64,7 +64,7 @@ class OpenAI implements TranslatorInterface
             $this->initTranslator();
         }
 
-        $prompt = 'Translate this text';
+        $prompt = 'Translate this text, with the context that this text is used in an e-commerce store as part of a product description or a category description without asking any further questions or clarifications, giving only the answer and nothing else,';
         $prompt .= (!empty($sourceLang)) ? ' from ' . $sourceLang : '';
         $prompt .= ' to ' . $targetLang;
         $prompt .= ': ' . $text;
