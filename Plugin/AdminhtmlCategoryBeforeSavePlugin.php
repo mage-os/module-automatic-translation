@@ -92,7 +92,7 @@ class AdminhtmlCategoryBeforeSavePlugin
                     $attributesToTranslate = self::CATEGORY_TRANSLATABLE_ATTRIBUTES;
 
                     foreach ($attributesToTranslate as $attributeCode) {
-                        if (isset($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
+                        if (!empty($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
                             $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue[$attributeCode]);
 
                             if (is_string($parsedContent)) {

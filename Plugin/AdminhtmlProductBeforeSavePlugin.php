@@ -103,7 +103,7 @@ class AdminhtmlProductBeforeSavePlugin
 
                         } else {
                             if (!empty($requestPostValue["product"][$attributeCode]) &&
-                                is_string($requestPostValue["product"][$attributeCode]) &&
+                                is_string($requestPostValue["product"][$attributeCode])
                             ) {
                                 $originalValue = $requestPostValue["product"][$attributeCode];
 
