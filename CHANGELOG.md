@@ -1,7 +1,10 @@
 # Automatic Translation
+## [1.7.1] - 11/02/2025
+### Fixed
+- Fixed url rewrite generation after url key translation in translation via cron job
 
 ## [1.7.0] - 10/02/2025
-### Fixed
+### Added
 - Updated minimum version of the OpenAI SDK to accommodate the new format of the APIs response
 - Translated product attributes only if they are not empty, to save calls and avoid incorrect engine responses
 - Improved prompt for translation with OpenAI 

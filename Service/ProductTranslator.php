@@ -191,8 +191,7 @@ class ProductTranslator implements ProductTranslatorInterface
                             $this->productResource->saveAttribute($product, $attributeCode);
 
                             if ($this->moduleConfig->enableUrlRewrite($storeId) && $attributeCode === 'url_key') {
-                                $storesToRewrite = [$this->storeManager->getStore($storeId)];
-                                $this->appendRewrites->execute([$product], $storesToRewrite);
+                                $this->appendRewrites->execute([$product], [$storeId]);
                             }
                         }
                     } catch (Exception $e) {
