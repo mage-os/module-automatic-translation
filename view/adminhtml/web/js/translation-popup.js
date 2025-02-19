@@ -83,7 +83,7 @@ define([
                         }
                     }, {
                         text: $t('Save & Translate'),
-                        class: 'action-primary action-accept',
+                        class: 'action-secondary action-accept',
 
                         /**
                          * Click handler.

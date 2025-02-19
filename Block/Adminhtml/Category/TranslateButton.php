@@ -4,7 +4,7 @@ namespace MageOS\AutomaticTranslation\Block\Adminhtml\Category;
 
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
 use Magento\Framework\Registry;
-use Magento\Ui\Component\Control\Container;
+use MageOS\AutomaticTranslation\Block\Adminhtml\Component\Control\SplitButton;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use Magento\Framework\View\Element\UiComponent\Context;
 
@@ -45,7 +45,7 @@ class TranslateButton extends Generic
             if ($this->moduleConfig->isEnable($currentStore)) {
                 return [
                     'label' => __('Translate'),
-                    'class' => 'save action-secondary',
+                    'class' => 'save secondary',
                     'data_attribute' => [
                         'mage-init' => [
                             'buttonAdapter' => [
@@ -65,12 +65,13 @@ class TranslateButton extends Generic
                             ]
                         ]
                     ],
-                    'class_name' => Container::SPLIT_BUTTON,
+                    'class_name' => SplitButton::class,
                     'options' => [
                         [
                             'label' => __('Switch translation scope'),
                             'data_attribute' => [
                                 'mage-init' => [
+                                    'MageOS_AutomaticTranslation/js/category-form/page-actions-update' => [],
                                     'buttonAdapter' => [
                                         'actions' => [
                                             [

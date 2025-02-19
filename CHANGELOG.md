@@ -1,4 +1,8 @@
 # Automatic Translation
+## [1.8.1] - 19/02/2025
+### Fixed
+- Changed product and category buttons to 'secondary' actions and fixed button visualization on category adminhtml form page
+
 ## [1.8.0] - 19/02/2025
 ### Fixed
 - Fixed configurable products translation made from adminhtml
