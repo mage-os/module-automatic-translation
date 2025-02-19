@@ -7,6 +7,7 @@ use Magento\Framework\Registry;
 use Magento\Ui\Component\Control\Container;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use Magento\Framework\View\Element\UiComponent\Context;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 
 /**
  * Class TranslateButton
@@ -52,8 +53,8 @@ class TranslateButton extends Generic
                             'buttonAdapter' => [
                                 'actions' => [
                                     [
-                                        'targetName' => 'product_form.product_form',
-                                        'actionName' => 'save',
+                                        'targetName' => $this->getSaveTarget(),
+                                        'actionName' => $this->getSaveAction(),
                                         'params' => [
                                             true,
                                             [
@@ -118,5 +119,43 @@ class TranslateButton extends Generic
             'on_click' => '',
             'sort_order' => 100
         ];
+    }
+
+    /**
+     * Retrieve target for button.
+     *
+     * @return string
+     */
+    protected function getSaveTarget()
+    {
+        $target = 'product_form.product_form';
+        if ($this->isConfigurableProduct()) {
+            $target = 'product_form.product_form.configurableVariations';
+        }
+        return $target;
+    }
+
+    /**
+     * Retrieve action for button.
+     *
+     * @return string
+     */
+    protected function getSaveAction()
+    {
+        $action = 'save';
+        if ($this->isConfigurableProduct()) {
+            $action = 'saveFormHandler';
+        }
+        return $action;
+    }
+
+    /**
+     * Is configurable product.
+     *
+     * @return boolean
+     */
+    protected function isConfigurableProduct()
+    {
+        return !$this->getProduct()->isComposite() || $this->getProduct()->getTypeId() === ConfigurableType::TYPE_CODE;
     }
 }
