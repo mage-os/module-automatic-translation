@@ -1,4 +1,8 @@
 # Automatic Translation
+## [1.8.0] - 19/02/2025
+### Fixed
+- Fixed configurable products translation made from adminhtml
+
 ## [1.7.1] - 11/02/2025
 ### Fixed
 - Fixed url rewrite generation after url key translation in translation via cron job
