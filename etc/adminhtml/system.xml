@@ -99,31 +99,31 @@
                 </field>
                 <field id="deepl_auth_key" translate="label comment" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>DeepL auth key</label>
-                    <comment>Get you auth key here: https://www.deepl.com/it/your-account/keys</comment>
+                    <comment>Get your auth key here: https://www.deepl.com/it/your-account/keys</comment>
                     <depends>
                         <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\DeepL</field>
                     </depends>
                     <validate>required-entry</validate>
                 </field>
                 <field id="openai_org_id" type="text" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Open AI Organization ID</label>
-                    <comment>Get you organization ID here: https://platform.openai.com/account/org-settings</comment>
+                    <label>OpenAI Organization ID</label>
+                    <comment>Get your organization ID here: https://platform.openai.com/account/org-settings</comment>
                     <depends>
                         <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
                     </depends>
                     <validate>required-entry</validate>
                 </field>
                 <field id="openai_api_key" translate="label comment" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Open AI Api Key</label>
-                    <comment>Get you api key here: https://platform.openai.com/settings/organization/api-keys</comment>
+                    <label>OpenAI Api Key</label>
+                    <comment>Get your api key here: https://platform.openai.com/settings/organization/api-keys</comment>
                     <depends>
                         <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
                     </depends>
                     <validate>required-entry</validate>
                 </field>
                 <field id="openai_project_id" translate="label comment" type="password" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Open AI Project ID</label>
-                    <comment>Get you project id here: https://platform.openai.com/settings/organization/projects.
+                    <label>OpenAI Project ID</label>
+                    <comment>Get your project id here: https://platform.openai.com/settings/organization/projects.
                         If left blank, OpenAI will consider your Default Project
                     </comment>
                     <depends>
@@ -140,7 +140,7 @@
                 </field>
                 <field id="gemini_api_key" translate="label comment" type="password" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Gemini API key</label>
-                    <comment>Get you API key here: https://aistudio.google.com/apikey</comment>
+                    <comment>Get your API key here: https://aistudio.google.com/apikey</comment>
                     <depends>
                         <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
                     </depends>
