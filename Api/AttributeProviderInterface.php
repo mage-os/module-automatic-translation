@@ -7,9 +7,9 @@ namespace MageOS\AutomaticTranslation\Api;
  */
 interface AttributeProviderInterface
 {
-    const SKIP_TRANSLATION = 'skip_translation';
-    const SKIP_TRANSLATION_LABEL = 'Skip translation';
-    const SKIP_TRANSLATION_NOTE = 'Uncheck to re-translate';
-    const LAST_TRANSLATION = 'last_translation_date';
-    const LAST_TRANSLATION_LABEL = 'Last translation date';
+    public const SKIP_TRANSLATION = 'skip_translation';
+    public const SKIP_TRANSLATION_LABEL = 'Skip translation';
+    public const SKIP_TRANSLATION_NOTE = 'Uncheck to re-translate';
+    public const LAST_TRANSLATION = 'last_translation_date';
+    public const LAST_TRANSLATION_LABEL = 'Last translation date';
 }

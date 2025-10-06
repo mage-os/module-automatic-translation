@@ -17,7 +17,7 @@ use Magento\Backend\Model\UrlInterface;
  */
 class GenerateTranslationsButton extends GenericButton implements ButtonProviderInterface
 {
-    const CMSBLOCK_TRANSLATION_CONTROLLER_PATH = 'automatic_translation/cms_block/generate';
+    protected const CMSBLOCK_TRANSLATION_CONTROLLER_PATH = 'automatic_translation/cms_block/generate';
 
     /**
      * @var ModuleConfig
