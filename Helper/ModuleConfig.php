@@ -123,7 +123,7 @@ class ModuleConfig extends AbstractHelper
         $translationExpirationDate->setTimestamp(strtotime('now'));
         $translationExpirationDate->modify('-' . $retranslationDays . ' days');
 
-        return date('Y-m-d H:i:s', $translationExpirationDate->getTimestamp());
+        return $translationExpirationDate->format('Y-m-d H:i:s');
     }
 
     /**
