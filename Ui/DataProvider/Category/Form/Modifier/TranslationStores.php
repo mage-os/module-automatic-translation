@@ -19,7 +19,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
  */
 class TranslationStores extends AbstractModifier
 {
-    const GROUP_CODE = 'translation-stores';
+    protected const GROUP_CODE = 'translation-stores';
 
     /**
      * @var StoreSwitcher

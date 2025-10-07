@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class AdminhtmlCategoryBeforeSavePlugin
 {
-    const CATEGORY_TRANSLATABLE_ATTRIBUTES = [
+    protected const CATEGORY_TRANSLATABLE_ATTRIBUTES = [
         'name',
         'description',
         'url_key',

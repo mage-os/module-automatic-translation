@@ -19,7 +19,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  */
 class TranslationStores extends AbstractModifier
 {
-    const GROUP_CODE = 'translation-stores';
+    protected const GROUP_CODE = 'translation-stores';
 
     /**
      * @var StoreSwitcher
@@ -53,8 +53,7 @@ class TranslationStores extends AbstractModifier
         ModuleConfig $moduleConfig,
         RequestInterface $request,
         ProductRepositoryInterface $productRepository
-    )
-    {
+    ) {
         $this->storeSwitcher = $storeSwitcher;
         $this->moduleConfig = $moduleConfig;
         $this->request = $request;
@@ -150,7 +149,8 @@ class TranslationStores extends AbstractModifier
      * @return array
      * @throws NoSuchEntityException
      */
-    private function getTranslationStores() {
+    private function getTranslationStores()
+    {
         $translationStores = [];
         try {
             $currentProduct = $this->productRepository->getById(
@@ -174,7 +174,8 @@ class TranslationStores extends AbstractModifier
                     }
                 }
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
         return $translationStores;
     }
 }
