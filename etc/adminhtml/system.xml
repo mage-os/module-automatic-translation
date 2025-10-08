@@ -17,7 +17,7 @@
                     <field id="source_language" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Source language</label>
                         <source_model>MageOS\AutomaticTranslation\Model\Config\Source\LanguageList</source_model>
-                        <comment>Select the language in which the product texts are written in the default view</comment>
+                        <comment>Select the default language that your product data is written in</comment>
                         <validate>required-entry</validate>
                     </field>
                     <field id="destination_language" translate="label comment" type="label" sortOrder="30"
