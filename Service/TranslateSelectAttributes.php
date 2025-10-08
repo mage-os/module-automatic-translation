@@ -125,46 +125,48 @@ class TranslateSelectAttributes implements TranslateSelectAttributesInterface
                     $origLangOptionLabel = $origLangOptions[$option->getValue()];
                     $optionLabel = $option->getLabel();
 
-                    if (empty($optionLabel) || $optionLabel === $origLangOptionLabel) {
-                        $targetLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
-                        $sourceLanguage = $this->moduleConfig->getSourceLanguage();
+                    if (!empty($optionLabel) && $optionLabel !== $origLangOptionLabel) {
+                        continue;
+                    }
 
-                        if ($sourceLanguage === $targetLanguage || empty(trim($origLangOptionLabel))) {
-                            continue;
-                        }
+                    $targetLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
+                    $sourceLanguage = $this->moduleConfig->getSourceLanguage();
 
-                        try {
-                            $translatedLabel = $this->translator->translate($origLangOptionLabel, $targetLanguage, $sourceLanguage);
-                        } catch (Exception $e) {
-                            $this->logger->debug('Error when translating the option');
-                            $this->logger->debug('Attribute: ' . $attribute->getAttributeCode());
-                            $this->logger->debug('Option: ' . $origLangOptionLabel);
-                            $this->logger->debug($e->getMessage());
-                            $this->logger->debug('-------------------------');
+                    if ($sourceLanguage === $targetLanguage || empty(trim($origLangOptionLabel))) {
+                        continue;
+                    }
 
-                            continue;
-                        }
+                    try {
+                        $translatedLabel = $this->translator->translate($origLangOptionLabel, $targetLanguage, $sourceLanguage);
+                    } catch (Exception $e) {
+                        $this->logger->debug('Error when translating the option');
+                        $this->logger->debug('Attribute: ' . $attribute->getAttributeCode());
+                        $this->logger->debug('Option: ' . $origLangOptionLabel);
+                        $this->logger->debug($e->getMessage());
+                        $this->logger->debug('-------------------------');
 
-                        $labelObject = $this->attributeOptionLabelInterface->create();
-                        $labelObject->setStoreId($storeId)
-                            ->setLabel($translatedLabel);
+                        continue;
+                    }
 
-                        $option->setStoreLabels([$labelObject]);
+                    $labelObject = $this->attributeOptionLabelInterface->create();
+                    $labelObject->setStoreId($storeId)
+                        ->setLabel($translatedLabel);
 
-                        try {
-                            $this->optionUpdate->update(
-                                ProductModel::ENTITY,
-                                $attribute->getAttributeCode(),
-                                $option->getValue(),
-                                $option
-                            );
-                        } catch (InputException|NoSuchEntityException|StateException $e) {
-                            $this->logger->debug('Error when saving translated the option');
-                            $this->logger->debug('Attribute: ' . $attribute->getAttributeCode());
-                            $this->logger->debug('Option: ' . $origLangOptionLabel);
-                            $this->logger->debug($e->getMessage());
-                            $this->logger->debug('-------------------------');
-                        }
+                    $option->setStoreLabels([$labelObject]);
+
+                    try {
+                        $this->optionUpdate->update(
+                            ProductModel::ENTITY,
+                            $attribute->getAttributeCode(),
+                            $option->getValue(),
+                            $option
+                        );
+                    } catch (InputException|NoSuchEntityException|StateException $e) {
+                        $this->logger->debug('Error when saving translated the option');
+                        $this->logger->debug('Attribute: ' . $attribute->getAttributeCode());
+                        $this->logger->debug('Option: ' . $origLangOptionLabel);
+                        $this->logger->debug($e->getMessage());
+                        $this->logger->debug('-------------------------');
                     }
                 }
             }

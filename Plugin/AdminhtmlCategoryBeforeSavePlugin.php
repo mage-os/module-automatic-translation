@@ -81,56 +81,70 @@ class AdminhtmlCategoryBeforeSavePlugin
     {
         try {
             $request = $subject->getRequest();
+
+            if ($request->getParam('translate') !== "true") {
+                return null;
+            }
+
+            $storeId = $request->getParam('store_id', 0);
+            $sourceLanguage = $this->moduleConfig->getSourceLanguage();
+            $destinationLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
+
+            if ($sourceLanguage === $destinationLanguage) {
+                return null;
+            }
+
             $requestPostValue = $request->getPostValue();
+            $attributesToTranslate = self::CATEGORY_TRANSLATABLE_ATTRIBUTES;
 
-            if ($request->getParam('translate') === "true") {
-                $storeId = $request->getParam('store_id', 0);
-                $sourceLanguage = $this->moduleConfig->getSourceLanguage();
-                $destinationLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
+            foreach ($attributesToTranslate as $attributeCode) {
+                if (!empty($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
+                    $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue[$attributeCode]);
 
-                if ($sourceLanguage !== $destinationLanguage) {
-                    $attributesToTranslate = self::CATEGORY_TRANSLATABLE_ATTRIBUTES;
+                    $requestPostValue[$attributeCode] = $this->translateParsedContent($parsedContent, $requestPostValue[$attributeCode], $destinationLanguage);
 
-                    foreach ($attributesToTranslate as $attributeCode) {
-                        if (!empty($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
-                            $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue[$attributeCode]);
-
-                            if (is_string($parsedContent)) {
-                                $requestPostValue[$attributeCode] = $this->translator->translate(
-                                    $parsedContent,
-                                    $destinationLanguage
-                                );
-                            } else {
-                                $requestPostValue[$attributeCode] = html_entity_decode(htmlspecialchars_decode($requestPostValue[$attributeCode]));
-                                foreach ($parsedContent as $parsedString) {
-                                    $parsedString["translation"] = $this->translator->translate(
-                                        $parsedString["source"],
-                                        $destinationLanguage
-                                    );
-
-                                    $requestPostValue[$attributeCode] = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue[$attributeCode]);
-                                }
-
-                                $requestPostValue[$attributeCode] = $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue[$attributeCode]);
-                            }
-
-                            if ($attributeCode === 'url_key') {
-                                $requestPostValue[$attributeCode] = strtolower(preg_replace('#[^0-9a-z]+#i', '-',$requestPostValue[$attributeCode]));
-                            }
-
-                            if (isset($requestPostValue["use_default"][$attributeCode])) {
-                                $requestPostValue["use_default"][$attributeCode] = "0";
-                            }
-                        }
+                    if ($attributeCode === 'url_key') {
+                        $requestPostValue[$attributeCode] = strtolower(preg_replace('#[^0-9a-z]+#i', '-',$requestPostValue[$attributeCode]));
                     }
 
-                    $request->setPostValue($requestPostValue);
+                    if (isset($requestPostValue["use_default"][$attributeCode])) {
+                        $requestPostValue["use_default"][$attributeCode] = "0";
+                    }
                 }
             }
+
+            $request->setPostValue($requestPostValue);
+
         } catch (Exception $e) {
             $this->logger->debug(__("An error translating category attributes: %s", $e->getMessage()));
             $this->messageManager->addErrorMessage(__("An error occurred translating category attributes. Try again later."));
         }
         return null;
+    }
+
+    /**
+     * @param mixed $parsedContent
+     * @param string $requestPostValue
+     * @param string $destinationLanguage
+     * @return mixed|string
+     */
+    protected function translateParsedContent($parsedContent, string $requestPostValue, string $destinationLanguage) {
+        if (is_string($parsedContent)) {
+            return $this->translator->translate(
+                $parsedContent,
+                $destinationLanguage
+            );
+        } else {
+            $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
+            foreach ($parsedContent as $parsedString) {
+                $parsedString["translation"] = $this->translator->translate(
+                    $parsedString["source"],
+                    $destinationLanguage
+                );
+
+                $requestPostValue = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue);
+            }
+            return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
+        }
     }
 }

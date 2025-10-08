@@ -61,48 +61,61 @@ class AdminhtmlCmsBeforeSavePlugin
     {
         try {
             $request = $subject->getRequest();
+
+            if ($request->getParam('translate') !== "true") {
+                return null;
+            }
+
             $requestPostValue = $request->getPostValue();
+            $destinationLanguage = $request->getParam('translationLanguage');
+            $attributesToTranslate = $request->getParam('translationFields');
 
-            if ($request->getParam('translate') === "true") {
-                $destinationLanguage = $request->getParam('translationLanguage');
-                $attributesToTranslate = $request->getParam('translationFields');
+            foreach ($attributesToTranslate as $attributeCode) {
+                if (isset($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
+                    $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue[$attributeCode]);
 
-                foreach ($attributesToTranslate as $attributeCode) {
-                    if (isset($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
-                        $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue[$attributeCode]);
+                    $requestPostValue[$attributeCode] = $this->translateParsedContent($parsedContent, $requestPostValue[$attributeCode], $destinationLanguage);
 
-                        if (is_string($parsedContent)) {
-                            $requestPostValue[$attributeCode] = $this->translator->translate(
-                                $parsedContent,
-                                $destinationLanguage
-                            );
-                        } else {
-                            $requestPostValue[$attributeCode] = html_entity_decode(htmlspecialchars_decode($requestPostValue[$attributeCode]));
-
-                            foreach ($parsedContent as $parsedString) {
-                                $parsedString["translation"] = $this->translator->translate(
-                                    $parsedString["source"],
-                                    $destinationLanguage
-                                );
-
-                                $requestPostValue[$attributeCode] = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue[$attributeCode]);
-                            }
-
-                            $requestPostValue[$attributeCode] = $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue[$attributeCode]);
-                        }
-
-                        if ($attributeCode === 'url_key') {
-                            $requestPostValue[$attributeCode] = strtolower(preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue[$attributeCode]));
-                        }
+                    if ($attributeCode === 'url_key') {
+                        $requestPostValue[$attributeCode] = strtolower(preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue[$attributeCode]));
                     }
                 }
-
-                $request->setPostValue($requestPostValue);
             }
+
+            $request->setPostValue($requestPostValue);
+
         } catch (Exception $e) {
             $this->logger->debug(__("An error translating category attributes: %s", $e->getMessage()));
             $this->messageManager->addErrorMessage(__("An error occurred translating cms contents. Try again later."));
         }
         return null;
+    }
+
+    /**
+     * @param mixed $parsedContent
+     * @param string $requestPostValue
+     * @param string $destinationLanguage
+     * @return mixed|string
+     */
+    protected function translateParsedContent($parsedContent, string $requestPostValue, string $destinationLanguage) {
+        if (is_string($parsedContent)) {
+            return $this->translator->translate(
+                $parsedContent,
+                $destinationLanguage
+            );
+        } else {
+            $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
+
+            foreach ($parsedContent as $parsedString) {
+                $parsedString["translation"] = $this->translator->translate(
+                    $parsedString["source"],
+                    $destinationLanguage
+                );
+
+                $requestPostValue = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue);
+            }
+
+            return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
+        }
     }
 }
