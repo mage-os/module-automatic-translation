@@ -34,7 +34,7 @@
                     <field id="text_attribute_to_translate" translate="label comment" sortOrder="10" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Product text attributes to translate</label>
                         <source_model>MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes</source_model>
-                        <comment>Select which textual attributes of the product you want the AI automatically translates</comment>
+                        <comment>Select which text product attributes you want to automatically translate</comment>        
                         <validate>required-entry validate-no-empty</validate>
                     </field>
                     <field id="select_attribute_to_translate" translate="label comment" sortOrder="20" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
