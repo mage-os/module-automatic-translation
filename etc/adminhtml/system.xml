@@ -67,7 +67,7 @@
                         <validate>required-entry validate-number validate-not-negative-number</validate>
                     </field>
                     <field id="translate_disabled" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Translate disable products</label>
+                        <label>Translate disabled products</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment>This option is not considered in the translation button in product editing. It is used only for periodic automatic translation.</comment>
                     </field>
