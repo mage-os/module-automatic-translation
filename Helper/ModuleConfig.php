@@ -11,7 +11,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 class ModuleConfig extends AbstractHelper
 {
-    protected const SECTION = 'automatic_translation';
+    protected const SECTION = 'ai_integration/automatic_translation';
 
     protected const GENERAL_GROUP = self::SECTION . '/general';
     protected const CATALOG_GROUP = self::SECTION . '/catalog';
