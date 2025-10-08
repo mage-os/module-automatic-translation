@@ -1,159 +1,164 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="mageos" translate="label" sortOrder="900">
-            <label>Mage-OS</label>
-        </tab>
-        <section id="automatic_translation" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>Automatic translation with AI</label>
-            <tab>mageos</tab>
-            <resource>MageOS_AutomaticTranslation::catalog_translation</resource>
-            <group id="general" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>General</label>
-                <field id="enable" translate="label" type="select" sortOrder="10"
-                       showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="source_language" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Source language</label>
-                    <source_model>MageOS\AutomaticTranslation\Model\Config\Source\LanguageList</source_model>
-                    <comment>Select the language in which the product texts are written in the default view</comment>
-                    <validate>required-entry</validate>
-                </field>
-                <field id="destination_language" translate="label comment" type="label" sortOrder="30"
-                       showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Destination language</label>
-                    <comment>The texts will be translated into the language of the target store view.
-                        The language of the target store view is selected in locale options in the Magento configuration:
-                        Stores -> Settings -> Configuration -> General -> General -> Locale option -> Locale
-                    </comment>
-                </field>
-            </group>
-            <group id="catalog" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Catalog translation options</label>
-                <field id="text_attribute_to_translate" translate="label comment" sortOrder="10" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Product text attributes to translate</label>
-                    <source_model>MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes</source_model>
-                    <comment>Select which textual attributes of the product you want the AI automatically translates</comment>
-                    <validate>required-entry validate-no-empty</validate>
-                </field>
-                <field id="select_attribute_to_translate" translate="label comment" sortOrder="20" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Product select/multiselect attributes to translate</label>
-                    <source_model>MageOS\AutomaticTranslation\Model\Config\Source\SelectAttributes</source_model>
-                    <comment>Select which select or multiselect attributes of the product you want the AI automatically translates.
-                        Options will always be translated for these types of attributes if they are empty.
-                        The automatic retranslation enabled below has no effect on these attributes.
-                        To retranslate options for these attributes you must go into the attribute management and empty the translation for the store view of interest.
-                        Attribute options will not be translated for store views where the module is disabled in the general configurations.
-                    </comment>
-                </field>
+        <section id="ai_integration" translate="label" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>AI Integration</label>
+            <tab>service</tab>
+            <resource>Magento_Backend::ai_integration</resource>
+            <group id="automatic_translation" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Automatic translation with AI</label>
+                <group id="general" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>General</label>
+                    <field id="enable" translate="label" type="select" sortOrder="10"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="source_language" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Source language</label>
+                        <source_model>MageOS\AutomaticTranslation\Model\Config\Source\LanguageList</source_model>
+                        <comment>Select the default language that your product data is written in</comment>
+                        <validate>required-entry</validate>
+                    </field>
+                    <field id="destination_language" translate="label comment" type="label" sortOrder="30"
+                           showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Destination language</label>
+                        <comment>The texts will be translated into the language of the target store view.
+                            The language of the target store view is selected in locale options in the Magento configuration:
+                            Stores -> Settings -> Configuration -> General -> General -> Locale option -> Locale
+                        </comment>
+                    </field>
+                </group>
+                <group id="catalog" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Catalog translation options</label>
+                    <field id="text_attribute_to_translate" translate="label comment" sortOrder="10" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Product text attributes to translate</label>
+                        <source_model>MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes</source_model>
+                        <comment>Select which text product attributes you want to automatically translate</comment>        
+                        <validate>required-entry validate-no-empty</validate>
+                    </field>
+                    <field id="select_attribute_to_translate" translate="label comment" sortOrder="20" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Product select/multiselect attributes to translate</label>
+                        <source_model>MageOS\AutomaticTranslation\Model\Config\Source\SelectAttributes</source_model>
+                        <comment>Select which select or multiselect product attributes you want to automatically translate.
+                            Options will always be translated for these types of attributes if they are empty.
+                            The automatic retranslation enabled below has no effect on these attributes.
+                            To retranslate options for these attributes you must go into the attribute management and empty the translation for the store view of interest.
+                            Attribute options will not be translated for store views where the module is disabled in the general configurations.
+                        </comment>
+                    </field>
 
-                <field id="enable_periodic_retranslation" translate="label comment" sortOrder="30" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable periodic retranslation</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>If set to "yes," products will be periodically retranslated, even if they are flagged as "already translated."
-                        Warning: this setting may overwrite any manual changes to the product translations.
-                    </comment>
-                </field>
-                <field id="retranslation_period" type="text" translate="label comment" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Retranslation period (in days)</label>
-                    <comment>Indicate after how long a product should be translated again, even if it is flagged as "already translated."
-                        The calculation is based on the "Last translation date" attribute,
-                        which indicates the date and time of the last translation for each product.
-                    </comment>
-                    <depends>
-                        <field id="automatic_translation/catalog/enable_periodic_retranslation">1</field>
-                    </depends>
-                    <validate>required-entry validate-number validate-not-negative-number</validate>
-                </field>
-                <field id="translate_disabled" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Translate disable products</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>This option is not considered in the translation button in product editing. It is used only for periodic automatic translation.</comment>
-                </field>
-                <field id="enable_url_rewrite" translate="label comment" type="select" sortOrder="47" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Generate url rewrites in automatic translation</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>If set to no, it allows you to disable url rewrite generation for translated urls, only during automatic translation, to save performance.
-                        If set to no, you should consider regenerating the url rewrite using a module or external procedure, otherwise newly translated language urls will not be browsable.</comment>
-                </field>
-                <field id="product_translation_cron" type="text" translate="label comment" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Product translation cron expression</label>
-                    <backend_model>MageOS\AutomaticTranslation\Model\Config\CatalogCron</backend_model>
-                    <comment>Use Unix crontab syntax (ex. */15 * * * * -> every 15 minutes)</comment>
-                </field>
-                <field id="select_attribute_translation_cron" type="text" translate="label comment" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Select attributes translation cron expression</label>
-                    <backend_model>MageOS\AutomaticTranslation\Model\Config\SelectAttributeCron</backend_model>
-                    <comment>Use Unix crontab syntax (ex. */15 * * * * -> every 15 minutes)</comment>
-                </field>
-            </group>
-            <group id="translations_engine" translate="label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Translation engine</label>
-                <field id="engine" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Engine</label>
-                    <source_model>MageOS\AutomaticTranslation\Model\Config\Source\TranslationEngineList</source_model>
-                    <comment>Select the translation engine you prefer (for example DeepL, OpenAI GTP/ChatGPT, etc.)</comment>
-                    <validate>required-entry</validate>
-                </field>
-                <field id="deepl_auth_key" translate="label comment" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>DeepL auth key</label>
-                    <comment>Get your auth key here: https://www.deepl.com/it/your-account/keys</comment>
-                    <depends>
-                        <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\DeepL</field>
-                    </depends>
-                    <validate>required-entry</validate>
-                </field>
-                <field id="openai_org_id" type="text" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>OpenAI Organization ID</label>
-                    <comment>Get your organization ID here: https://platform.openai.com/account/org-settings</comment>
-                    <depends>
-                        <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
-                    </depends>
-                    <validate>required-entry</validate>
-                </field>
-                <field id="openai_api_key" translate="label comment" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>OpenAI Api Key</label>
-                    <comment>Get your api key here: https://platform.openai.com/settings/organization/api-keys</comment>
-                    <depends>
-                        <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
-                    </depends>
-                    <validate>required-entry</validate>
-                </field>
-                <field id="openai_project_id" translate="label comment" type="password" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>OpenAI Project ID</label>
-                    <comment>Get your project id here: https://platform.openai.com/settings/organization/projects.
-                        If left blank, OpenAI will consider your Default Project
-                    </comment>
-                    <depends>
-                        <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
-                    </depends>
-                </field>
-                <field id="openai_model" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>OpenAI GPT model</label>
-                    <source_model>MageOS\AutomaticTranslation\Model\Config\Source\GPTModels</source_model>
-                    <comment>Insert api key and organization ID and save to see options. Refer to the documentation to understand which model you should select: https://platform.openai.com/docs/models/overview</comment>
-                    <depends>
-                        <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
-                    </depends>
-                </field>
-                <field id="gemini_api_key" translate="label comment" type="password" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Gemini API key</label>
-                    <comment>Get your API key here: https://aistudio.google.com/apikey</comment>
-                    <depends>
-                        <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
-                    </depends>
-                    <validate>required-entry</validate>
-                </field>
-                <field id="gemini_model" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Google Gemini model</label>
-                    <source_model>MageOS\AutomaticTranslation\Model\Config\Source\GeminiModels</source_model>
-                    <comment>Insert API key and save to see options. Refer to the documentation to understand which model you should select: https://ai.google.dev/gemini-api/docs/models/gemini</comment>
-                    <depends>
-                        <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
-                    </depends>
-                </field>
+                    <field id="enable_periodic_retranslation" translate="label comment" sortOrder="30" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable periodic retranslation</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>If set to "yes," products will be periodically retranslated, even if they are flagged as "already translated."
+                            Warning: this setting may overwrite any manual changes to the product translations.
+                        </comment>
+                    </field>
+                    <field id="retranslation_period" type="text" translate="label comment" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Retranslation period (in days)</label>
+                        <comment>Indicate after how long a product should be translated again, even if it is flagged as "already translated."
+                            The calculation is based on the "Last translation date" attribute,
+                            which indicates the date and time of the last translation for each product.
+                        </comment>
+                        <depends>
+                            <field id="automatic_translation/catalog/enable_periodic_retranslation">1</field>
+                        </depends>
+                        <validate>required-entry validate-number validate-not-negative-number</validate>
+                    </field>
+                    <field id="translate_disabled" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Translate disabled products</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>This option is not considered in the translation button in product editing. It is used only for periodic automatic translation.</comment>
+                    </field>
+                    <field id="enable_url_rewrite" translate="label comment" type="select" sortOrder="47" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Generate url rewrites in automatic translation</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>If set to no, it allows you to disable url rewrite generation for translated urls, only during automatic translation, to save performance.
+                            If set to no, you should consider regenerating the url rewrite using a module or external procedure, otherwise newly translated language urls will not be browsable.
+                        </comment>
+                    </field>
+                    <field id="product_translation_cron" type="text" translate="label comment" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Product translation cron expression</label>
+                        <backend_model>MageOS\AutomaticTranslation\Model\Config\CatalogCron</backend_model>
+                        <comment>Use Unix crontab syntax (ex. */15 * * * * -> every 15 minutes)</comment>
+                    </field>
+                    <field id="select_attribute_translation_cron" type="text" translate="label comment" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Select attributes translation cron expression</label>
+                        <backend_model>MageOS\AutomaticTranslation\Model\Config\SelectAttributeCron</backend_model>
+                        <comment>Use Unix crontab syntax (ex. */15 * * * * -> every 15 minutes)</comment>
+                    </field>
+                </group>
+                <group id="translations_engine" translate="label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Translation engine</label>
+                    <field id="engine" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Engine</label>
+                        <source_model>MageOS\AutomaticTranslation\Model\Config\Source\TranslationEngineList</source_model>
+                        <comment>Select the translation engine you prefer (for example DeepL, OpenAI GTP/ChatGPT, etc.)</comment>
+                        <validate>required-entry</validate>
+                    </field>
+                    <field id="deepl_auth_key" translate="label comment" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>DeepL auth key</label>
+                        <comment>Get your auth key here: https://www.deepl.com/it/your-account/keys</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\DeepL</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                    </field>
+                    <field id="openai_org_id" type="text" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>OpenAI Organization ID</label>
+                        <comment>Get your organization ID here: https://platform.openai.com/account/org-settings</comment>
+                        <depends>
+                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                    </field>
+                    <field id="openai_api_key" translate="label comment" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>OpenAI Api Key</label>
+                        <comment>Get your api key here: https://platform.openai.com/settings/organization/api-keys</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                    </field>
+                    <field id="openai_project_id" translate="label comment" type="obscure" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>OpenAI Project ID</label>
+                        <comment>Get your project id here: https://platform.openai.com/settings/organization/projects.
+                            If left blank, OpenAI will consider your Default Project
+                        </comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
+                        </depends>
+                    </field>
+                    <field id="openai_model" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>OpenAI GPT model</label>
+                        <source_model>MageOS\AutomaticTranslation\Model\Config\Source\GPTModels</source_model>
+                        <comment>Insert api key and organization ID and save to see options. Refer to the documentation to understand which model you should select: https://platform.openai.com/docs/models/overview</comment>
+                        <depends>
+                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
+                        </depends>
+                    </field>
+                    <field id="gemini_api_key" translate="label comment" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Gemini API key</label>
+                        <comment>Get your API key here: https://aistudio.google.com/apikey</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                    </field>
+                    <field id="gemini_model" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Google Gemini model</label>
+                        <source_model>MageOS\AutomaticTranslation\Model\Config\Source\GeminiModels</source_model>
+                        <comment>Insert API key and save to see options. Refer to the documentation to understand which model you should select: https://ai.google.dev/gemini-api/docs/models/gemini</comment>
+                        <depends>
+                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
+                        </depends>
+                    </field>
+                </group>
             </group>
         </section>
     </system>

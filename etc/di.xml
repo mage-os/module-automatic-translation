@@ -25,6 +25,18 @@
         </arguments>
     </type>
 
+    <!-- SENSITIVE CONFIG -->
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="ai_integration/automatic_translation/translations_engine/deepl_auth_key" xsi:type="string">1</item>
+                <item name="ai_integration/automatic_translation/translations_engine/openai_api_key" xsi:type="string">1</item>
+                <item name="ai_integration/automatic_translation/translations_engine/openai_project_id" xsi:type="string">1</item>
+                <item name="ai_integration/automatic_translation/translations_engine/gemini_api_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+
     <!-- CUSTOM LOG -->
     <virtualType name="MageOS\AutomaticTranslation\Product\LoggerHanlder" type="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -61,10 +73,9 @@
             <argument name="logger" xsi:type="object">MageOS\AutomaticTranslation\SelectAttribute\Logger</argument>
         </arguments>
     </type>
-    <type name="MageOS\AutomaticTranslation\Plugin\AdinhtmlProductBeforeSavePlugin">
+    <type name="MageOS\AutomaticTranslation\Plugin\AdminhtmlProductBeforeSavePlugin">
         <arguments>
             <argument name="logger" xsi:type="object">MageOS\AutomaticTranslation\SelectAttribute\Logger</argument>
         </arguments>
     </type>
-
 </config>
