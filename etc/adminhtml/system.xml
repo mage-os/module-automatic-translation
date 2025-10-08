@@ -40,7 +40,7 @@
                     <field id="select_attribute_to_translate" translate="label comment" sortOrder="20" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Product select/multiselect attributes to translate</label>
                         <source_model>MageOS\AutomaticTranslation\Model\Config\Source\SelectAttributes</source_model>
-                        <comment>Select which select or multiselect attributes of the product you want the AI automatically translates.
+                        <comment>Select which select or multiselect product attributes you want to automatically translate.
                             Options will always be translated for these types of attributes if they are empty.
                             The automatic retranslation enabled below has no effect on these attributes.
                             To retranslate options for these attributes you must go into the attribute management and empty the translation for the store view of interest.
