@@ -97,9 +97,10 @@
                         <comment>Select the translation engine you prefer (for example DeepL, OpenAI GTP/ChatGPT, etc.)</comment>
                         <validate>required-entry</validate>
                     </field>
-                    <field id="deepl_auth_key" translate="label comment" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="deepl_auth_key" translate="label comment" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>DeepL auth key</label>
                         <comment>Get your auth key here: https://www.deepl.com/it/your-account/keys</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\DeepL</field>
                         </depends>
@@ -113,19 +114,21 @@
                         </depends>
                         <validate>required-entry</validate>
                     </field>
-                    <field id="openai_api_key" translate="label comment" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="openai_api_key" translate="label comment" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>OpenAI Api Key</label>
                         <comment>Get your api key here: https://platform.openai.com/settings/organization/api-keys</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
                         </depends>
                         <validate>required-entry</validate>
                     </field>
-                    <field id="openai_project_id" translate="label comment" type="password" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="openai_project_id" translate="label comment" type="obscure" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>OpenAI Project ID</label>
                         <comment>Get your project id here: https://platform.openai.com/settings/organization/projects.
                             If left blank, OpenAI will consider your Default Project
                         </comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
                         </depends>
@@ -138,9 +141,10 @@
                             <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
                         </depends>
                     </field>
-                    <field id="gemini_api_key" translate="label comment" type="password" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="gemini_api_key" translate="label comment" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Gemini API key</label>
                         <comment>Get your API key here: https://aistudio.google.com/apikey</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
                         </depends>
