@@ -31,8 +31,7 @@ class Service extends AbstractHelper
         Context $context,
         StoreManagerInterface $storeManager,
         ModuleConfig $moduleConfig
-    )
-    {
+    ) {
         $this->storeManager = $storeManager;
         $this->moduleConfig = $moduleConfig;
 
@@ -133,10 +132,10 @@ class Service extends AbstractHelper
     }
 
     /**
-     * @param $string
-     * @return mixed
+     * @param string $string
+     * @return array|string
      */
-    public function parsePageBuilderHtmlBox($string)
+    public function parsePageBuilderHtmlBox(string $string)
     {
         if ($string !== strip_tags($string)) {
             try {
@@ -179,6 +178,7 @@ class Service extends AbstractHelper
         }
         return $string;
     }
+
 
     /**
      * @param $str1
