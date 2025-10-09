@@ -3,9 +3,9 @@
 namespace MageOS\AutomaticTranslation\Plugin;
 
 use Exception;
+use MageOS\AutomaticTranslation\Helper\Service;
 use MageOS\AutomaticTranslation\Model\Translator;
 use Magento\Framework\Message\ManagerInterface;
-use MageOS\AutomaticTranslation\Helper\Service;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -68,7 +68,7 @@ class AdminhtmlCmsBeforeSavePlugin
 
             $requestPostValue = $request->getPostValue();
             $destinationLanguage = $request->getParam('translationLanguage');
-            $attributesToTranslate = $request->getParam('translationFields');
+            $attributesToTranslate = $request->getParam('translationFields') ?? [];
 
             foreach ($attributesToTranslate as $attributeCode) {
                 if (isset($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
@@ -97,25 +97,26 @@ class AdminhtmlCmsBeforeSavePlugin
      * @param string $destinationLanguage
      * @return mixed|string
      */
-    protected function translateParsedContent($parsedContent, string $requestPostValue, string $destinationLanguage) {
+    protected function translateParsedContent($parsedContent, string $requestPostValue, string $destinationLanguage)
+    {
         if (is_string($parsedContent)) {
             return $this->translator->translate(
                 $parsedContent,
                 $destinationLanguage
             );
-        } else {
-            $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
-
-            foreach ($parsedContent as $parsedString) {
-                $parsedString["translation"] = $this->translator->translate(
-                    $parsedString["source"],
-                    $destinationLanguage
-                );
-
-                $requestPostValue = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue);
-            }
-
-            return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
         }
+        
+        $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
+
+        foreach ($parsedContent as $parsedString) {
+            $parsedString["translation"] = $this->translator->translate(
+                $parsedString["source"],
+                $destinationLanguage
+            );
+
+            $requestPostValue = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue);
+        }
+
+        return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
     }
 }
