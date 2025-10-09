@@ -174,12 +174,7 @@ class Service extends AbstractHelper
                     }
                     usort(
                         $htmlContents,
-                        function ($str1, $str2) {
-                            if (strlen($str1) == strlen($str2)) {
-                                return 0;
-                            }
-                            return (strlen($str1) > strlen($str2)) ? -1 : 1;
-                        }
+                        [$this, 'compareStringLength']
                     );
                     $result = [];
                     foreach ($htmlContents as $content) {
