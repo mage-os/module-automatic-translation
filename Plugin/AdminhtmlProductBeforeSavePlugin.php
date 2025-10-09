@@ -3,14 +3,14 @@
 namespace MageOS\AutomaticTranslation\Plugin;
 
 use Exception;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
 use MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes;
 use MageOS\AutomaticTranslation\Model\Translator;
-use Magento\Framework\Message\ManagerInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
+use Magento\Framework\Message\ManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -64,8 +64,7 @@ class AdminhtmlProductBeforeSavePlugin
         Gallery          $gallery,
         ManagerInterface $messageManager,
         Logger           $logger
-    )
-    {
+    ) {
         $this->moduleConfig = $moduleConfig;
         $this->serviceHelper = $serviceHelper;
         $this->translator = $translator;
@@ -103,7 +102,7 @@ class AdminhtmlProductBeforeSavePlugin
                     $mediaGalleryImages = $requestPostValue["product"]["media_gallery"]["images"];
                     foreach ($mediaGalleryImages as $index => $mediaImage) {
                         $mediaGalleryImages[$index]["label"] = $this->translator
-                            ->translate($mediaImage["label"], $destinationLanguage, $sourceLanguage);
+                            ->translate((string)$mediaImage["label"], $destinationLanguage, $sourceLanguage);
                     }
                     $requestPostValue["product"]["media_gallery"]["images"] = $mediaGalleryImages;
                 } else {
@@ -161,23 +160,23 @@ class AdminhtmlProductBeforeSavePlugin
                 $parsedContent,
                 $destinationLanguage
             );
-        } else {
-            $requestPostValue = html_entity_decode(
-                htmlspecialchars_decode($requestPostValue)
-            );
-            foreach ($parsedContent as $parsedString) {
-                $parsedString["translation"] = $this->translator->translate(
-                    $parsedString["source"],
-                    $destinationLanguage
-                );
-
-                $requestPostValue = str_replace(
-                    $parsedString["source"],
-                    $parsedString["translation"],
-                    $requestPostValue
-                );
-            }
-            return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
         }
+        
+        $requestPostValue = html_entity_decode(
+            htmlspecialchars_decode($requestPostValue)
+        );
+        foreach ($parsedContent as $parsedString) {
+            $parsedString["translation"] = $this->translator->translate(
+                (string)$parsedString["source"],
+                $destinationLanguage
+            );
+
+            $requestPostValue = str_replace(
+                $parsedString["source"],
+                $parsedString["translation"],
+                $requestPostValue
+            );
+        }
+        return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
     }
 }
