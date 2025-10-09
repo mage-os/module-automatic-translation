@@ -64,8 +64,7 @@ class AdminhtmlCategoryBeforeSavePlugin
         Translator $translator,
         ManagerInterface $messageManager,
         Logger $logger
-    )
-    {
+    ) {
         $this->moduleConfig = $moduleConfig;
         $this->serviceHelper = $serviceHelper;
         $this->translator = $translator;
@@ -128,23 +127,24 @@ class AdminhtmlCategoryBeforeSavePlugin
      * @param string $destinationLanguage
      * @return mixed|string
      */
-    protected function translateParsedContent($parsedContent, string $requestPostValue, string $destinationLanguage) {
+    protected function translateParsedContent($parsedContent, string $requestPostValue, string $destinationLanguage)
+    {
         if (is_string($parsedContent)) {
             return $this->translator->translate(
                 $parsedContent,
                 $destinationLanguage
             );
-        } else {
-            $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
-            foreach ($parsedContent as $parsedString) {
-                $parsedString["translation"] = $this->translator->translate(
-                    $parsedString["source"],
-                    $destinationLanguage
-                );
-
-                $requestPostValue = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue);
-            }
-            return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
         }
+        
+        $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
+        foreach ($parsedContent as $parsedString) {
+            $parsedString["translation"] = $this->translator->translate(
+                $parsedString["source"],
+                $destinationLanguage
+            );
+
+            $requestPostValue = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue);
+        }
+        return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
     }
 }
