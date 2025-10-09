@@ -37,7 +37,7 @@ class Translator implements TranslatorInterface
     /**
      * @return void
      */
-    protected function initTranslator()
+    protected function initTranslator(): void
     {
         $engineClass = $this->moduleConfig->getEngineForTranslation();
         $this->translator = $this->translatorFactory->create($engineClass);
@@ -52,6 +52,10 @@ class Translator implements TranslatorInterface
      */
     public function translate(string $text, string $targetLang, ?string $sourceLang = null): string
     {
+        if (empty($text)) {
+            return '';
+        }
+        
         if (empty($this->translator)) {
             $this->initTranslator();
         }
