@@ -2,21 +2,21 @@
 
 namespace MageOS\AutomaticTranslation\Service;
 
-use Magento\Framework\Exception\LocalizedException;
+use Exception;
+use MageOS\AutomaticTranslation\Api\AttributeProviderInterface;
 use MageOS\AutomaticTranslation\Api\ProductTranslatorInterface;
+use MageOS\AutomaticTranslation\Api\TranslatorInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service as ServiceHelper;
-use MageOS\AutomaticTranslation\Api\AttributeProviderInterface;
-use Magento\Framework\DataObject;
-use Magento\Catalog\Api\Data\ProductInterface;
-use MageOS\AutomaticTranslation\Api\TranslatorInterface;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Psr\Log\LoggerInterface as Logger;
-use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\CatalogUrlRewrite\Model\Products\AppendUrlRewritesToProducts;
-use Exception;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class ProductTranslator
@@ -109,14 +109,14 @@ class ProductTranslator implements ProductTranslatorInterface
                 $this->translateGalleryAlternativeTexts($product, $storeId, $targetLanguage, $sourceLanguage);
             } else {
                 $textToTranslate = $product->getData($attributeCode);
-                if (empty($textToTranslate)) {
+                if (!is_string($textToTranslate) || empty($textToTranslate)) {
                     continue;
                 }
                 try {
                     $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($textToTranslate);
                     $textTranslated = $this->translateParsedContent($parsedContent, $textToTranslate, $targetLanguage, $sourceLanguage);
 
-                    if ($textToTranslate != $textTranslated) {
+                    if ($textToTranslate !== $textTranslated) {
                         $product->setData($attributeCode, $textTranslated);
                         $this->productResource->saveAttribute($product, $attributeCode);
 
@@ -200,7 +200,7 @@ class ProductTranslator implements ProductTranslatorInterface
                 }
             }
 
-            if ($textToTranslate) {
+            if (is_string($textToTranslate) && !empty($textToTranslate)) {
                 $translatedText = $this->translator->translate(
                     $textToTranslate,
                     $targetLanguage,
@@ -226,31 +226,32 @@ class ProductTranslator implements ProductTranslatorInterface
      * @return mixed|string
      * @throws Exception
      */
-    protected function translateParsedContent(string $parsedContent, string $textToTranslate, string $targetLanguage, string $sourceLanguage) {
+    protected function translateParsedContent(string $parsedContent, string $textToTranslate, string $targetLanguage, string $sourceLanguage)
+    {
         if (is_string($parsedContent)) {
             return $this->translator->translate(
                 $textToTranslate,
                 $targetLanguage,
                 $sourceLanguage
             );
-        } else {
-            $textToTranslate = html_entity_decode(htmlspecialchars_decode($textToTranslate));
-            $textTranslated = $textToTranslate;
-
-            foreach ($parsedContent as $parsedString) {
-                $parsedString["translation"] = $this->translator->translate(
-                    $parsedString["source"],
-                    $targetLanguage
-                );
-
-                $textTranslated = str_replace(
-                    $parsedString["source"],
-                    $parsedString["translation"],
-                    $textTranslated
-                );
-            }
-
-            return $this->serviceHelper->encodePageBuilderHtmlBox($textTranslated);
         }
+        
+        $textToTranslate = html_entity_decode(htmlspecialchars_decode($textToTranslate));
+        $textTranslated = $textToTranslate;
+
+        foreach ($parsedContent as $parsedString) {
+            $parsedString["translation"] = $this->translator->translate(
+                $parsedString["source"],
+                $targetLanguage
+            );
+
+            $textTranslated = str_replace(
+                $parsedString["source"],
+                $parsedString["translation"],
+                $textTranslated
+            );
+        }
+
+        return $this->serviceHelper->encodePageBuilderHtmlBox($textTranslated);
     }
 }
