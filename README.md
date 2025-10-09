@@ -63,7 +63,7 @@ If, however, there are many products to be retranslated or the underlying conten
 
 ### Configuration Options
 
-The module provides several configuration options under **Stores > Configuration > MageOS > Automatic translation with AI**:
+The module provides several configuration options under **Stores > Configuration > Services > AI Integration > Automatic translation with AI**:
 
 #### General Configuration
 - **Enable**: Enables or disables the module. This setting is configurable per store view, allowing you to translate only certain languages.
