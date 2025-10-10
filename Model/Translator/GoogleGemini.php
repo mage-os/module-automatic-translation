@@ -2,10 +2,10 @@
 
 namespace MageOS\AutomaticTranslation\Model\Translator;
 
-use MageOS\AutomaticTranslation\Api\TranslatorInterface;
-use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use Gemini as GeminiTranslator;
 use Gemini\Client as GeminiClient;
+use MageOS\AutomaticTranslation\Api\TranslatorInterface;
+use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 
 /**
  * Class GoogleGemini
@@ -41,7 +41,7 @@ class GoogleGemini implements TranslatorInterface
     /**
      * @return void
      */
-    public function initTranslator()
+    public function initTranslator(): void
     {
         $apiKey = $this->moduleConfig->getGeminiApiKey();
         $this->translator = $this->geminiTranslator::client($apiKey);
@@ -62,8 +62,8 @@ class GoogleGemini implements TranslatorInterface
         $prompt = 'Translate this text';
         $prompt .= (!empty($sourceLang)) ? ' from ' . $sourceLang : '';
         $prompt .= ' to ' . $targetLang;
-        $prompt .= ' writing the result directly without premise or conclusion or consideration, keeping the html code unchanged, if i don\'t have initial html don\'t add it';
-        $prompt .= ': ' . $text;
+        $prompt .= ' writing the result directly without premise or conclusion or consideration, keeping the html code';
+        $prompt .= ' unchanged, if i don\'t have initial html don\'t add it: ' . $text;
 
         $response = $this->translator
             ->generativeModel($this->moduleConfig->getGeminiModel())

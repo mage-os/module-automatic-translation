@@ -3,14 +3,13 @@
 namespace MageOS\AutomaticTranslation\Plugin;
 
 use Exception;
+use Magento\Catalog\Controller\Adminhtml\Product\Save;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
+use Magento\Framework\Message\ManagerInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
 use MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes;
 use MageOS\AutomaticTranslation\Model\Translator;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Controller\Adminhtml\Product\Save;
-use Magento\Catalog\Model\ResourceModel\Product\Gallery;
-use Magento\Framework\Message\ManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -58,12 +57,12 @@ class AdminhtmlProductBeforeSavePlugin
      * @param Logger $logger
      */
     public function __construct(
-        ModuleConfig     $moduleConfig,
-        Service          $serviceHelper,
-        Translator       $translator,
-        Gallery          $gallery,
+        ModuleConfig $moduleConfig,
+        Service $serviceHelper,
+        Translator $translator,
+        Gallery $gallery,
         ManagerInterface $messageManager,
-        Logger           $logger
+        Logger $logger
     ) {
         $this->moduleConfig = $moduleConfig;
         $this->serviceHelper = $serviceHelper;
@@ -161,7 +160,7 @@ class AdminhtmlProductBeforeSavePlugin
                 $destinationLanguage
             );
         }
-        
+
         $requestPostValue = html_entity_decode(
             htmlspecialchars_decode($requestPostValue)
         );

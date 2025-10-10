@@ -57,8 +57,12 @@ class TranslationPopup extends Template
     {
         $layout = $this->json->unserialize(parent::getJsLayout());
 
-        $layout['components']['mageos-translation-popup']['title'] = __('Translate') . ' ' . __( $layout['components']['mageos-translation-popup']['config']['type']);
-        $layout['components']['mageos-translation-popup']['content'] = __('Choose the translation language and the fields to translate.');
+        $layout['components']['mageos-translation-popup']['title'] = __('Translate') . ' ' . __(
+                $layout['components']['mageos-translation-popup']['config']['type']
+            );
+        $layout['components']['mageos-translation-popup']['content'] = __(
+            'Choose the translation language and the fields to translate.'
+        );
 
         $layout['components']['mageos-translation-popup']['languages'] = $this->getAllowedLanguages();
         $layout['components']['mageos-translation-popup']['fields'] = $layout['components']['mageos-translation-popup']['config']['allowedFields'];
@@ -82,7 +86,8 @@ class TranslationPopup extends Template
     /**
      * @return array
      */
-    private function getAllowedLanguages() {
+    private function getAllowedLanguages(): array
+    {
         $result = [];
         foreach ($this->service->getStoresLanguages() as $language) {
             $result[] = [

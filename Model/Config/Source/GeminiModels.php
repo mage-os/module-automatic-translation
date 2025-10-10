@@ -2,11 +2,11 @@
 
 namespace MageOS\AutomaticTranslation\Model\Config\Source;
 
-use Magento\Framework\Data\OptionSourceInterface;
+use Exception;
 use Gemini;
 use Gemini\Client as GeminiClient;
+use Magento\Framework\Data\OptionSourceInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Exception;
 
 /**
  * Class GeminiModels
@@ -42,7 +42,7 @@ class GeminiModels implements OptionSourceInterface
     /**
      * @return void
      */
-    protected function initClient()
+    protected function initClient(): void
     {
         $apiKey = $this->moduleConfig->getGeminiApiKey();
         $this->geminiClient = $this->gemini::client($apiKey);
@@ -72,7 +72,6 @@ class GeminiModels implements OptionSourceInterface
             } catch (Exception $e) {
                 return $optionArray;
             }
-
         }
 
         return $optionArray;

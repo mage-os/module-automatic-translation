@@ -2,23 +2,24 @@
 
 namespace MageOS\AutomaticTranslation\Service;
 
-use MageOS\AutomaticTranslation\Api\TranslateSelectAttributesInterface;
-use MageOS\AutomaticTranslation\Helper\Service as ServiceHelper;
-use Magento\Store\Model\StoreManagerInterface;
-use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\AttributeInterface;
-use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Catalog\Model\Product as ProductModel;
-use Magento\Eav\Api\Data\AttributeFrontendLabelInterface;
-use MageOS\AutomaticTranslation\Api\TranslatorInterface;
-use Magento\Eav\Api\AttributeOptionUpdateInterface;
-use Magento\Eav\Api\Data\AttributeOptionLabelInterfaceFactory;
-use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\StateException;
 use Exception;
+use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Eav\Api\AttributeOptionUpdateInterface;
+use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
+use Magento\Eav\Api\Data\AttributeFrontendLabelInterface;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Api\Data\AttributeOptionLabelInterfaceFactory;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
+use Magento\Store\Model\StoreManagerInterface;
+use MageOS\AutomaticTranslation\Api\TranslateSelectAttributesInterface;
+use MageOS\AutomaticTranslation\Api\TranslatorInterface;
+use MageOS\AutomaticTranslation\Helper\ModuleConfig;
+use MageOS\AutomaticTranslation\Helper\Service as ServiceHelper;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class TranslateSelectAttributes
@@ -137,7 +138,11 @@ class TranslateSelectAttributes implements TranslateSelectAttributesInterface
                     }
 
                     try {
-                        $translatedLabel = $this->translator->translate($origLangOptionLabel, $targetLanguage, $sourceLanguage);
+                        $translatedLabel = $this->translator->translate(
+                            $origLangOptionLabel,
+                            $targetLanguage,
+                            $sourceLanguage
+                        );
                     } catch (Exception $e) {
                         $this->logger->debug('Error when translating the option');
                         $this->logger->debug('Attribute: ' . $attribute->getAttributeCode());
@@ -180,7 +185,11 @@ class TranslateSelectAttributes implements TranslateSelectAttributesInterface
     protected function getAttributeToTranslate($storeId): array
     {
         $attributeCodes = $this->moduleConfig->getProductSelectAttributeToTranslate($storeId);
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter(AttributeInterface::ATTRIBUTE_CODE, $attributeCodes, 'in')
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+            AttributeInterface::ATTRIBUTE_CODE,
+            $attributeCodes,
+            'in'
+        )
             ->create();
         $attributes = $this->attributeRepository->getList(ProductModel::ENTITY, $searchCriteria)->getItems();
 
@@ -190,10 +199,12 @@ class TranslateSelectAttributes implements TranslateSelectAttributesInterface
     /**
      * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
      * @param int $storeId
-     * @return \Magento\Eav\Api\Data\AttributeOptionInterface[]|null
+     * @return AttributeOptionInterface[]|null
      */
-    protected function getAttributeOptions(\Magento\Eav\Api\Data\AttributeInterface $attribute, int $storeId = 0): ?array
-    {
+    protected function getAttributeOptions(
+        \Magento\Eav\Api\Data\AttributeInterface $attribute,
+        int $storeId = 0
+    ): ?array {
         $this->storeManager->setCurrentStore($storeId);
         return $attribute->getOptions();
     }

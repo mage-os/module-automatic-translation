@@ -3,13 +3,13 @@
 namespace MageOS\AutomaticTranslation\Block\Adminhtml\CmsBlock;
 
 use Magento\Backend\Block\Widget\Context;
-use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Backend\Model\UrlInterface;
 use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Block\Adminhtml\Page\Edit\GenericButton;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Magento\Backend\Model\UrlInterface;
 
 /**
  * Class GenerateTranslationsButton
@@ -48,8 +48,7 @@ class GenerateTranslationsButton extends GenericButton implements ButtonProvider
         PageRepositoryInterface $pageRepository,
         ModuleConfig $moduleConfig,
         UrlInterface $url
-    )
-    {
+    ) {
         $this->moduleConfig = $moduleConfig;
         $this->url = $url;
         $this->blockRepository = $blockRepository;
@@ -73,7 +72,10 @@ class GenerateTranslationsButton extends GenericButton implements ButtonProvider
         return [
             'label' => __('Generate translations'),
             'class' => 'action-secondary',
-            'on_click' => 'window.mageosTranslationPopup("' . $this->url->getUrl(self::CMSBLOCK_TRANSLATION_CONTROLLER_PATH, $params) . '")',
+            'on_click' => 'window.mageosTranslationPopup("' . $this->url->getUrl(
+                    self::CMSBLOCK_TRANSLATION_CONTROLLER_PATH,
+                    $params
+                ) . '")',
             'sort_order' => 10
         ];
     }
@@ -82,7 +84,8 @@ class GenerateTranslationsButton extends GenericButton implements ButtonProvider
      * @return int|null
      * @throws LocalizedException
      */
-    private function getCmsBlockId() {
+    private function getCmsBlockId()
+    {
         return $this->blockRepository->getById(
             $this->context->getRequest()->getParam('block_id')
         )->getId();

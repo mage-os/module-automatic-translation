@@ -11,11 +11,11 @@ define([
             noStoresMessage: '',
             translationStores: [],
             stores: '',
-            content:        '',
-            showSpinner:    false,
-            loading:        false,
-            visible:        true,
-            template:       'ui/content/content',
+            content: '',
+            showSpinner: false,
+            loading: false,
+            visible: true,
+            template: 'ui/content/content',
             additionalClasses: {},
             ignoreTmpls: {
                 content: true

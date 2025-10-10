@@ -2,6 +2,7 @@
 
 namespace MageOS\AutomaticTranslation\Helper;
 
+use DateTime;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Store\Model\ScopeInterface;
 
@@ -115,11 +116,15 @@ class ModuleConfig extends AbstractHelper
      * @param int $storeId
      * @return string
      */
-    public function getTranslationExpirationDate(int $storeId = 0)
+    public function getTranslationExpirationDate(int $storeId = 0): string
     {
-        $retranslationDays = (string)$this->scopeConfig->getValue(self::RETRANSLATION_PERIOD, ScopeInterface::SCOPE_STORE, $storeId);
+        $retranslationDays = (string)$this->scopeConfig->getValue(
+            self::RETRANSLATION_PERIOD,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
 
-        $translationExpirationDate = new \DateTime();
+        $translationExpirationDate = new DateTime();
         $translationExpirationDate->setTimestamp(strtotime('now'));
         $translationExpirationDate->modify('-' . $retranslationDays . ' days');
 
@@ -129,7 +134,7 @@ class ModuleConfig extends AbstractHelper
     /**
      * @return string
      */
-    public function getEngineForTranslation()
+    public function getEngineForTranslation(): string
     {
         return (string)$this->scopeConfig->getValue(self::ENGINE, ScopeInterface::SCOPE_STORE, 0);
     }

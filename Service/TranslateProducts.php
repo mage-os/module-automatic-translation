@@ -2,20 +2,20 @@
 
 namespace MageOS\AutomaticTranslation\Service;
 
-use MageOS\AutomaticTranslation\Api\TranslateProductsInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\DataObject;
 use Magento\Store\Model\StoreManagerInterface;
+use MageOS\AutomaticTranslation\Api\AttributeProviderInterface;
+use MageOS\AutomaticTranslation\Api\ProductTranslatorInterface;
+use MageOS\AutomaticTranslation\Api\TranslateProductsInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service as ServiceHelper;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Catalog\Model\Product as ProductModel;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use MageOS\AutomaticTranslation\Api\AttributeProviderInterface;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\DataObject;
-use Magento\Catalog\Api\Data\ProductInterface;
-use MageOS\AutomaticTranslation\Api\ProductTranslatorInterface;
 
 /**
  * Class TranslateProducts
@@ -93,7 +93,13 @@ class TranslateProducts implements TranslateProductsInterface
 
             /** @var $product DataObject|ProductInterface */
             foreach ($productsToTranslate as $product) {
-                $this->productTranslator->translateProduct($product, $targetLanguage, $sourceLanguage, $storeName, $storeId);
+                $this->productTranslator->translateProduct(
+                    $product,
+                    $targetLanguage,
+                    $sourceLanguage,
+                    $storeName,
+                    $storeId
+                );
             }
         }
     }
@@ -148,8 +154,11 @@ class TranslateProducts implements TranslateProductsInterface
      * @param bool $getExpired
      * @return void
      */
-    protected function filterByRetranslationDate(SearchCriteriaBuilder $searchCriteriaBuilder, int $storeId = 0, bool $getExpired = true): void
-    {
+    protected function filterByRetranslationDate(
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        int $storeId = 0,
+        bool $getExpired = true
+    ): void {
         $translationExpirationDate = $this->moduleConfig->getTranslationExpirationDate($storeId);
 
         if ($getExpired) {
@@ -164,7 +173,11 @@ class TranslateProducts implements TranslateProductsInterface
                     ->create()
             ]);
         } else {
-            $searchCriteriaBuilder->addFilter(AttributeProviderInterface::LAST_TRANSLATION, $translationExpirationDate, 'gt');
+            $searchCriteriaBuilder->addFilter(
+                AttributeProviderInterface::LAST_TRANSLATION,
+                $translationExpirationDate,
+                'gt'
+            );
         }
     }
 

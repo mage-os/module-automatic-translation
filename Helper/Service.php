@@ -1,7 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace MageOS\AutomaticTranslation\Helper;
 
+use DOMDocument;
+use DOMNode;
+use DOMNodeList;
+use DOMXPath;
+use Exception;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\StoreManagerInterface;
@@ -83,30 +89,33 @@ class Service extends AbstractHelper
      */
     public function encodePageBuilderHtmlBox(string $string): string
     {
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
 
         preg_match('/<script.*?\/script>/s', $string, $scripts);
         $string = preg_replace('/<script.*?\/script>/s', '', $string) ?? '';
         preg_match('/<style.*?\/style>/s', $string, $styles);
         $string = preg_replace('/<style.*?\/style>/s', '', $string) ?? '';
-        $dom->loadHTML('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">' . $string, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $dom->loadHTML(
+            '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">' . $string,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
 
-        $xpath = new \DOMXPath($dom);
+        $xpath = new DOMXPath($dom);
         /**
-         * @var \DOMNodeList $pagebuilderNodes
+         * @var DOMNodeList $pagebuilderNodes
          */
         $pagebuilderNodes = $xpath->query('//div[@data-content-type="html"]');
-        
+
         if ($pagebuilderNodes === false) {
             return '<div data-content-type="html" data-appearance="default" data-element="main">' . $string . '</div>';
         }
-        
+
         /**
-         * @var \DOMNode $node
+         * @var DOMNode $node
          */
         foreach ($pagebuilderNodes as $node) {
             /**
-             * @var \DOMNode $childNode
+             * @var DOMNode $childNode
              */
             $length = $node->childNodes->length;
             for ($nodeIndex = 0; $nodeIndex < $length; $nodeIndex++) {
@@ -114,17 +123,18 @@ class Service extends AbstractHelper
                 if ($childNode === null) {
                     continue;
                 }
-                $childDom = new \DOMDocument();
+                $childDom = new DOMDocument();
                 $importedNode = $childDom->importNode($childNode, true);
                 $childDom->appendChild($importedNode);
                 $nodeHtml = html_entity_decode($childDom->saveHTML());
-                $node->replaceChild($dom->createTextNode(str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$nodeHtml)), $childNode);
+                $node->replaceChild($dom->createTextNode(str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$nodeHtml)),
+                    $childNode);
             }
         }
 
         $resultNode = $dom->firstChild?->childNodes->item(0);
         $resultHtml = '';
-        
+
         if ($resultNode !== null) {
             $resultHtml = preg_replace_callback(
                 '/=\"(%7B%7B[^"]*%7D%7D)\"/m',
@@ -134,7 +144,7 @@ class Service extends AbstractHelper
                 $resultNode->nodeValue ?? ''
             ) ?? '';
         }
-        
+
         foreach ($styles as $style) {
             $resultHtml = str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$style) . $resultHtml;
         }
@@ -155,19 +165,19 @@ class Service extends AbstractHelper
                 $htmlString = htmlspecialchars_decode($string);
                 $htmlString = preg_replace('/<script.*?\/script>/s', '', $htmlString) ?? '';
                 $htmlString = preg_replace('/<style.*?\/style>/s', '', $htmlString) ?? '';
-                $dom = new \DOMDocument();
+                $dom = new DOMDocument();
                 $dom->loadHTML('<?xml encoding="utf-8" ?>' . $htmlString);
                 $htmlContents = [];
 
-                $xpath = new \DOMXPath($dom);
+                $xpath = new DOMXPath($dom);
                 $queryResult = $xpath->query('//div[@data-content-type="html"]');
-                
+
                 if (
                     $queryResult !== false
                     && $queryResult->length > 0
                 ) {
                     /**
-                     * @var \DOMNode $node
+                     * @var DOMNode $node
                      */
                     foreach ($queryResult as $node) {
                         $this->getChildNodesContent($node, $htmlContents);
@@ -182,7 +192,7 @@ class Service extends AbstractHelper
                     }
                     return $result;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return $string;
             }
         }
@@ -205,10 +215,10 @@ class Service extends AbstractHelper
 
 
     /**
-     * @param \DOMNode $node
+     * @param DOMNode $node
      * @param array $htmlContents
      */
-    private function getChildNodesContent(\DOMNode $node, array &$htmlContents): void
+    private function getChildNodesContent(DOMNode $node, array &$htmlContents): void
     {
         if (!in_array($node->nodeName, ['img', '#comment'], true)) {
             if ($node->hasChildNodes()) {
