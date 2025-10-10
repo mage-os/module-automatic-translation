@@ -14,6 +14,14 @@ use MageOS\AutomaticTranslation\Helper\ModuleConfig;
  */
 class DeepL implements TranslatorInterface
 {
+
+    const REGIONAL_VARIANTS_LANGUAGES = [
+        'en',
+        'pt',
+        'es',
+        'zh'
+    ];
+
     /**
      * @var DeepLTranslator|null
      */
@@ -63,6 +71,9 @@ class DeepL implements TranslatorInterface
 
         if (substr($targetLang, 2, 1) === '_') {
             $targetLang = str_replace('_', '-', $targetLang);
+            if (!in_array(substr($targetLang, 0, 2), self::REGIONAL_VARIANTS_LANGUAGES)) {
+                $targetLang = substr($targetLang, 0, 2);
+            }
         }
 
         if ($sourceLang) {

@@ -20,7 +20,11 @@ class SelectAttributes implements OptionSourceInterface
         'custom_design',
         'custom_layout',
         'custom_layout_update_file',
-        'page_layout'
+        'page_layout',
+        'msrp_display_actual_price_type',
+        'price_view',
+        'shipment_type',
+        'gift_message_available'
     ];
 
     protected CollectionFactory $collectionFactory;

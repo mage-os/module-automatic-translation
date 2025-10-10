@@ -56,7 +56,7 @@ class Service extends AbstractHelper
             $storeId = $store->getId();
             $storeName = $store->getName();
 
-            if ($this->moduleConfig->isEnable($storeId)) {
+            if ($this->moduleConfig->isEnable((int)$storeId)) {
                 $storeToTranslate[$storeId] = $storeName;
             }
         }
@@ -74,9 +74,9 @@ class Service extends AbstractHelper
 
         foreach ($stores as $store) {
             $storeId = $store->getId();
-            $storeLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
+            $storeLanguage = $this->moduleConfig->getDestinationLanguage((int)$storeId);
 
-            if ($this->moduleConfig->isEnable($storeId)) {
+            if ($this->moduleConfig->isEnable((int)$storeId)) {
                 $storeToTranslate[$storeId] = $storeLanguage;
             }
         }

@@ -4,6 +4,8 @@ namespace MageOS\AutomaticTranslation\Helper;
 
 use DateTime;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -37,6 +39,20 @@ class ModuleConfig extends AbstractHelper
     protected const OPEN_AI_MODEL = self::ENGINE_GROUP . '/openai_model';
     protected const GEMINI_API_KEY = self::ENGINE_GROUP . '/gemini_api_key';
     protected const GEMINI_MODEL = self::ENGINE_GROUP . '/gemini_model';
+
+    /**
+     * @var EncryptorInterface
+     */
+    protected EncryptorInterface $encryptor;
+
+    public function __construct(
+        EncryptorInterface $encryptor,
+        Context $context
+    )
+    {
+        $this->encryptor = $encryptor;
+        parent::__construct($context);
+    }
 
     /**
      * @param int $storeId
@@ -144,7 +160,8 @@ class ModuleConfig extends AbstractHelper
      */
     public function getDeepLAuthKey(): string
     {
-        return (string)$this->scopeConfig->getValue(self::DEEPL_AUTH_KEY, ScopeInterface::SCOPE_STORE, 0);
+        $encryptedAuthKey = (string)$this->scopeConfig->getValue(self::DEEPL_AUTH_KEY, ScopeInterface::SCOPE_STORE, 0);
+        return $this->encryptor->decrypt($encryptedAuthKey);
     }
 
     /**
@@ -152,7 +169,8 @@ class ModuleConfig extends AbstractHelper
      */
     public function getOpenAIApiKey(): string
     {
-        return (string)$this->scopeConfig->getValue(self::OPEN_AI_API_KEY, ScopeInterface::SCOPE_STORE, 0);
+        $encryptedApiKey = (string)$this->scopeConfig->getValue(self::OPEN_AI_API_KEY, ScopeInterface::SCOPE_STORE, 0);
+        return $this->encryptor->decrypt($encryptedApiKey);
     }
 
     /**
@@ -184,7 +202,8 @@ class ModuleConfig extends AbstractHelper
      */
     public function getGeminiApiKey(): string
     {
-        return (string)$this->scopeConfig->getValue(self::GEMINI_API_KEY, ScopeInterface::SCOPE_STORE, 0);
+        $encryptedApiKey = (string)$this->scopeConfig->getValue(self::GEMINI_API_KEY, ScopeInterface::SCOPE_STORE, 0);
+        return $this->encryptor->decrypt($encryptedApiKey);
     }
 
     /**

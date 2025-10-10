@@ -163,7 +163,7 @@ class TranslateSelectAttributes implements TranslateSelectAttributesInterface
                         $this->optionUpdate->update(
                             ProductModel::ENTITY,
                             $attribute->getAttributeCode(),
-                            $option->getValue(),
+                            (int)$option->getValue(),
                             $option
                         );
                     } catch (InputException|NoSuchEntityException|StateException $e) {
