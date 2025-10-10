@@ -4,9 +4,9 @@ namespace MageOS\AutomaticTranslation\Block\Adminhtml\Category;
 
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\UiComponent\Context;
 use MageOS\AutomaticTranslation\Block\Adminhtml\Component\Control\SplitButton;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Magento\Framework\View\Element\UiComponent\Context;
 
 /**
  * Class TranslateButton
@@ -90,8 +90,6 @@ class TranslateButton extends Generic
                     ],
                     'dropdown_button_aria_label' => __('Save options'),
                 ];
-
-
             } else {
                 return [];
             }

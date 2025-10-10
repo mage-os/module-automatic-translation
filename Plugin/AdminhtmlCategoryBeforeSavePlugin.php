@@ -4,10 +4,10 @@ namespace MageOS\AutomaticTranslation\Plugin;
 
 use Exception;
 use Magento\Catalog\Controller\Adminhtml\Category\Save;
+use Magento\Framework\Message\ManagerInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
 use MageOS\AutomaticTranslation\Model\Translator;
-use Magento\Framework\Message\ManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -100,10 +100,16 @@ class AdminhtmlCategoryBeforeSavePlugin
                 if (!empty($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
                     $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue[$attributeCode]);
 
-                    $requestPostValue[$attributeCode] = $this->translateParsedContent($parsedContent, $requestPostValue[$attributeCode], $destinationLanguage);
+                    $requestPostValue[$attributeCode] = $this->translateParsedContent(
+                        $parsedContent,
+                        $requestPostValue[$attributeCode],
+                        $destinationLanguage
+                    );
 
                     if ($attributeCode === 'url_key') {
-                        $requestPostValue[$attributeCode] = strtolower(preg_replace('#[^0-9a-z]+#i', '-',$requestPostValue[$attributeCode]));
+                        $requestPostValue[$attributeCode] = strtolower(
+                            preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue[$attributeCode])
+                        );
                     }
 
                     if (isset($requestPostValue["use_default"][$attributeCode])) {
@@ -113,10 +119,11 @@ class AdminhtmlCategoryBeforeSavePlugin
             }
 
             $request->setPostValue($requestPostValue);
-
         } catch (Exception $e) {
             $this->logger->debug(__("An error translating category attributes: %s", $e->getMessage()));
-            $this->messageManager->addErrorMessage(__("An error occurred translating category attributes. Try again later."));
+            $this->messageManager->addErrorMessage(
+                __("An error occurred translating category attributes. Try again later.")
+            );
         }
         return null;
     }
@@ -135,7 +142,7 @@ class AdminhtmlCategoryBeforeSavePlugin
                 $destinationLanguage
             );
         }
-        
+
         $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
         foreach ($parsedContent as $parsedString) {
             $parsedString["translation"] = $this->translator->translate(

@@ -3,12 +3,6 @@
 namespace MageOS\AutomaticTranslation\Service;
 
 use Exception;
-use MageOS\AutomaticTranslation\Api\AttributeProviderInterface;
-use MageOS\AutomaticTranslation\Api\ProductTranslatorInterface;
-use MageOS\AutomaticTranslation\Api\TranslatorInterface;
-use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use MageOS\AutomaticTranslation\Helper\Service as ServiceHelper;
-use MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
@@ -16,6 +10,12 @@ use Magento\CatalogUrlRewrite\Model\Products\AppendUrlRewritesToProducts;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
+use MageOS\AutomaticTranslation\Api\AttributeProviderInterface;
+use MageOS\AutomaticTranslation\Api\ProductTranslatorInterface;
+use MageOS\AutomaticTranslation\Api\TranslatorInterface;
+use MageOS\AutomaticTranslation\Helper\ModuleConfig;
+use MageOS\AutomaticTranslation\Helper\Service as ServiceHelper;
+use MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -114,7 +114,12 @@ class ProductTranslator implements ProductTranslatorInterface
                 }
                 try {
                     $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($textToTranslate);
-                    $textTranslated = $this->translateParsedContent($parsedContent, $textToTranslate, $targetLanguage, $sourceLanguage);
+                    $textTranslated = $this->translateParsedContent(
+                        $parsedContent,
+                        $textToTranslate,
+                        $targetLanguage,
+                        $sourceLanguage
+                    );
 
                     if ($textToTranslate !== $textTranslated) {
                         $product->setData($attributeCode, $textTranslated);
@@ -166,8 +171,12 @@ class ProductTranslator implements ProductTranslatorInterface
      * @return void
      * @throws LocalizedException
      */
-    protected function translateGalleryAlternativeTexts($product, $storeId, string $targetLanguage, string $sourceLanguage): void
-    {
+    protected function translateGalleryAlternativeTexts(
+        $product,
+        $storeId,
+        string $targetLanguage,
+        string $sourceLanguage
+    ): void {
         $gallery = $this->gallery->loadProductGalleryByAttributeId(
             $product,
             (int)$this->productResource
@@ -226,8 +235,12 @@ class ProductTranslator implements ProductTranslatorInterface
      * @return mixed|string
      * @throws Exception
      */
-    protected function translateParsedContent(string $parsedContent, string $textToTranslate, string $targetLanguage, string $sourceLanguage)
-    {
+    protected function translateParsedContent(
+        string $parsedContent,
+        string $textToTranslate,
+        string $targetLanguage,
+        string $sourceLanguage
+    ) {
         if (is_string($parsedContent)) {
             return $this->translator->translate(
                 $textToTranslate,
@@ -235,7 +248,7 @@ class ProductTranslator implements ProductTranslatorInterface
                 $sourceLanguage
             );
         }
-        
+
         $textToTranslate = html_entity_decode(htmlspecialchars_decode($textToTranslate));
         $textTranslated = $textToTranslate;
 

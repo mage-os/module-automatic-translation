@@ -3,11 +3,11 @@
 namespace MageOS\AutomaticTranslation\Block\Adminhtml\Product;
 
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\UiComponent\Context;
 use MageOS\AutomaticTranslation\Block\Adminhtml\Component\Control\SplitButton;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 
 /**
  * Class TranslateButton
@@ -44,7 +44,6 @@ class TranslateButton extends Generic
         $currentStore = $this->context->getRequestParam("store");
         if ($currentStore && intval($currentStore) !== 0) {
             if ($this->moduleConfig->isEnable($currentStore)) {
-
                 return [
                     'label' => __('Translate'),
                     'class' => 'save secondary',
@@ -126,7 +125,7 @@ class TranslateButton extends Generic
      *
      * @return string
      */
-    protected function getSaveTarget()
+    protected function getSaveTarget(): string
     {
         $target = 'product_form.product_form';
         if ($this->isConfigurableProduct()) {
@@ -140,7 +139,7 @@ class TranslateButton extends Generic
      *
      * @return string
      */
-    protected function getSaveAction()
+    protected function getSaveAction(): string
     {
         $action = 'save';
         if ($this->isConfigurableProduct()) {
@@ -152,9 +151,9 @@ class TranslateButton extends Generic
     /**
      * Is configurable product.
      *
-     * @return boolean
+     * @return bool
      */
-    protected function isConfigurableProduct()
+    protected function isConfigurableProduct(): bool
     {
         return !$this->getProduct()->isComposite() || $this->getProduct()->getTypeId() === ConfigurableType::TYPE_CODE;
     }

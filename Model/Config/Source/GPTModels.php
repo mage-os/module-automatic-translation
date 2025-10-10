@@ -2,11 +2,11 @@
 
 namespace MageOS\AutomaticTranslation\Model\Config\Source;
 
+use Exception;
 use Magento\Framework\Data\OptionSourceInterface;
+use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use OpenAI;
 use OpenAI\Client as OpenAIClient;
-use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Exception;
 
 /**
  * Class GPTModels
@@ -42,7 +42,7 @@ class GPTModels implements OptionSourceInterface
     /**
      * @return void
      */
-    protected function initClient()
+    protected function initClient(): void
     {
         $apiKey = $this->moduleConfig->getOpenAIApiKey();
         $organization = $this->moduleConfig->getOpenAIOrgID();
@@ -75,7 +75,6 @@ class GPTModels implements OptionSourceInterface
             } catch (Exception $e) {
                 return $optionArray;
             }
-
         }
 
         return $optionArray;

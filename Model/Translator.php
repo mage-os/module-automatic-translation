@@ -55,7 +55,7 @@ class Translator implements TranslatorInterface
         if (empty($text)) {
             return '';
         }
-        
+
         if (empty($this->translator)) {
             $this->initTranslator();
         }

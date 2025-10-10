@@ -2,16 +2,17 @@
 
 namespace MageOS\AutomaticTranslation\Ui\DataProvider\Product\Form\Modifier;
 
+use Exception;
+use Magento\Backend\Block\Store\Switcher as StoreSwitcher;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ResourceModel\Store;
 use Magento\Store\Model\Website;
 use Magento\Ui\Component;
 use Magento\Ui\Component\Container;
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Backend\Block\Store\Switcher as StoreSwitcher;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Class TranslationStores
@@ -94,7 +95,7 @@ class TranslationStores extends AbstractModifier
      * @param array $meta
      * @return array
      */
-    private function customizeSwitchStoreModal(array $meta)
+    private function customizeSwitchStoreModal(array $meta): array
     {
         $meta['select_store_modal']['arguments']['data']['config'] = [
             'isTemplate' => false,
@@ -125,7 +126,7 @@ class TranslationStores extends AbstractModifier
      * @return array
      * @throws NoSuchEntityException
      */
-    private function customizeTranslationStoresList(array $meta)
+    private function customizeTranslationStoresList(array $meta): array
     {
         $meta['select_store_modal']['children']['translation_store_list'] = [
             'arguments' => [
@@ -133,8 +134,12 @@ class TranslationStores extends AbstractModifier
                     'config' => [
                         'component' => 'MageOS_AutomaticTranslation/js/components/translation-stores-listing',
                         'componentType' => Container::NAME,
-                        'translationSwitcherMessage' => __('In order to translate contents you must switch to store-view scope. Please choose one of the following store-views.'),
-                        'noStoresMessage' => __('Seems that your product isn\'t associated to any translatable store-view. Please check store-view scopes configurations at "Stores > Configuration > MageOS > Automatic translation with AI".'),
+                        'translationSwitcherMessage' => __(
+                            'In order to translate contents you must switch to store-view scope. Please choose one of the following store-views.'
+                        ),
+                        'noStoresMessage' => __(
+                            'Seems that your product isn\'t associated to any translatable store-view. Please check store-view scopes configurations at "Stores > Configuration > MageOS > Automatic translation with AI".'
+                        ),
                         'content' => '',
                         'storeSwitchUrl' => $this->storeSwitcher->getSwitchUrl(),
                         'translationStores' => $this->getTranslationStores()
@@ -149,7 +154,7 @@ class TranslationStores extends AbstractModifier
      * @return array
      * @throws NoSuchEntityException
      */
-    private function getTranslationStores()
+    private function getTranslationStores(): array
     {
         $translationStores = [];
         try {
@@ -174,7 +179,7 @@ class TranslationStores extends AbstractModifier
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         return $translationStores;
     }
