@@ -34,7 +34,7 @@
                     <field id="text_attribute_to_translate" translate="label comment" sortOrder="10" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Product text attributes to translate</label>
                         <source_model>MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes</source_model>
-                        <comment>Select which text product attributes you want to automatically translate</comment>        
+                        <comment>Select which text product attributes you want to automatically translate</comment>
                         <validate>required-entry validate-no-empty</validate>
                     </field>
                     <field id="select_attribute_to_translate" translate="label comment" sortOrder="20" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -62,7 +62,7 @@
                             which indicates the date and time of the last translation for each product.
                         </comment>
                         <depends>
-                            <field id="automatic_translation/catalog/enable_periodic_retranslation">1</field>
+                            <field id="ai_integration/automatic_translation/catalog/enable_periodic_retranslation">1</field>
                         </depends>
                         <validate>required-entry validate-number validate-not-negative-number</validate>
                     </field>
@@ -102,7 +102,7 @@
                         <comment>Get your auth key here: https://www.deepl.com/it/your-account/keys</comment>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
-                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\DeepL</field>
+                            <field id="ai_integration/automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\DeepL</field>
                         </depends>
                         <validate>required-entry</validate>
                     </field>
@@ -110,7 +110,7 @@
                         <label>OpenAI Organization ID</label>
                         <comment>Get your organization ID here: https://platform.openai.com/account/org-settings</comment>
                         <depends>
-                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
+                            <field id="ai_integration/automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
                         </depends>
                         <validate>required-entry</validate>
                     </field>
@@ -119,7 +119,7 @@
                         <comment>Get your api key here: https://platform.openai.com/settings/organization/api-keys</comment>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
-                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
+                            <field id="ai_integration/automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
                         </depends>
                         <validate>required-entry</validate>
                     </field>
@@ -130,7 +130,7 @@
                         </comment>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
-                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
+                            <field id="ai_integration/automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
                         </depends>
                     </field>
                     <field id="openai_model" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -138,7 +138,7 @@
                         <source_model>MageOS\AutomaticTranslation\Model\Config\Source\GPTModels</source_model>
                         <comment>Insert api key and organization ID and save to see options. Refer to the documentation to understand which model you should select: https://platform.openai.com/docs/models/overview</comment>
                         <depends>
-                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
+                            <field id="ai_integration/automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\OpenAI</field>
                         </depends>
                     </field>
                     <field id="gemini_api_key" translate="label comment" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -146,7 +146,7 @@
                         <comment>Get your API key here: https://aistudio.google.com/apikey</comment>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
-                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
+                            <field id="ai_integration/automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
                         </depends>
                         <validate>required-entry</validate>
                     </field>
@@ -155,7 +155,7 @@
                         <source_model>MageOS\AutomaticTranslation\Model\Config\Source\GeminiModels</source_model>
                         <comment>Insert API key and save to see options. Refer to the documentation to understand which model you should select: https://ai.google.dev/gemini-api/docs/models/gemini</comment>
                         <depends>
-                            <field id="automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
+                            <field id="ai_integration/automatic_translation/translations_engine/engine">MageOS\AutomaticTranslation\Model\Translator\GoogleGemini</field>
                         </depends>
                     </field>
                 </group>

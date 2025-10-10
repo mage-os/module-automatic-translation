@@ -168,8 +168,8 @@ class TranslationStores extends AbstractModifier
                  */
                 foreach ($stores as $store) {
                     if (in_array($store->getId(), $categoryStoreIds)) {
-                        if ($this->moduleConfig->isEnable($store->getId())) {
-                            $translationStores[$store->getId()] = $store->getName();
+                        if ($this->moduleConfig->isEnable((int)$store->getId())) {
+                            $translationStores[(int)$store->getId()] = $store->getName();
                         }
                     }
                 }

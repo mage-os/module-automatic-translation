@@ -7,6 +7,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -29,18 +30,26 @@ class MigrateConfigPaths implements DataPatchInterface
     protected StoreManagerInterface $storeManager;
 
     /**
+     * @var EncryptorInterface
+     */
+    protected EncryptorInterface $encryptor;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param WriterInterface $configWriter
      * @param StoreManagerInterface $storeManager
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         WriterInterface $configWriter,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        EncryptorInterface $encryptor
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->configWriter = $configWriter;
         $this->storeManager = $storeManager;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -97,10 +106,19 @@ class MigrateConfigPaths implements DataPatchInterface
      */
     protected function migratePath(string $oldPath, string $newPath, string $scope, int $scopeId): void
     {
+        $encryptedMappings = [
+            'automatic_translation/translations_engine/deepl_auth_key' => 'ai_integration/automatic_translation/translations_engine/deepl_auth_key',
+            'automatic_translation/translations_engine/openai_api_key' => 'ai_integration/automatic_translation/translations_engine/openai_api_key',
+            'automatic_translation/translations_engine/gemini_api_key' => 'ai_integration/automatic_translation/translations_engine/gemini_api_key'
+        ];
+
         $oldValue = $this->scopeConfig->getValue($oldPath, $scope, $scopeId);
         $newValue = $this->scopeConfig->getValue($newPath, $scope, $scopeId);
 
         if ($oldValue !== null && $newValue === null) {
+            if (in_array($oldPath, array_keys($encryptedMappings))) {
+                $oldValue = $this->encryptor->encrypt($oldValue);
+            }
             $this->configWriter->save($newPath, $oldValue, $scope, $scopeId);
         }
     }

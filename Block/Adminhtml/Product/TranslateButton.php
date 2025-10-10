@@ -42,8 +42,8 @@ class TranslateButton extends Generic
     public function getButtonData(): array
     {
         $currentStore = $this->context->getRequestParam("store");
-        if ($currentStore && intval($currentStore) !== 0) {
-            if ($this->moduleConfig->isEnable($currentStore)) {
+        if ($currentStore && (int)$currentStore !== 0) {
+            if ($this->moduleConfig->isEnable((int)$currentStore)) {
 
                 return [
                     'label' => __('Translate'),

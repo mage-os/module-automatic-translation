@@ -50,7 +50,7 @@ class Service extends AbstractHelper
             $storeId = $store->getId();
             $storeName = $store->getName();
 
-            if ($this->moduleConfig->isEnable($storeId)) {
+            if ($this->moduleConfig->isEnable((int)$storeId)) {
                 $storeToTranslate[$storeId] = $storeName;
             }
         }
@@ -68,9 +68,9 @@ class Service extends AbstractHelper
 
         foreach ($stores as $store) {
             $storeId = $store->getId();
-            $storeLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
+            $storeLanguage = $this->moduleConfig->getDestinationLanguage((int)$storeId);
 
-            if ($this->moduleConfig->isEnable($storeId)) {
+            if ($this->moduleConfig->isEnable((int)$storeId)) {
                 $storeToTranslate[$storeId] = $storeLanguage;
             }
         }
@@ -96,11 +96,11 @@ class Service extends AbstractHelper
          * @var \DOMNodeList $pagebuilderNodes
          */
         $pagebuilderNodes = $xpath->query('//div[@data-content-type="html"]');
-        
+
         if ($pagebuilderNodes === false) {
             return '<div data-content-type="html" data-appearance="default" data-element="main">' . $string . '</div>';
         }
-        
+
         /**
          * @var \DOMNode $node
          */
@@ -124,7 +124,7 @@ class Service extends AbstractHelper
 
         $resultNode = $dom->firstChild?->childNodes->item(0);
         $resultHtml = '';
-        
+
         if ($resultNode !== null) {
             $resultHtml = preg_replace_callback(
                 '/=\"(%7B%7B[^"]*%7D%7D)\"/m',
@@ -134,7 +134,7 @@ class Service extends AbstractHelper
                 $resultNode->nodeValue ?? ''
             ) ?? '';
         }
-        
+
         foreach ($styles as $style) {
             $resultHtml = str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$style) . $resultHtml;
         }
@@ -161,7 +161,7 @@ class Service extends AbstractHelper
 
                 $xpath = new \DOMXPath($dom);
                 $queryResult = $xpath->query('//div[@data-content-type="html"]');
-                
+
                 if (
                     $queryResult !== false
                     && $queryResult->length > 0
