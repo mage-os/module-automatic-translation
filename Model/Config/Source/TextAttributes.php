@@ -2,8 +2,8 @@
 
 namespace MageOS\AutomaticTranslation\Model\Config\Source;
 
-use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class TextAttributes
@@ -56,8 +56,8 @@ class TextAttributes implements OptionSourceInterface
             ->create()
             ->addFieldToSelect('attribute_code')
             ->addFieldToSelect('frontend_label')
-            ->addFieldToFilter('attribute_code', array('nin' => self::ATTRIBUTES_TO_EXCLUDE))
-            ->addFieldToFilter('frontend_input', array('in' => self::ATTRIBUTE_TYPES))
+            ->addFieldToFilter('attribute_code', ['nin' => self::ATTRIBUTES_TO_EXCLUDE])
+            ->addFieldToFilter('frontend_input', ['in' => self::ATTRIBUTE_TYPES])
             ->setOrder('frontend_label', 'ASC')
             ->getItems();
 

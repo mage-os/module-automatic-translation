@@ -2,11 +2,11 @@
 
 namespace MageOS\AutomaticTranslation\Model\Translator;
 
+use Exception;
 use MageOS\AutomaticTranslation\Api\TranslatorInterface;
+use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use OpenAI as OpenAITranslator;
 use OpenAI\Client as OpenAIClient;
-use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use Exception;
 
 /**
  * Class OpenAI
@@ -42,13 +42,17 @@ class OpenAI implements TranslatorInterface
     /**
      * @return void
      */
-    public function initTranslator()
+    public function initTranslator(): void
     {
         $apiKey = $this->moduleConfig->getOpenAIApiKey();
         $organization = $this->moduleConfig->getOpenAIOrgID();
         $projectId = $this->moduleConfig->getOpenAIProjectID();
 
-        $this->translator = $this->openAITranslator::client($apiKey, $organization, !empty($projectId) ? $projectId : null);
+        $this->translator = $this->openAITranslator::client(
+            $apiKey,
+            $organization,
+            !empty($projectId) ? $projectId : null
+        );
     }
 
     /**
@@ -64,7 +68,9 @@ class OpenAI implements TranslatorInterface
             $this->initTranslator();
         }
 
-        $prompt = 'Translate this text, with the context that this text is used in an e-commerce store as part of a product description or a category description without asking any further questions or clarifications, giving only the answer and nothing else,';
+        $prompt = 'Translate this text, with the context that this text is used in an e-commerce store as part of a';
+        $prompt .= ' product description or a category description without asking any further questions or';
+        $prompt .= ' clarifications, giving only the answer and nothing else,';
         $prompt .= (!empty($sourceLang)) ? ' from ' . $sourceLang : '';
         $prompt .= ' to ' . $targetLang;
         $prompt .= ': ' . $text;

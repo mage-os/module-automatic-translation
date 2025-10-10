@@ -2,12 +2,12 @@
 
 namespace MageOS\AutomaticTranslation\Model\Translator;
 
-use MageOS\AutomaticTranslation\Api\TranslatorInterface;
+use DeepL\DeepLException;
+use DeepL\TextResult;
 use DeepL\Translator as DeepLTranslator;
 use DeepL\TranslatorFactory as DeepLTranslatorFactory;
+use MageOS\AutomaticTranslation\Api\TranslatorInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use DeepL\TextResult;
-use DeepL\DeepLException;
 
 /**
  * Class DeepL
@@ -51,7 +51,7 @@ class DeepL implements TranslatorInterface
     /**
      * @return void
      */
-    protected function initTranslator()
+    protected function initTranslator(): void
     {
         $this->translator = $this->deepLTranslator->create(['authKey' => $this->moduleConfig->getDeepLAuthKey()]);
     }

@@ -2,10 +2,10 @@
 
 namespace MageOS\AutomaticTranslation\Console\Command;
 
+use MageOS\AutomaticTranslation\Api\TranslateProductsInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use MageOS\AutomaticTranslation\Api\TranslateProductsInterface;
 
 /**
  * Class TestProcedure

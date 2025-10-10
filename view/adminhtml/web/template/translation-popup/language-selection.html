@@ -1,7 +1,7 @@
 <% if(data.languages){ %>
 <div class="languages">
-    <fieldset class="admin__fieldset" >
-        <div class="admin__field _required" >
+    <fieldset class="admin__fieldset">
+        <div class="admin__field _required">
             <div class="admin__field-label">
                 <label for="mageos-translation-language">
                     <span><%= data.languageLabel %></span>
@@ -23,8 +23,8 @@
 
 <% if(data.fields){ %>
 <div class="fields">
-    <fieldset class="admin__fieldset" >
-        <div class="admin__field _required" >
+    <fieldset class="admin__fieldset">
+        <div class="admin__field _required">
             <div class="admin__field-label">
                 <label for="mageos-translation-fields">
                     <span><%= data.fieldLabel %></span>
@@ -34,7 +34,7 @@
                 <div id="mageos-translation-fields">
                     <% _.each(data.fields, function(field, key) { %>
                     <input type="checkbox"
-                    name="field[]" value="<%= key %>" />
+                           name="field[]" value="<%= key %>"/>
                     <label for="<%= key %>"><%= field %></label><br>
                     <% }); %>
                 </div>
@@ -44,4 +44,4 @@
 </div>
 <% } %>
 
-<input type="hidden" name="scope" value="<%= data.scope %>" id="mageos-translation-scope" />
+<input type="hidden" name="scope" value="<%= data.scope %>" id="mageos-translation-scope"/>

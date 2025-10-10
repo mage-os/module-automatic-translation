@@ -2,15 +2,15 @@
 
 namespace MageOS\AutomaticTranslation\Model\Config;
 
-use Magento\Framework\App\Config\Value;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Registry;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\App\Config\ValueFactory;
 use Exception;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 
 /**
  * Class CatalogCron
@@ -81,7 +81,6 @@ class CatalogCron extends Value
             )->setPath(
                 $this->cronStringPath
             )->save();
-
         } catch (Exception $e) {
             throw new Exception(__('Some Thing Want Wrong , We can\'t save the cron expression.'));
         }
