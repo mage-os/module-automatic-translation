@@ -28,7 +28,7 @@ class TranslationEngineList implements OptionSourceInterface
             ],
             [
                 'value' => OpenAI::class,
-                'label' => __('OpenAI (GPT, ChatGPT, ecc..)')
+                'label' => __('OpenAI (GPT, ChatGPT, etc.)')
             ],
             [
                 'value' => GoogleGemini::class,
