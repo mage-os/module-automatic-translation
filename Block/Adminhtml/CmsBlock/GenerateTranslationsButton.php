@@ -10,7 +10,6 @@ use Magento\Cms\Block\Adminhtml\Page\Edit\GenericButton;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
-use MageOS\AutomaticTranslation\Block\Adminhtml\TranslationPopup;
 use MageOS\AutomaticTranslation\Helper\Service;
 
 /**
