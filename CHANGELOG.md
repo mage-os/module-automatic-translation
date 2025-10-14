@@ -1,4 +1,17 @@
 # Automatic Translation
+## [1.9.1] - 14/10/2025
+### Fixed
+- Fixed product and category translation buttons appearing when translation is disabled
+
+## [1.9.0] - 10/10/2025
+### Fixed
+- Fixed php 8.4 compatibility by @dadolun95 in #34
+- Fixed code standards issues by @rhoerr in #38 and @SamueleMartini in #30 and #35
+- Changed date formatting by @SamueleMartini in #32
+- Feature/config modifications by @SamueleMartini in #33
+- Code refactoring by @dadolun95 in #36
+- Improved README.md by @SamueleMartini in #37
+
 ## [1.8.1] - 19/02/2025
 ### Fixed
 - Changed product and category buttons to 'secondary' actions and fixed button visualization on category adminhtml form page

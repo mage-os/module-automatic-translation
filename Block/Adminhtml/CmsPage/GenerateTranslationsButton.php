@@ -8,6 +8,7 @@ use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Block\Adminhtml\Page\Edit\GenericButton;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
+use MageOS\AutomaticTranslation\Helper\Service;
 
 /**
  * Class GenerateTranslationsButton
@@ -28,20 +29,27 @@ class GenerateTranslationsButton extends GenericButton implements ButtonProvider
     protected UrlInterface $url;
 
     /**
-     * GenerateTransationsButton constructor.
+     * @var Service
+     */
+    protected Service $service;
+
+    /**
      * @param Context $context
      * @param PageRepositoryInterface $pageRepository
      * @param ModuleConfig $moduleConfig
      * @param UrlInterface $url
+     * @param Service $service
      */
     public function __construct(
         Context $context,
         PageRepositoryInterface $pageRepository,
         ModuleConfig $moduleConfig,
-        UrlInterface $url
+        UrlInterface $url,
+        Service $service
     ) {
         $this->moduleConfig = $moduleConfig;
         $this->url = $url;
+        $this->service = $service;
         parent::__construct($context, $pageRepository);
     }
 
@@ -51,6 +59,10 @@ class GenerateTranslationsButton extends GenericButton implements ButtonProvider
     public function getButtonData(): array
     {
         if (!$this->moduleConfig->isEnable()) {
+            return [];
+        }
+
+        if (empty($this->service->getStoresLanguages())) {
             return [];
         }
 
