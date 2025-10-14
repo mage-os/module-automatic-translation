@@ -96,28 +96,31 @@ class TranslateButton extends Generic
             }
         }
 
-        return [
-            'label' => __('Translate'),
-            'class' => 'save action-secondary',
-            'data_attribute' => [
-                'mage-init' => [
-                    'buttonAdapter' => [
-                        'actions' => [
-                            [
-                                'targetName' => 'product_form.product_form.select_store_modal',
-                                'actionName' => 'toggleModal'
-                            ],
-                            [
-                                'targetName' => 'product_form.product_form.select_store_modal.translation_store_list',
-                                'actionName' => 'render'
+        if ($this->moduleConfig->isEnable()) {
+            return [
+                'label' => __('Translate'),
+                'class' => 'save action-secondary',
+                'data_attribute' => [
+                    'mage-init' => [
+                        'buttonAdapter' => [
+                            'actions' => [
+                                [
+                                    'targetName' => 'product_form.product_form.select_store_modal',
+                                    'actionName' => 'toggleModal'
+                                ],
+                                [
+                                    'targetName' => 'product_form.product_form.select_store_modal.translation_store_list',
+                                    'actionName' => 'render'
+                                ]
                             ]
                         ]
                     ]
-                ]
-            ],
-            'on_click' => '',
-            'sort_order' => 100
-        ];
+                ],
+                'on_click' => '',
+                'sort_order' => 100
+            ];
+        }
+        return [];
     }
 
     /**

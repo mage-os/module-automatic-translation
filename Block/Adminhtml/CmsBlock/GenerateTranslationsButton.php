@@ -10,6 +10,8 @@ use Magento\Cms\Block\Adminhtml\Page\Edit\GenericButton;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
+use MageOS\AutomaticTranslation\Block\Adminhtml\TranslationPopup;
+use MageOS\AutomaticTranslation\Helper\Service;
 
 /**
  * Class GenerateTranslationsButton
@@ -35,23 +37,30 @@ class GenerateTranslationsButton extends GenericButton implements ButtonProvider
     protected BlockRepositoryInterface $blockRepository;
 
     /**
-     * GenerateTranslationsButton constructor.
+     * @var Service
+     */
+    protected Service $service;
+
+    /**
      * @param Context $context
      * @param BlockRepositoryInterface $blockRepository
      * @param PageRepositoryInterface $pageRepository
      * @param ModuleConfig $moduleConfig
      * @param UrlInterface $url
+     * @param Service $service
      */
     public function __construct(
         Context $context,
         BlockRepositoryInterface $blockRepository,
         PageRepositoryInterface $pageRepository,
         ModuleConfig $moduleConfig,
-        UrlInterface $url
+        UrlInterface $url,
+        Service $service
     ) {
         $this->moduleConfig = $moduleConfig;
         $this->url = $url;
         $this->blockRepository = $blockRepository;
+        $this->service = $service;
         parent::__construct($context, $pageRepository);
     }
 
@@ -62,6 +71,10 @@ class GenerateTranslationsButton extends GenericButton implements ButtonProvider
     public function getButtonData(): array
     {
         if (!$this->moduleConfig->isEnable() || !$this->context->getRequest()->getParam('block_id')) {
+            return [];
+        }
+
+        if (empty($this->service->getStoresLanguages())) {
             return [];
         }
 
