@@ -8,9 +8,9 @@
     "require": {
         "magento/framework": "*",
         "magento/module-catalog": "^104.0.0",
-        "deeplcom/deepl-php": "^1.4.0",
-        "openai-php/client": "^0.10.3",
-        "google-gemini-php/client": "^1.0.14",
+        "deeplcom/deepl-php": "^1",
+        "openai-php/client": "^0",
+        "google-gemini-php/client": "^1",
         "guzzlehttp/guzzle": "^7.9"
     },
     "authors": [
