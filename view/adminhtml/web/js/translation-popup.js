@@ -13,9 +13,8 @@ define([
     'underscore',
     'Magento_Ui/js/modal/alert',
     'uiRegistry',
-    'Magento_PageBuilder/js/events',
     'text!MageOS_AutomaticTranslation/template/translation-popup/language-selection.html'
-], function (Component, confirm, $, ko, $t, template, _, alert, registry, pageBuilderEvents, selectTpl) {
+], function (Component, confirm, $, ko, $t, template, _, alert, registry, selectTpl) {
 
     'use strict';
 
