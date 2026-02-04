@@ -61,7 +61,7 @@ class TranslationPopup extends Template
                 $layout['components']['mageos-translation-popup']['config']['type']
             );
         $layout['components']['mageos-translation-popup']['content'] = __(
-            'Choose the translation language and the fields to translate.'
+            'Choose the target translation language and the fields to translate.'
         );
 
         $layout['components']['mageos-translation-popup']['languages'] = $this->getAllowedLanguages();
