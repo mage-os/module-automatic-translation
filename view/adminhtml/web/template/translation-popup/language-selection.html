@@ -33,9 +33,10 @@
             <div class="admin__field-control">
                 <div id="mageos-translation-fields">
                     <% _.each(data.fields, function(field, key) { %>
-                    <input type="checkbox"
-                           name="field[]" value="<%= key %>"/>
-                    <label for="<%= key %>"><%= field %></label><br>
+                    <label>
+                        <input type="checkbox" name="field[]" value="<%= key %>"/>
+                        <%= field %>
+                    </label><br>
                     <% }); %>
                 </div>
             </div>
