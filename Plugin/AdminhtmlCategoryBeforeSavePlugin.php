@@ -7,7 +7,7 @@ use Magento\Catalog\Controller\Adminhtml\Category\Save;
 use Magento\Framework\Message\ManagerInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
-use MageOS\AutomaticTranslation\Model\Translator;
+use MageOS\AutomaticTranslation\Service\TranslateParsedContent;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -36,11 +36,6 @@ class AdminhtmlCategoryBeforeSavePlugin
     protected Service $serviceHelper;
 
     /**
-     * @var Translator
-     */
-    protected Translator $translator;
-
-    /**
      * @var ManagerInterface
      */
     protected ManagerInterface $messageManager;
@@ -51,25 +46,30 @@ class AdminhtmlCategoryBeforeSavePlugin
     protected Logger $logger;
 
     /**
+     * @var TranslateParsedContent
+     */
+    protected TranslateParsedContent $translateParsedContent;
+
+    /**
      * AdminhtmlProductBeforeSavePlugin constructor.
      * @param ModuleConfig $moduleConfig
      * @param Service $serviceHelper
-     * @param Translator $translator
      * @param ManagerInterface $messageManager
      * @param Logger $logger
+     * @param TranslateParsedContent $translateParsedContent
      */
     public function __construct(
         ModuleConfig $moduleConfig,
         Service $serviceHelper,
-        Translator $translator,
         ManagerInterface $messageManager,
-        Logger $logger
+        Logger $logger,
+        TranslateParsedContent $translateParsedContent
     ) {
         $this->moduleConfig = $moduleConfig;
         $this->serviceHelper = $serviceHelper;
-        $this->translator = $translator;
         $this->messageManager = $messageManager;
         $this->logger = $logger;
+        $this->translateParsedContent = $translateParsedContent;
     }
 
     /**
@@ -100,7 +100,7 @@ class AdminhtmlCategoryBeforeSavePlugin
                 if (!empty($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
                     $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue[$attributeCode]);
 
-                    $requestPostValue[$attributeCode] = $this->translateParsedContent(
+                    $requestPostValue[$attributeCode] = $this->translateParsedContent->execute(
                         $parsedContent,
                         $requestPostValue[$attributeCode],
                         $destinationLanguage
@@ -126,32 +126,5 @@ class AdminhtmlCategoryBeforeSavePlugin
             );
         }
         return null;
-    }
-
-    /**
-     * @param mixed $parsedContent
-     * @param string $requestPostValue
-     * @param string $destinationLanguage
-     * @return mixed|string
-     */
-    protected function translateParsedContent($parsedContent, string $requestPostValue, string $destinationLanguage)
-    {
-        if (is_string($parsedContent)) {
-            return $this->translator->translate(
-                $parsedContent,
-                $destinationLanguage
-            );
-        }
-
-        $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
-        foreach ($parsedContent as $parsedString) {
-            $parsedString["translation"] = $this->translator->translate(
-                $parsedString["source"],
-                $destinationLanguage
-            );
-
-            $requestPostValue = str_replace($parsedString["source"], $parsedString["translation"], $requestPostValue);
-        }
-        return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
     }
 }

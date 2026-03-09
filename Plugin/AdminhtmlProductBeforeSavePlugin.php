@@ -10,6 +10,7 @@ use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
 use MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes;
 use MageOS\AutomaticTranslation\Model\Translator;
+use MageOS\AutomaticTranslation\Service\TranslateParsedContent;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -49,12 +50,18 @@ class AdminhtmlProductBeforeSavePlugin
     protected Logger $logger;
 
     /**
+     * @var TranslateParsedContent
+     */
+    private TranslateParsedContent $translateParsedContent;
+
+    /**
      * @param ModuleConfig $moduleConfig
      * @param Service $serviceHelper
      * @param Translator $translator
      * @param Gallery $gallery
      * @param ManagerInterface $messageManager
      * @param Logger $logger
+     * @param TranslateParsedContent $translateParsedContent
      */
     public function __construct(
         ModuleConfig $moduleConfig,
@@ -62,7 +69,8 @@ class AdminhtmlProductBeforeSavePlugin
         Translator $translator,
         Gallery $gallery,
         ManagerInterface $messageManager,
-        Logger $logger
+        Logger $logger,
+        TranslateParsedContent $translateParsedContent
     ) {
         $this->moduleConfig = $moduleConfig;
         $this->serviceHelper = $serviceHelper;
@@ -70,6 +78,7 @@ class AdminhtmlProductBeforeSavePlugin
         $this->gallery = $gallery;
         $this->messageManager = $messageManager;
         $this->logger = $logger;
+        $this->translateParsedContent = $translateParsedContent;
     }
 
     /**
@@ -116,7 +125,7 @@ class AdminhtmlProductBeforeSavePlugin
                     $parsedContent = $this->serviceHelper
                         ->parsePageBuilderHtmlBox($requestPostValue["product"][$attributeCode]);
 
-                    $requestPostValue["product"][$attributeCode] = $this->translateParsedContent(
+                    $requestPostValue["product"][$attributeCode] = $this->translateParsedContent->execute(
                         $parsedContent,
                         $requestPostValue["product"][$attributeCode],
                         $destinationLanguage
@@ -144,38 +153,5 @@ class AdminhtmlProductBeforeSavePlugin
             );
         }
         return null;
-    }
-
-    /**
-     * @param mixed $parsedContent
-     * @param string $requestPostValue
-     * @param string $destinationLanguage
-     * @return mixed|string
-     */
-    protected function translateParsedContent($parsedContent, string $requestPostValue, string $destinationLanguage)
-    {
-        if (is_string($parsedContent)) {
-            return $this->translator->translate(
-                $parsedContent,
-                $destinationLanguage
-            );
-        }
-
-        $requestPostValue = html_entity_decode(
-            htmlspecialchars_decode($requestPostValue)
-        );
-        foreach ($parsedContent as $parsedString) {
-            $parsedString["translation"] = $this->translator->translate(
-                (string)$parsedString["source"],
-                $destinationLanguage
-            );
-
-            $requestPostValue = str_replace(
-                $parsedString["source"],
-                $parsedString["translation"],
-                $requestPostValue
-            );
-        }
-        return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
     }
 }
