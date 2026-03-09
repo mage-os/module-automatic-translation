@@ -90,7 +90,7 @@ class DeepL implements TranslatorInterface
 
             return $result->text;
         } catch (DeepLException $e) {
-            if (strlen($targetLang) > 2) {
+            if (strstr($e->getMessage(), 'is deprecated') && strlen($targetLang) > 2) {
                 $targetLang = substr($targetLang, 0, 2);
 
                 /** @var $result TextResult; */
