@@ -52,6 +52,17 @@ class TranslateParsedContent
             );
         }
 
+        $contentSettingsMap = [];
+        $requestPostValue = preg_replace_callback(
+            '/content_settings="([^"]*)"/',
+            function ($matches) use (&$contentSettingsMap) {
+                $key = 'CS_PLACEHOLDER_' . count($contentSettingsMap);
+                $contentSettingsMap[$key] = $matches[1];
+                return 'content_settings="' . $key . '"';
+            },
+            $requestPostValue
+        ) ?? $requestPostValue;
+
         $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
 
         foreach ($parsedContent as $parsedString) {
@@ -60,13 +71,28 @@ class TranslateParsedContent
                 $destinationLanguage
             );
 
-            $requestPostValue = str_replace(
-                $parsedString["source"],
-                $parsedString["translation"],
-                $requestPostValue
+            $pos = strpos($requestPostValue, $parsedString["source"]);
+
+            if ($pos !== false) {
+                $requestPostValue = substr_replace(
+                    $requestPostValue,
+                    $parsedString["translation"],
+                    $pos,
+                    strlen($parsedString["source"])
+                );
+            }
+        }
+
+        $result = $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
+
+        foreach ($contentSettingsMap as $key => $value) {
+            $result = str_replace(
+                'content_settings="' . $key . '"',
+                'content_settings="' . $value . '"',
+                $result
             );
         }
 
-        return $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
+        return $result;
     }
 }

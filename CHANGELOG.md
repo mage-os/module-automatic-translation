@@ -1,4 +1,19 @@
 # Automatic Translation
+## [1.10.1] - 10/03/2026
+### Fixed
+- Fixed translation failing on long texts by adding chunking plugin for translation API limits
+- Fixed double-encoding of HTML entities in PageBuilder HTML Code blocks
+- Fixed greedy string replacement corrupting content when identical text appeared multiple times
+- Fixed DOMDocument corrupting Widget content_settings JSON attributes during translation
+
+## [1.10.0] - 05/03/2026
+### Changed
+- Retry DeepL translation with 2-char target language only on deprecated target language error
+- Updated popup behaviour
+- Extracted parsed content translation to service, reducing code duplication
+- Removed unnecessary dependency on PageBuilder module
+- Loosened dependency constraints in composer.json
+
 ## [1.9.1] - 14/10/2025
 ### Fixed
 - Fixed product and category translation buttons appearing when translation is disabled

@@ -25,6 +25,11 @@
         </arguments>
     </type>
 
+    <!-- CHUNK PLUGIN -->
+    <type name="MageOS\AutomaticTranslation\Model\Translator">
+        <plugin name="translator_chunk_plugin" type="MageOS\AutomaticTranslation\Plugin\TranslatorChunkPlugin" sortOrder="10"/>
+    </type>
+
     <!-- SENSITIVE CONFIG -->
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
