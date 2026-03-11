@@ -11,7 +11,6 @@ use Exception;
 class TranslateParsedContent
 {
     const TRANSLATABLE_WIDGET_PARAMS = ['anchor_text', 'title', 'description'];
-    const CONTENT_SETTINGS_PATTERN = '/content_settings="[^"]*"/';
     const WIDGET_PATTERN = '/\{\{widget\s[^}]*\}\}/';
 
     /**
@@ -41,13 +40,22 @@ class TranslateParsedContent
             return $this->translator->translate($parsedContent, $destinationLanguage);
         }
 
-        [$requestPostValue, $contentSettingsMap] = $this->extractPlaceholders(
-            $requestPostValue,
-            self::CONTENT_SETTINGS_PATTERN,
-            'CS_PLACEHOLDER_'
+        $contentSettingsMap = [];
+        $result = preg_replace_callback(
+            '/content_settings="([^"]*)"/',
+            function (array $matches) use (&$contentSettingsMap): string {
+                $key = 'CS_PLACEHOLDER_' . count($contentSettingsMap);
+                $contentSettingsMap[$key] = $matches[1];
+                return 'content_settings="' . $key . '"';
+            },
+            $requestPostValue
         );
 
-        $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
+        if ($result === null) {
+            throw new RuntimeException(sprintf('preg_replace_callback failed with error %d', preg_last_error()));
+        }
+
+        $requestPostValue = html_entity_decode(htmlspecialchars_decode($result));
 
         [$requestPostValue, $widgetMap] = $this->extractPlaceholders(
             $requestPostValue,
@@ -82,8 +90,12 @@ class TranslateParsedContent
             );
         }
 
-        foreach ($contentSettingsMap as $key => $original) {
-            $result = str_replace($key, $original, $result);
+        foreach ($contentSettingsMap as $key => $value) {
+            $result = str_replace(
+                'content_settings="' . $key . '"',
+                'content_settings="' . $value . '"',
+                $result
+            );
         }
 
         return $result;
