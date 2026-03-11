@@ -8,6 +8,7 @@ use RuntimeException;
 class TextChunker
 {
     const MAX_CHUNK_SIZE = 4500;
+    const HALF_CHUNK_SIZE = 2250;
 
     const BLOCK_TAG_PATTERN = '#(</(?:p|div|h[1-6]|ul|ol|li|table|tr|blockquote|section|article|header|footer|figure|figcaption)>)#i';
 
@@ -157,23 +158,19 @@ class TextChunker
         while (mb_strlen($text) > self::MAX_CHUNK_SIZE) {
             $candidate = mb_substr($text, 0, self::MAX_CHUNK_SIZE);
 
-            $lastDot = mb_strrpos($candidate, '. ');
-            $lastExcl = mb_strrpos($candidate, '! ');
-            $lastQuest = mb_strrpos($candidate, '? ');
+            $positions = array_filter([
+                mb_strrpos($candidate, '. '),
+                mb_strrpos($candidate, '! '),
+                mb_strrpos($candidate, '? '),
+            ], fn($pos): bool => $pos !== false);
 
-            $sentenceBreak = max(
-                $lastDot !== false ? $lastDot : 0,
-                $lastExcl !== false ? $lastExcl : 0,
-                $lastQuest !== false ? $lastQuest : 0
-            );
+            $sentenceBreak = $positions ? max($positions) : 0;
 
-            $halfSize = (int)(self::MAX_CHUNK_SIZE / 2);
-
-            if ($sentenceBreak > $halfSize) {
+            if ($sentenceBreak > self::HALF_CHUNK_SIZE) {
                 $breakAt = $sentenceBreak + 2;
             } else {
                 $lastSpace = mb_strrpos($candidate, ' ');
-                $breakAt = $lastSpace !== false && $lastSpace > $halfSize
+                $breakAt = $lastSpace !== false && $lastSpace > self::HALF_CHUNK_SIZE
                     ? $lastSpace + 1
                     : self::MAX_CHUNK_SIZE;
             }

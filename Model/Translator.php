@@ -48,7 +48,7 @@ class Translator implements TranslatorInterface
      * @param string $targetLang
      * @param string|null $sourceLang
      * @return string
-     * @throw Exception
+     * @throws Exception
      */
     public function translate(string $text, string $targetLang, ?string $sourceLang = null): string
     {
