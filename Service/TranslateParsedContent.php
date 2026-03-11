@@ -2,30 +2,17 @@
 
 namespace MageOS\AutomaticTranslation\Service;
 
-use Magento\Framework\Message\ManagerInterface;
-use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
 use MageOS\AutomaticTranslation\Model\Translator;
-use Psr\Log\LoggerInterface as Logger;
 
-/**
- * Class TranslateParsedContent
- * @package MageOS\AutomaticTranslation\Service
- */
 class TranslateParsedContent
 {
-    /**
-     * @var Service
-     */
-    protected Service $serviceHelper;
+    const array TRANSLATABLE_WIDGET_PARAMS = ['anchor_text', 'title', 'description'];
 
-    /**
-     * @var Translator
-     */
+    protected Service $serviceHelper;
     protected Translator $translator;
 
     /**
-     * TranslateParsedContent constructor.
      * @param Service $serviceHelper
      * @param Translator $translator
      */
@@ -65,6 +52,17 @@ class TranslateParsedContent
 
         $requestPostValue = html_entity_decode(htmlspecialchars_decode($requestPostValue));
 
+        $widgetMap = [];
+        $requestPostValue = preg_replace_callback(
+            '/\{\{widget\s[^}]*\}\}/',
+            function ($matches) use (&$widgetMap) {
+                $key = 'WIDGET_PLACEHOLDER_' . count($widgetMap);
+                $widgetMap[$key] = $matches[0];
+                return $key;
+            },
+            $requestPostValue
+        ) ?? $requestPostValue;
+
         foreach ($parsedContent as $parsedString) {
             $parsedString["translation"] = $this->translator->translate(
                 $parsedString["source"],
@@ -85,6 +83,14 @@ class TranslateParsedContent
 
         $result = $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
 
+        foreach ($widgetMap as $key => $widget) {
+            $result = str_replace(
+                $key,
+                $this->translateWidgetParams($widget, $destinationLanguage),
+                $result
+            );
+        }
+
         foreach ($contentSettingsMap as $key => $value) {
             $result = str_replace(
                 'content_settings="' . $key . '"',
@@ -94,5 +100,32 @@ class TranslateParsedContent
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $widget
+     * @param string $destinationLanguage
+     * @return string
+     */
+    protected function translateWidgetParams(
+        string $widget,
+        string $destinationLanguage
+    ): string {
+        foreach (self::TRANSLATABLE_WIDGET_PARAMS as $param) {
+            $widget = preg_replace_callback(
+                '/(' . preg_quote($param, '/') . '=")([^"]*)(")/',
+                function ($matches) use ($destinationLanguage) {
+                    if (trim($matches[2]) === '') {
+                        return $matches[0];
+                    }
+                    return $matches[1]
+                        . $this->translator->translate($matches[2], $destinationLanguage)
+                        . $matches[3];
+                },
+                $widget
+            ) ?? $widget;
+        }
+
+        return $widget;
     }
 }
