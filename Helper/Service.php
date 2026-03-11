@@ -84,6 +84,15 @@ class Service extends AbstractHelper
     }
 
     /**
+     * @param string $html
+     * @return string
+     */
+    protected function stripContentSettings(string $html): string
+    {
+        return preg_replace('/\s*content_settings="[^"]*"/', '', $html) ?? $html;
+    }
+
+    /**
      * @param string $string
      * @return string
      */
@@ -132,18 +141,30 @@ class Service extends AbstractHelper
             }
         }
 
-        $resultNode = $dom->firstChild?->childNodes->item(0);
         $resultHtml = '';
+        $root = $dom->firstChild;
 
-        if ($resultNode !== null) {
-            $resultHtml = preg_replace_callback(
-                '/=\"(%7B%7B[^"]*%7D%7D)\"/m',
-                function ($matches) {
-                    return urldecode($matches[0]);
-                },
-                $resultNode->nodeValue ?? ''
-            ) ?? '';
+        if ($root !== null) {
+            foreach ($root->childNodes as $node) {
+                $resultHtml .= $dom->saveHTML($node);
+            }
         }
+
+        $resultHtml = preg_replace_callback(
+            '/(<div[^>]*data-content-type="html"[^>]*>)(.*?)(<\/div>)/s',
+            function ($matches) {
+                return $matches[1] . html_entity_decode($matches[2], ENT_NOQUOTES, 'UTF-8') . $matches[3];
+            },
+            $resultHtml
+        ) ?? $resultHtml;
+
+        $resultHtml = preg_replace_callback(
+            '/="(%7B%7B[^"]*%7D%7D)"/m',
+            function ($matches) {
+                return urldecode($matches[0]);
+            },
+            $resultHtml
+        ) ?? '';
 
         foreach ($styles as $style) {
             $resultHtml = str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$style) . $resultHtml;
@@ -151,7 +172,8 @@ class Service extends AbstractHelper
         foreach ($scripts as $script) {
             $resultHtml = $resultHtml . str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$script);
         }
-        return '<div data-content-type="html" data-appearance="default" data-element="main">' . $resultHtml . '</div>';
+
+        return $resultHtml;
     }
 
     /**
@@ -162,7 +184,7 @@ class Service extends AbstractHelper
     {
         if ($string !== strip_tags($string)) {
             try {
-                $htmlString = htmlspecialchars_decode($string);
+                $htmlString = htmlspecialchars_decode($this->stripContentSettings($string));
                 $htmlString = preg_replace('/<script.*?\/script>/s', '', $htmlString) ?? '';
                 $htmlString = preg_replace('/<style.*?\/style>/s', '', $htmlString) ?? '';
                 $dom = new DOMDocument();
