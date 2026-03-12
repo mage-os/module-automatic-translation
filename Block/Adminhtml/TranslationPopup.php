@@ -1,35 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Block\Adminhtml;
 
 use Magento\Backend\Block\Template;
 use Magento\Framework\Serialize\Serializer\Json;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
+use InvalidArgumentException;
 
-/**
- * Class TranslationPopup
- * @package MageOS\AutomaticTranslation\Block\Adminhtml
- */
 class TranslationPopup extends Template
 {
     /**
-     * @var ModuleConfig
-     */
-    private ModuleConfig $config;
-
-    /**
-     * @var Service
-     */
-    private Service $service;
-
-    /**
-     * @var Json
-     */
-    private Json $json;
-
-    /**
-     * TranslationPopup constructor.
      * @param Template\Context $context
      * @param ModuleConfig $config
      * @param Service $service
@@ -38,44 +21,36 @@ class TranslationPopup extends Template
      */
     public function __construct(
         Template\Context $context,
-        ModuleConfig $config,
-        Service $service,
-        Json $json,
+        protected ModuleConfig $config,
+        protected Service $service,
+        protected Json $json,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->config = $config;
-        $this->service = $service;
-        $this->json = $json;
     }
 
     /**
-     * @inheritdoc
-     * @since 100.4.0
+     * @return string
+     * @throws InvalidArgumentException
      */
-    public function getJsLayout()
+    public function getJsLayout(): string
     {
         $layout = $this->json->unserialize(parent::getJsLayout());
+        $popup = &$layout['components']['mageos-translation-popup'];
 
-        $layout['components']['mageos-translation-popup']['title'] = __('Translate') . ' ' . __(
-                $layout['components']['mageos-translation-popup']['config']['type']
-            );
-        $layout['components']['mageos-translation-popup']['content'] = __(
-            'Choose the target translation language and the fields to translate.'
-        );
-
-        $layout['components']['mageos-translation-popup']['languages'] = $this->getAllowedLanguages();
-        $layout['components']['mageos-translation-popup']['fields'] = $layout['components']['mageos-translation-popup']['config']['allowedFields'];
-        $layout['components']['mageos-translation-popup']['scope'] = $layout['components']['mageos-translation-popup']['config']['scope'];
+        $popup['title'] = __('Translate') . ' ' . __($popup['config']['type']);
+        $popup['content'] = __('Choose the target translation language and the fields to translate.');
+        $popup['languages'] = $this->getAllowedLanguages();
+        $popup['fields'] = $popup['config']['allowedFields'];
+        $popup['scope'] = $popup['config']['scope'];
 
         return $this->json->serialize($layout);
     }
 
     /**
-     * @inheritdoc
-     * @since 100.4.0
+     * @return string
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         if (!$this->config->isEnable()) {
             return '';
@@ -86,15 +61,11 @@ class TranslationPopup extends Template
     /**
      * @return array
      */
-    private function getAllowedLanguages(): array
+    protected function getAllowedLanguages(): array
     {
-        $result = [];
-        foreach ($this->service->getStoresLanguages() as $language) {
-            $result[] = [
-                "value" => $language,
-                "label" => $language
-            ];
-        }
-        return $result;
+        return array_map(
+            fn($language) => ['value' => $language, 'label' => $language],
+            $this->service->getStoresLanguages()
+        );
     }
 }

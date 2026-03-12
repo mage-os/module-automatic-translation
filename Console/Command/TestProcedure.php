@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Console\Command;
 
 use MageOS\AutomaticTranslation\Api\TranslateProductsInterface;
@@ -7,30 +9,23 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class TestProcedure
- */
 class TestProcedure extends Command
 {
-    protected TranslateProductsInterface $translateProducts;
-
     /**
-     * TestProcedure constructor.
      * @param TranslateProductsInterface $translateProducts
-     * @param $name
+     * @param string|null $name
      */
     public function __construct(
-        TranslateProductsInterface $translateProducts,
-        $name = null
+        protected TranslateProductsInterface $translateProducts,
+        ?string $name = null
     ) {
-        $this->translateProducts = $translateProducts;
         parent::__construct($name);
     }
 
     /**
-     * Initialization of the command.
+     * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('mage-os:procedure:test');
         $this->setDescription('Test the translation procedure by shell');

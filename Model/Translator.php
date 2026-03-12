@@ -1,37 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Model;
 
 use MageOS\AutomaticTranslation\Api\TranslatorInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Model\Translator\TranslatorFactory;
+use Exception;
 
-/**
- * Class Translator
- */
 class Translator implements TranslatorInterface
 {
-    protected $translator;
-    /**
-     * @var ModuleConfig
-     */
-    protected ModuleConfig $moduleConfig;
-    /**
-     * @var TranslatorFactory
-     */
-    protected TranslatorFactory $translatorFactory;
+    protected ?TranslatorInterface $translator = null;
 
     /**
-     * Translator constructor.
      * @param ModuleConfig $moduleConfig
      * @param TranslatorFactory $translatorFactory
      */
     public function __construct(
-        ModuleConfig $moduleConfig,
-        TranslatorFactory $translatorFactory
+        protected ModuleConfig $moduleConfig,
+        protected TranslatorFactory $translatorFactory
     ) {
-        $this->moduleConfig = $moduleConfig;
-        $this->translatorFactory = $translatorFactory;
     }
 
     /**
@@ -56,7 +45,7 @@ class Translator implements TranslatorInterface
             return '';
         }
 
-        if (empty($this->translator)) {
+        if ($this->translator === null) {
             $this->initTranslator();
         }
 

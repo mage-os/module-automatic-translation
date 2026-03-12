@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Block\Adminhtml\CmsPage;
 
 use Magento\Backend\Block\Widget\Context;
@@ -10,28 +12,9 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
 
-/**
- * Class GenerateTranslationsButton
- * @package MageOS\AutomaticTranslation\Block\Adminhtml\CmsPage
- */
 class GenerateTranslationsButton extends GenericButton implements ButtonProviderInterface
 {
-    protected const CMSPAGE_TRANSLATION_CONTROLLER_PATH = 'automatic_translation/cms_page/generate';
-
-    /**
-     * @var ModuleConfig
-     */
-    protected ModuleConfig $moduleConfig;
-
-    /**
-     * @var UrlInterface
-     */
-    protected UrlInterface $url;
-
-    /**
-     * @var Service
-     */
-    protected Service $service;
+    const string CMSPAGE_TRANSLATION_CONTROLLER_PATH = 'automatic_translation/cms_page/generate';
 
     /**
      * @param Context $context
@@ -43,13 +26,10 @@ class GenerateTranslationsButton extends GenericButton implements ButtonProvider
     public function __construct(
         Context $context,
         PageRepositoryInterface $pageRepository,
-        ModuleConfig $moduleConfig,
-        UrlInterface $url,
-        Service $service
+        protected ModuleConfig $moduleConfig,
+        protected UrlInterface $url,
+        protected Service $service
     ) {
-        $this->moduleConfig = $moduleConfig;
-        $this->url = $url;
-        $this->service = $service;
         parent::__construct($context, $pageRepository);
     }
 

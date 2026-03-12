@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Console\Command;
 
 use MageOS\AutomaticTranslation\Service\TranslateSelectAttributes;
@@ -7,31 +9,23 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class SelectAttributeTest
- */
 class SelectAttributeTest extends Command
 {
-    protected TranslateSelectAttributes $translateSelectAttributes;
-
     /**
-     * SelectAttributeTest constructor.
      * @param TranslateSelectAttributes $translateSelectAttributes
-     * @param $name
+     * @param string|null $name
      */
     public function __construct(
-        TranslateSelectAttributes $translateSelectAttributes,
-        $name = null
+        protected TranslateSelectAttributes $translateSelectAttributes,
+        ?string $name = null
     ) {
-        $this->translateSelectAttributes = $translateSelectAttributes;
-
         parent::__construct($name);
     }
 
     /**
-     * Initialization of the command.
+     * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('mage-os:select-attribute:test');
         $this->setDescription('Test select attribute translation');

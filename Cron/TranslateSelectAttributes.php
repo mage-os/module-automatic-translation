@@ -1,33 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Cron;
 
 use MageOS\AutomaticTranslation\Api\TranslateSelectAttributesInterface;
 
-/**
- * Class TranslateSelectAttributes
- */
 class TranslateSelectAttributes
 {
     /**
-     * @var TranslateSelectAttributesInterface
-     */
-    protected TranslateSelectAttributesInterface $translateSelectAttributes;
-
-    /**
-     * TranslateSelectAttributes constructor.
      * @param TranslateSelectAttributesInterface $translateSelectAttributes
      */
     public function __construct(
-        TranslateSelectAttributesInterface $translateSelectAttributes
+        protected TranslateSelectAttributesInterface $translateSelectAttributes
     ) {
-        $this->translateSelectAttributes = $translateSelectAttributes;
     }
 
     /**
      * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         $this->translateSelectAttributes->translateOptions();
     }

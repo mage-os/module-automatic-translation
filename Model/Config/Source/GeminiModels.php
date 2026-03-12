@@ -1,51 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Model\Config\Source;
 
-use Exception;
 use Gemini;
 use Gemini\Client as GeminiClient;
 use Magento\Framework\Data\OptionSourceInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
+use Exception;
 
-/**
- * Class GeminiModels
- */
 class GeminiModels implements OptionSourceInterface
 {
-    /**
-     * @var GeminiClient|null
-     */
     protected ?GeminiClient $geminiClient = null;
-    /**
-     * @var Gemini
-     */
-    protected Gemini $gemini;
-    /**
-     * @var ModuleConfig
-     */
-    protected ModuleConfig $moduleConfig;
 
     /**
-     * GeminiModels constructor.
      * @param Gemini $gemini
      * @param ModuleConfig $moduleConfig
      */
     public function __construct(
-        Gemini $gemini,
-        ModuleConfig $moduleConfig
+        protected Gemini $gemini,
+        protected ModuleConfig $moduleConfig
     ) {
-        $this->gemini = $gemini;
-        $this->moduleConfig = $moduleConfig;
-    }
-
-    /**
-     * @return void
-     */
-    protected function initClient(): void
-    {
-        $apiKey = $this->moduleConfig->getGeminiApiKey();
-        $this->geminiClient = $this->gemini::client($apiKey);
     }
 
     /**
@@ -55,25 +31,21 @@ class GeminiModels implements OptionSourceInterface
     {
         $optionArray = [['value' => '', 'label' => __('-- Please Select --')]];
 
-        if (!empty($this->moduleConfig->getGeminiApiKey())) {
-            try {
-                if (empty($this->geminiClient)) {
-                    $this->initClient();
-                }
-
-                $models = $this->geminiClient->models()->list()->toArray();
-
-                foreach ($models['models'] as $model) {
-                    $optionArray[] = [
-                        'value' => $model['name'],
-                        'label' => $model['displayName']
-                    ];
-                }
-            } catch (Exception $e) {
-                return $optionArray;
-            }
+        if (empty($this->moduleConfig->getGeminiApiKey())) {
+            return $optionArray;
         }
 
-        return $optionArray;
+        try {
+            $this->geminiClient ??= $this->gemini::client($this->moduleConfig->getGeminiApiKey());
+
+            $models = $this->geminiClient->models()->list()->toArray();
+
+            return array_merge($optionArray, array_map(
+                fn($model) => ['value' => $model['name'], 'label' => $model['displayName']],
+                $models['models']
+            ));
+        } catch (Exception) {
+            return $optionArray;
+        }
     }
 }

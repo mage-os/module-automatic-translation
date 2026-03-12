@@ -1,24 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Block\Adminhtml\Component\Control;
 
+use Magento\Ui\Component\Control\SplitButton as BaseSplitButton;
 
-class SplitButton extends \Magento\Ui\Component\Control\SplitButton
+class SplitButton extends BaseSplitButton
 {
-
     /**
-     * Retrieve button attributes html
-     *
      * @return string
      */
-    public function getButtonAttributesHtml()
+    public function getButtonAttributesHtml(): string
     {
         $disabled = $this->getDisabled() ? 'disabled' : '';
         $classes = ['action-default', 'secondary'];
 
-        if (!($title = $this->getTitle())) {
-            $title = $this->getLabel();
-        }
+        $title = $this->getTitle() ?: $this->getLabel();
 
         if ($this->getButtonClass()) {
             $classes[] = $this->getButtonClass();
@@ -29,17 +27,12 @@ class SplitButton extends \Magento\Ui\Component\Control\SplitButton
         }
 
         $attributes = [
-            'id' => $this->getButtonId(),
+            'id' => $this->getIdHard() ?: $this->getButtonId(),
             'title' => $title,
             'class' => join(' ', $classes),
             'disabled' => $disabled,
         ];
 
-        if ($idHard = $this->getIdHard()) {
-            $attributes['id'] = $idHard;
-        }
-
-        //TODO perhaps we need to skip data-mage-init when disabled="disabled"
         if ($dataAttribute = $this->getDataAttribute()) {
             $this->getDataAttributes($dataAttribute, $attributes);
         }
@@ -51,18 +44,14 @@ class SplitButton extends \Magento\Ui\Component\Control\SplitButton
     }
 
     /**
-     * Retrieve toggle button attributes html
-     *
      * @return string
      */
-    public function getToggleAttributesHtml()
+    public function getToggleAttributesHtml(): string
     {
         $disabled = $this->getDisabled() ? 'disabled' : '';
         $classes = ['action-toggle', 'secondary'];
 
-        if (!($title = $this->getTitle())) {
-            $title = $this->getLabel();
-        }
+        $title = $this->getTitle() ?: $this->getLabel();
 
         if ($currentClass = $this->getClass()) {
             $classes[] = $currentClass;

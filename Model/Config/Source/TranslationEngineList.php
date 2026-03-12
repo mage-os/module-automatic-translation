@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -7,9 +9,6 @@ use MageOS\AutomaticTranslation\Model\Translator\DeepL;
 use MageOS\AutomaticTranslation\Model\Translator\GoogleGemini;
 use MageOS\AutomaticTranslation\Model\Translator\OpenAI;
 
-/**
- * Class TranslationEngineList
- */
 class TranslationEngineList implements OptionSourceInterface
 {
     /**

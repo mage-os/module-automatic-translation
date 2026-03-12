@@ -1,82 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Ui\DataProvider\Product\Form\Modifier;
 
-use Exception;
 use Magento\Backend\Block\Store\Switcher as StoreSwitcher;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ResourceModel\Store;
 use Magento\Store\Model\Website;
 use Magento\Ui\Component;
 use Magento\Ui\Component\Container;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
+use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class TranslationStores
- * @package MageOS\AutomaticTranslation\Ui\DataProvider\Product\Form\Modifier
- */
 class TranslationStores extends AbstractModifier
 {
-    protected const GROUP_CODE = 'translation-stores';
+    const string GROUP_CODE = 'translation-stores';
 
     /**
-     * @var StoreSwitcher
-     */
-    private StoreSwitcher $storeSwitcher;
-
-    /**
-     * @var ModuleConfig
-     */
-    private ModuleConfig $moduleConfig;
-
-    /**
-     * @var RequestInterface
-     */
-    private RequestInterface $request;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private ProductRepositoryInterface $productRepository;
-
-    /**
-     * TranslationStores constructor.
      * @param StoreSwitcher $storeSwitcher
      * @param ModuleConfig $moduleConfig
      * @param RequestInterface $request
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        StoreSwitcher $storeSwitcher,
-        ModuleConfig $moduleConfig,
-        RequestInterface $request,
-        ProductRepositoryInterface $productRepository
+        protected StoreSwitcher $storeSwitcher,
+        protected ModuleConfig $moduleConfig,
+        protected RequestInterface $request,
+        protected ProductRepositoryInterface $productRepository
     ) {
-        $this->storeSwitcher = $storeSwitcher;
-        $this->moduleConfig = $moduleConfig;
-        $this->request = $request;
-        $this->productRepository = $productRepository;
     }
 
     /**
-     * @inheritdoc
-     *
-     * @since 101.0.0
+     * @param array $data
+     * @return array
      */
-    public function modifyData(array $data)
+    public function modifyData(array $data): array
     {
         return $data;
     }
 
     /**
-     * @inheritdoc
-     *
-     * @since 101.0.0
+     * @param array $meta
+     * @return array
+     * @throws NoSuchEntityException
      */
-    public function modifyMeta(array $meta)
+    public function modifyMeta(array $meta): array
     {
         if (isset($meta[static::GROUP_CODE])) {
             $meta[static::GROUP_CODE]['arguments']['data']['config']['component'] =
@@ -90,12 +61,10 @@ class TranslationStores extends AbstractModifier
     }
 
     /**
-     * Modify meta customize switch store modal.
-     *
      * @param array $meta
      * @return array
      */
-    private function customizeSwitchStoreModal(array $meta): array
+    protected function customizeSwitchStoreModal(array $meta): array
     {
         $meta['select_store_modal']['arguments']['data']['config'] = [
             'isTemplate' => false,
@@ -126,7 +95,7 @@ class TranslationStores extends AbstractModifier
      * @return array
      * @throws NoSuchEntityException
      */
-    private function customizeTranslationStoresList(array $meta): array
+    protected function customizeTranslationStoresList(array $meta): array
     {
         $meta['select_store_modal']['children']['translation_store_list'] = [
             'arguments' => [
@@ -154,7 +123,7 @@ class TranslationStores extends AbstractModifier
      * @return array
      * @throws NoSuchEntityException
      */
-    private function getTranslationStores(): array
+    protected function getTranslationStores(): array
     {
         $translationStores = [];
         try {
@@ -163,14 +132,10 @@ class TranslationStores extends AbstractModifier
             );
             $productStoreIds = $currentProduct->getStoreIds();
 
-            /**
-             * @var Website $website
-             */
+            /** @var Website $website */
             foreach ($this->storeSwitcher->getWebsites() as $website) {
                 $stores = $website->getStores();
-                /**
-                 * @var  Store $store
-                 */
+                /** @var Store $store */
                 foreach ($stores as $store) {
                     if (in_array($store->getId(), $productStoreIds)) {
                         if ($this->moduleConfig->isEnable((int)$store->getId())) {
@@ -179,7 +144,8 @@ class TranslationStores extends AbstractModifier
                     }
                 }
             }
-        } catch (Exception $e) {
+        } catch (NoSuchEntityException) {
+            return $translationStores;
         }
         return $translationStores;
     }

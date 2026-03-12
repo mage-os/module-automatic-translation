@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Service;
 
-use Exception;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\CatalogUrlRewrite\Model\Products\AppendUrlRewritesToProducts;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 use MageOS\AutomaticTranslation\Api\AttributeProviderInterface;
 use MageOS\AutomaticTranslation\Api\ProductTranslatorInterface;
@@ -17,45 +17,11 @@ use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service as ServiceHelper;
 use MageOS\AutomaticTranslation\Model\Config\Source\TextAttributes;
 use Psr\Log\LoggerInterface as Logger;
+use Magento\Framework\Exception\LocalizedException;
+use Exception;
 
-/**
- * Class ProductTranslator
- */
 class ProductTranslator implements ProductTranslatorInterface
 {
-    /**
-     * @var ModuleConfig
-     */
-    protected ModuleConfig $moduleConfig;
-    /**
-     * @var ServiceHelper
-     */
-    protected ServiceHelper $serviceHelper;
-    /**
-     * @var TranslatorInterface
-     */
-    protected TranslatorInterface $translator;
-    /**
-     * @var ProductResource
-     */
-    protected ProductResource $productResource;
-    /**
-     * @var Gallery
-     */
-    protected Gallery $gallery;
-    /**
-     * @var StoreManagerInterface
-     */
-    protected StoreManagerInterface $storeManager;
-    /**
-     * @var AppendUrlRewritesToProducts
-     */
-    protected AppendUrlRewritesToProducts $appendRewrites;
-    /**
-     * @var Logger
-     */
-    protected Logger $logger;
-
     /**
      * @param ModuleConfig $moduleConfig
      * @param ServiceHelper $serviceHelper
@@ -63,26 +29,19 @@ class ProductTranslator implements ProductTranslatorInterface
      * @param ProductResource $productResource
      * @param Gallery $gallery
      * @param StoreManagerInterface $storeManager
+     * @param AppendUrlRewritesToProducts $appendRewrites
      * @param Logger $logger
      */
     public function __construct(
-        ModuleConfig $moduleConfig,
-        ServiceHelper $serviceHelper,
-        TranslatorInterface $translator,
-        ProductResource $productResource,
-        Gallery $gallery,
-        StoreManagerInterface $storeManager,
-        AppendUrlRewritesToProducts $appendRewrites,
-        Logger $logger
+        protected ModuleConfig $moduleConfig,
+        protected ServiceHelper $serviceHelper,
+        protected TranslatorInterface $translator,
+        protected ProductResource $productResource,
+        protected Gallery $gallery,
+        protected StoreManagerInterface $storeManager,
+        protected AppendUrlRewritesToProducts $appendRewrites,
+        protected Logger $logger
     ) {
-        $this->moduleConfig = $moduleConfig;
-        $this->serviceHelper = $serviceHelper;
-        $this->translator = $translator;
-        $this->productResource = $productResource;
-        $this->gallery = $gallery;
-        $this->storeManager = $storeManager;
-        $this->appendRewrites = $appendRewrites;
-        $this->logger = $logger;
     }
 
     /**
@@ -165,15 +124,14 @@ class ProductTranslator implements ProductTranslatorInterface
 
     /**
      * @param ProductInterface $product
-     * @param int|string $storeId
+     * @param int $storeId
      * @param string $targetLanguage
      * @param string $sourceLanguage
-     * @return void
      * @throws LocalizedException
      */
     protected function translateGalleryAlternativeTexts(
-        $product,
-        $storeId,
+        ProductInterface $product,
+        int $storeId,
         string $targetLanguage,
         string $sourceLanguage
     ): void {
@@ -228,19 +186,19 @@ class ProductTranslator implements ProductTranslatorInterface
     }
 
     /**
-     * @param string $parsedContent
+     * @param array|string $parsedContent
      * @param string $textToTranslate
      * @param string $targetLanguage
      * @param string $sourceLanguage
-     * @return mixed|string
+     * @return string
      * @throws Exception
      */
     protected function translateParsedContent(
-        string $parsedContent,
+        array|string $parsedContent,
         string $textToTranslate,
         string $targetLanguage,
         string $sourceLanguage
-    ) {
+    ): string {
         if (is_string($parsedContent)) {
             return $this->translator->translate(
                 $textToTranslate,
@@ -249,18 +207,12 @@ class ProductTranslator implements ProductTranslatorInterface
             );
         }
 
-        $textToTranslate = html_entity_decode(htmlspecialchars_decode($textToTranslate));
-        $textTranslated = $textToTranslate;
+        $textTranslated = html_entity_decode(htmlspecialchars_decode($textToTranslate));
 
         foreach ($parsedContent as $parsedString) {
-            $parsedString["translation"] = $this->translator->translate(
-                $parsedString["source"],
-                $targetLanguage
-            );
-
             $textTranslated = str_replace(
                 $parsedString["source"],
-                $parsedString["translation"],
+                $this->translator->translate($parsedString["source"], $targetLanguage),
                 $textTranslated
             );
         }

@@ -1,38 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Console\Command;
 
-use Exception;
 use MageOS\AutomaticTranslation\Model\Translator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Exception;
 
-/**
- * Class TestTranslation
- */
 class TestTranslation extends Command
 {
-    protected Translator $translator;
-
     /**
-     * TestTranslation constructor.
      * @param Translator $translator
-     * @param $name
+     * @param string|null $name
      */
     public function __construct(
-        Translator $translator,
-        $name = null
+        protected Translator $translator,
+        ?string $name = null
     ) {
-        $this->translator = $translator;
         parent::__construct($name);
     }
 
     /**
-     * Initialization of the command.
+     * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('mage-os:translation:test');
         $this->setDescription('Command to test Translation');
@@ -58,19 +53,16 @@ class TestTranslation extends Command
     }
 
     /**
-     * CLI command description.
-     *
      * @param InputInterface $input
      * @param OutputInterface $output
-     *
-     * @return void
+     * @return int
      * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $text = $input->getOption('text');
         $targetlang = $input->getOption('targetlang');
-        $sourcelang = (!empty($input->getOption('sourcelang'))) ? $input->getOption('sourcelang') : null;
+        $sourcelang = $input->getOption('sourcelang') ?: null;
 
         $output->writeln($this->translator->translate($text, $targetlang, $sourcelang));
 

@@ -1,44 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Setup\Patch\Data;
 
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\Validator\ValidateException;
 use MageOS\AutomaticTranslation\Api\AttributeProviderInterface as AttributeProvider;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validator\ValidateException;
 
-/**
- * Class AddLastTranslationDateProductAttribute
- * @package MageOS\AutomaticTranslation\Setup\Patch\Data
- */
 class AddLastTranslationDateProductAttribute implements DataPatchInterface
 {
     /**
-     * @var ModuleDataSetupInterface
-     */
-    protected ModuleDataSetupInterface $moduleDataSetup;
-
-    /**
-     * @var EavSetupFactory
-     */
-    protected EavSetupFactory $eavSetupFactory;
-
-    /**
-     * AddLastTranslationDateProductAttribute constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup,
-        EavSetupFactory $eavSetupFactory
+        protected ModuleDataSetupInterface $moduleDataSetup,
+        protected EavSetupFactory $eavSetupFactory
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
@@ -75,7 +60,7 @@ class AddLastTranslationDateProductAttribute implements DataPatchInterface
     }
 
     /**
-     * @return array|string[]
+     * @return array
      */
     public static function getDependencies(): array
     {
@@ -83,7 +68,7 @@ class AddLastTranslationDateProductAttribute implements DataPatchInterface
     }
 
     /**
-     * @return array|string[]
+     * @return array
      */
     public function getAliases(): array
     {
