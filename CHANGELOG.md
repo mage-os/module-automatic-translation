@@ -1,4 +1,11 @@
 # Automatic Translation
+## [1.11.0] - 11/03/2026
+### Fixed
+- Fixed chunking fallback for segments without block-level HTML tags (hard split on sentence/word boundaries)
+
+### Added
+- Widget directives are now excluded from translation payload and their translatable parameters are translated individually
+
 ## [1.10.1] - 10/03/2026
 ### Fixed
 - Fixed translation failing on long texts by adding chunking plugin for translation API limits
