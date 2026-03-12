@@ -32,12 +32,12 @@ class TranslateParsedContent
      * @throws Exception
      */
     public function execute(
-        mixed $parsedContent,
+        $parsedContent,
         string $requestPostValue,
         string $destinationLanguage
     ): mixed {
         if (is_string($parsedContent)) {
-            return $this->translator->translate($parsedContent, $destinationLanguage);
+            return $this->translateWidgetDirectives($parsedContent, $destinationLanguage);
         }
 
         $contentSettingsMap = [];
@@ -80,7 +80,9 @@ class TranslateParsedContent
             }
         }
 
-        $result = $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue);
+        $result = strpos($requestPostValue, 'data-content-type="html"') !== false
+            ? $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue)
+            : $requestPostValue;
 
         foreach ($widgetMap as $key => $widget) {
             $result = str_replace(
@@ -99,6 +101,34 @@ class TranslateParsedContent
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $text
+     * @param string $destinationLanguage
+     * @return string
+     * @throws RuntimeException
+     * @throws Exception
+     */
+    protected function translateWidgetDirectives(
+        string $text,
+        string $destinationLanguage
+    ): string {
+        [$text, $widgetMap] = $this->extractPlaceholders(
+            $text,
+            self::WIDGET_PATTERN,
+            'WIDGET_PLACEHOLDER_'
+        );
+
+        foreach ($widgetMap as $key => $widget) {
+            $text = str_replace(
+                $key,
+                $this->translateWidgetParams($widget, $destinationLanguage),
+                $text
+            );
+        }
+
+        return $text;
     }
 
     /**

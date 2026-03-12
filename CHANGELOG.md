@@ -1,4 +1,11 @@
 # Automatic Translation
+## [1.11.1] - 12/03/2026
+### Fixed
+- Fixed encodePageBuilderHtmlBox corrupting text/heading content types (double HTML-encoding, style block encoding, spurious newlines)
+- Expanded parsePageBuilderHtmlBox XPath to extract text from text and heading content types, not just html
+- Fixed is_string branch sending entire structural HTML to translator — now only translates widget parameters
+- Fixed log message not showing exception details (sprintf instead of __())
+
 ## [1.11.0] - 11/03/2026
 ### Fixed
 - Fixed chunking fallback for segments without block-level HTML tags (hard split on sentence/word boundaries)

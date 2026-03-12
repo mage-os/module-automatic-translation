@@ -113,7 +113,9 @@ class Service extends AbstractHelper
         /**
          * @var DOMNodeList $pagebuilderNodes
          */
-        $pagebuilderNodes = $xpath->query('//div[@data-content-type="html"]');
+        $pagebuilderNodes = $xpath->query(
+            '//*[@data-content-type="html"]'
+        );
 
         if ($pagebuilderNodes === false) {
             return '<div data-content-type="html" data-appearance="default" data-element="main">' . $string . '</div>';
@@ -167,10 +169,10 @@ class Service extends AbstractHelper
         ) ?? '';
 
         foreach ($styles as $style) {
-            $resultHtml = str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$style) . $resultHtml;
+            $resultHtml = (string)$style . $resultHtml;
         }
         foreach ($scripts as $script) {
-            $resultHtml = $resultHtml . str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$script);
+            $resultHtml = $resultHtml . (string)$script;
         }
 
         return $resultHtml;
@@ -192,7 +194,9 @@ class Service extends AbstractHelper
                 $htmlContents = [];
 
                 $xpath = new DOMXPath($dom);
-                $queryResult = $xpath->query('//div[@data-content-type="html"]');
+                $queryResult = $xpath->query(
+                    '//*[@data-content-type="html" or @data-content-type="text" or @data-content-type="heading"]'
+                );
 
                 if (
                     $queryResult !== false
