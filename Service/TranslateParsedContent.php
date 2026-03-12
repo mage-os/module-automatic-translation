@@ -16,16 +16,28 @@ class TranslateParsedContent
     const TRANSLATABLE_REPEATABLE_PARAMS = ['title', 'content', 'button', 'image_alt'];
     const JSON_ENCODE_FLAGS = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
 
+    /** @var Service */
+    protected Service $serviceHelper;
+
+    /** @var Translator */
+    protected Translator $translator;
+
+    /** @var Json */
+    protected Json $json;
+
     /**
      * @param Service $serviceHelper
      * @param Translator $translator
      * @param Json $json
      */
     public function __construct(
-        protected Service $serviceHelper,
-        protected Translator $translator,
-        protected Json $json,
+        Service $serviceHelper,
+        Translator $translator,
+        Json $json
     ) {
+        $this->serviceHelper = $serviceHelper;
+        $this->translator = $translator;
+        $this->json = $json;
     }
 
     /**
@@ -40,7 +52,7 @@ class TranslateParsedContent
         $parsedContent,
         string $requestPostValue,
         string $destinationLanguage
-    ): mixed {
+    ) {
         if (is_string($parsedContent)) {
             return $this->translateWidgetDirectives($parsedContent, $destinationLanguage);
         }
@@ -180,7 +192,7 @@ class TranslateParsedContent
 
         try {
             $outer = $this->json->unserialize($decoded);
-        } catch (Exception) {
+        } catch (Exception $e) {
             return $contentSettings;
         }
 
@@ -190,7 +202,7 @@ class TranslateParsedContent
 
         try {
             $data = $this->json->unserialize($outer['data']);
-        } catch (Exception) {
+        } catch (Exception $e) {
             return $contentSettings;
         }
 
@@ -205,7 +217,7 @@ class TranslateParsedContent
                 continue;
             }
 
-            if (str_starts_with($key, 'repeatable_') && str_ends_with($key, '_items')) {
+            if (strncmp($key, 'repeatable_', 11) === 0 && substr($key, -6) === '_items') {
                 $original = $value;
                 $value = $this->translateRepeatableItems($value, $destinationLanguage);
                 $this->collectRepeatableTranslations($original, $value, $translations);
@@ -213,7 +225,8 @@ class TranslateParsedContent
             }
 
             foreach (self::TRANSLATABLE_WIDGET_PARAMS as $suffix) {
-                if (str_ends_with($key, '_' . $suffix)) {
+                $needle = '_' . $suffix;
+                if (substr($key, -strlen($needle)) === $needle) {
                     $original = $value;
                     $value = $this->translator->translate($value, $destinationLanguage);
                     if ($original !== $value) {
