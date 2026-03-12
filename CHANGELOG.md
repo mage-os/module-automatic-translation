@@ -1,4 +1,10 @@
 # Automatic Translation
+## [1.11.2] - 12/03/2026
+### Fixed
+- Fixed widget content_settings translation using JSON decode/encode instead of unreliable regex on raw encoded string
+- Added translation of repeatable items (title, content, button, image_alt) inside content_settings
+- Added translation of widget preview HTML inside content_settings for Page Builder editor consistency
+
 ## [1.11.1] - 12/03/2026
 ### Fixed
 - Fixed encodePageBuilderHtmlBox corrupting text/heading content types (double HTML-encoding, style block encoding, spurious newlines)

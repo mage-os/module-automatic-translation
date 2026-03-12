@@ -6,6 +6,7 @@
         "MIT"
     ],
     "require": {
+        "php": ">=7.4",
         "magento/framework": "*",
         "magento/module-catalog": "^104.0.0",
         "deeplcom/deepl-php": "^1",
