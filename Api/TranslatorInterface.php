@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Api;
 
 use Exception;

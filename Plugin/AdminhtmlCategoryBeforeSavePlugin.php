@@ -1,22 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Plugin;
 
-use Exception;
 use Magento\Catalog\Controller\Adminhtml\Category\Save;
 use Magento\Framework\Message\ManagerInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service;
 use MageOS\AutomaticTranslation\Service\TranslateParsedContent;
 use Psr\Log\LoggerInterface as Logger;
+use Exception;
 
-/**
- * Class AdminhtmlCategoryBeforeSavePlugin
- * @package MageOS\AutomaticTranslation\Plugin
- */
 class AdminhtmlCategoryBeforeSavePlugin
 {
-    protected const CATEGORY_TRANSLATABLE_ATTRIBUTES = [
+    const array CATEGORY_TRANSLATABLE_ATTRIBUTES = [
         'name',
         'description',
         'url_key',
@@ -26,32 +24,6 @@ class AdminhtmlCategoryBeforeSavePlugin
     ];
 
     /**
-     * @var ModuleConfig
-     */
-    protected ModuleConfig $moduleConfig;
-
-    /**
-     * @var Service
-     */
-    protected Service $serviceHelper;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected ManagerInterface $messageManager;
-
-    /**
-     * @var Logger
-     */
-    protected Logger $logger;
-
-    /**
-     * @var TranslateParsedContent
-     */
-    protected TranslateParsedContent $translateParsedContent;
-
-    /**
-     * AdminhtmlProductBeforeSavePlugin constructor.
      * @param ModuleConfig $moduleConfig
      * @param Service $serviceHelper
      * @param ManagerInterface $messageManager
@@ -59,24 +31,19 @@ class AdminhtmlCategoryBeforeSavePlugin
      * @param TranslateParsedContent $translateParsedContent
      */
     public function __construct(
-        ModuleConfig $moduleConfig,
-        Service $serviceHelper,
-        ManagerInterface $messageManager,
-        Logger $logger,
-        TranslateParsedContent $translateParsedContent
+        protected ModuleConfig $moduleConfig,
+        protected Service $serviceHelper,
+        protected ManagerInterface $messageManager,
+        protected Logger $logger,
+        protected TranslateParsedContent $translateParsedContent
     ) {
-        $this->moduleConfig = $moduleConfig;
-        $this->serviceHelper = $serviceHelper;
-        $this->messageManager = $messageManager;
-        $this->logger = $logger;
-        $this->translateParsedContent = $translateParsedContent;
     }
 
     /**
      * @param Save $subject
-     * @return null
+     * @return ?array
      */
-    public function beforeExecute(Save $subject)
+    public function beforeExecute(Save $subject): ?array
     {
         try {
             $request = $subject->getRequest();
@@ -94,9 +61,8 @@ class AdminhtmlCategoryBeforeSavePlugin
             }
 
             $requestPostValue = $request->getPostValue();
-            $attributesToTranslate = self::CATEGORY_TRANSLATABLE_ATTRIBUTES;
 
-            foreach ($attributesToTranslate as $attributeCode) {
+            foreach (self::CATEGORY_TRANSLATABLE_ATTRIBUTES as $attributeCode) {
                 if (!empty($requestPostValue[$attributeCode]) && is_string($requestPostValue[$attributeCode])) {
                     $parsedContent = $this->serviceHelper->parsePageBuilderHtmlBox($requestPostValue[$attributeCode]);
 

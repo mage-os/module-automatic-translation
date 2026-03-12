@@ -1,58 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Model\Translator;
 
-use Exception;
 use MageOS\AutomaticTranslation\Api\TranslatorInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use OpenAI as OpenAITranslator;
 use OpenAI\Client as OpenAIClient;
+use Exception;
 
-/**
- * Class OpenAI
- */
 class OpenAI implements TranslatorInterface
 {
-    /**
-     * @var OpenAIClient|null
-     */
     protected ?OpenAIClient $translator = null;
-    /**
-     * @var OpenAITranslator
-     */
-    protected OpenAITranslator $openAITranslator;
-    /**
-     * @var ModuleConfig
-     */
-    protected ModuleConfig $moduleConfig;
 
     /**
-     * OpenAI constructor.
      * @param OpenAITranslator $openAITranslator
      * @param ModuleConfig $moduleConfig
      */
     public function __construct(
-        OpenAITranslator $openAITranslator,
-        ModuleConfig $moduleConfig
+        protected OpenAITranslator $openAITranslator,
+        protected ModuleConfig $moduleConfig
     ) {
-        $this->openAITranslator = $openAITranslator;
-        $this->moduleConfig = $moduleConfig;
-    }
-
-    /**
-     * @return void
-     */
-    public function initTranslator(): void
-    {
-        $apiKey = $this->moduleConfig->getOpenAIApiKey();
-        $organization = $this->moduleConfig->getOpenAIOrgID();
-        $projectId = $this->moduleConfig->getOpenAIProjectID();
-
-        $this->translator = $this->openAITranslator::client(
-            $apiKey,
-            $organization,
-            !empty($projectId) ? $projectId : null
-        );
     }
 
     /**
@@ -60,20 +29,21 @@ class OpenAI implements TranslatorInterface
      * @param string $targetLang
      * @param string|null $sourceLang
      * @return string
-     * @throw Exception
+     * @throws Exception
      */
     public function translate(string $text, string $targetLang, ?string $sourceLang = null): string
     {
-        if (empty($this->translator)) {
-            $this->initTranslator();
-        }
+        $this->translator ??= $this->openAITranslator::client(
+            $this->moduleConfig->getOpenAIApiKey(),
+            $this->moduleConfig->getOpenAIOrgID(),
+            $this->moduleConfig->getOpenAIProjectID() ?: null
+        );
 
-        $prompt = 'Translate this text, with the context that this text is used in an e-commerce store as part of a';
-        $prompt .= ' product description or a category description without asking any further questions or';
-        $prompt .= ' clarifications, giving only the answer and nothing else,';
-        $prompt .= (!empty($sourceLang)) ? ' from ' . $sourceLang : '';
-        $prompt .= ' to ' . $targetLang;
-        $prompt .= ': ' . $text;
+        $sourceFragment = $sourceLang ? ' from ' . $sourceLang : '';
+        $prompt = 'Translate this text, with the context that this text is used in an e-commerce store as part of a'
+            . ' product description or a category description without asking any further questions or'
+            . ' clarifications, giving only the answer and nothing else,'
+            . $sourceFragment . ' to ' . $targetLang . ': ' . $text;
 
         try {
             $result = $this->translator->completions()->create([
@@ -82,7 +52,7 @@ class OpenAI implements TranslatorInterface
             ]);
 
             return trim($result['choices'][0]['text']);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $result = $this->translator->chat()->create([
                 'model' => $this->moduleConfig->getOpenAIModel(),
                 'messages' => [

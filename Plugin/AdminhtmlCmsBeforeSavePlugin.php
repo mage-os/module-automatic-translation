@@ -1,63 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Plugin;
 
-use Exception;
 use Magento\Framework\Message\ManagerInterface;
 use MageOS\AutomaticTranslation\Helper\Service;
 use MageOS\AutomaticTranslation\Service\TranslateParsedContent;
 use Psr\Log\LoggerInterface as Logger;
+use Exception;
 
-/**
- * Class AdminhtmlCmsBeforeSavePlugin
- * @package MageOS\AutomaticTranslation\Plugin
- */
 class AdminhtmlCmsBeforeSavePlugin
 {
     /**
-     * @var Service
-     */
-    protected Service $serviceHelper;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected ManagerInterface $messageManager;
-
-    /**
-     * @var Logger
-     */
-    protected Logger $logger;
-
-    /**
-     * @var TranslateParsedContent
-     */
-    protected TranslateParsedContent $translateParsedContent;
-
-    /**
-     * AdminhtmlCmsBeforeSavePlugin constructor.
      * @param Service $serviceHelper
      * @param ManagerInterface $messageManager
      * @param Logger $logger
      * @param TranslateParsedContent $translateParsedContent
      */
     public function __construct(
-        Service $serviceHelper,
-        ManagerInterface $messageManager,
-        Logger $logger,
-        TranslateParsedContent $translateParsedContent
+        protected Service $serviceHelper,
+        protected ManagerInterface $messageManager,
+        protected Logger $logger,
+        protected TranslateParsedContent $translateParsedContent
     ) {
-        $this->serviceHelper = $serviceHelper;
-        $this->messageManager = $messageManager;
-        $this->logger = $logger;
-        $this->translateParsedContent = $translateParsedContent;
     }
 
     /**
-     * @param $subject
-     * @return null
+     * @param mixed $subject
+     * @return ?array
      */
-    public function beforeExecute($subject)
+    public function beforeExecute(mixed $subject): ?array
     {
         try {
             $request = $subject->getRequest();

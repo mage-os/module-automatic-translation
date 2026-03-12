@@ -1,29 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Model\Config\Source;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Framework\Data\OptionSourceInterface;
 
-/**
- * Class TextAttributes
- */
 class TextAttributes implements OptionSourceInterface
 {
-    // Custom attribute for gallery alt images translations management
-    public const GALLERY_ALT_ATTRIBUTE_CODE = 'gallery_alt';
-    private const GALLERY_ALT_IMAGE_ATTRIBUTE = [
+    const string GALLERY_ALT_ATTRIBUTE_CODE = 'gallery_alt';
+    const array GALLERY_ALT_IMAGE_ATTRIBUTE = [
         'value' => self::GALLERY_ALT_ATTRIBUTE_CODE,
         'label' => 'Gallery image alt text'
     ];
-
-    // Attribute types to select
-    private const ATTRIBUTE_TYPES = [
+    const array ATTRIBUTE_TYPES = [
         'text',
         'textarea'
     ];
-    // Attributes to exclude from the select
-    private const ATTRIBUTES_TO_EXCLUDE = [
+    const array ATTRIBUTES_TO_EXCLUDE = [
         'sku',
         'tier_price',
         'category_ids',
@@ -33,16 +28,12 @@ class TextAttributes implements OptionSourceInterface
         'thumbnail_label'
     ];
 
-    protected CollectionFactory $collectionFactory;
-
     /**
-     * TextAttributes constructor.
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        CollectionFactory $collectionFactory
+        protected CollectionFactory $collectionFactory
     ) {
-        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -50,8 +41,6 @@ class TextAttributes implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        $attributesArray = [];
-
         $attributes = $this->collectionFactory
             ->create()
             ->addFieldToSelect('attribute_code')
@@ -61,12 +50,10 @@ class TextAttributes implements OptionSourceInterface
             ->setOrder('frontend_label', 'ASC')
             ->getItems();
 
-        foreach ($attributes as $attribute) {
-            $attributesArray[] = [
-                'value' => $attribute->getAttributeCode(),
-                'label' => $attribute->getFrontendLabel()
-            ];
-        }
+        $attributesArray = array_map(
+            fn($attribute) => ['value' => $attribute->getAttributeCode(), 'label' => $attribute->getFrontendLabel()],
+            $attributes
+        );
 
         $attributesArray[] = self::GALLERY_ALT_IMAGE_ATTRIBUTE;
 

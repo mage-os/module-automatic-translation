@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Model\Config;
 
-use Exception;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
@@ -11,27 +12,11 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Exception;
 
-/**
- * Class CatalogCron
- */
 class CatalogCron extends Value
 {
     /**
-     * @var ValueFactory
-     */
-    protected $valueFactory;
-    /**
-     * @var string
-     */
-    protected $expression;
-    /**
-     * @var string
-     */
-    protected $cronStringPath;
-
-    /**
-     * CatalogCron constructor.
      * @param Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config
@@ -49,26 +34,22 @@ class CatalogCron extends Value
         Registry $registry,
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
-        ValueFactory $valueFactory,
+        protected ValueFactory $valueFactory,
         ?AbstractResource $resource = null,
         ?AbstractDb $resourceCollection = null,
         string $modelPath = '',
-        string $expression = 'groups/catalog/fields/product_translation_cron/value',
-        string $cronStringPath = 'crontab/translate_products/jobs/mageos_translate_products/schedule/cron_expr',
+        protected string $expression = 'groups/catalog/fields/product_translation_cron/value',
+        protected string $cronStringPath = 'crontab/translate_products/jobs/mageos_translate_products/schedule/cron_expr',
         array $data = []
     ) {
-        $this->valueFactory = $valueFactory;
-        $this->expression = $expression;
-        $this->cronStringPath = $cronStringPath;
-
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**
-     * @return CronStringExpr
+     * @return CatalogCron
      * @throws Exception
      */
-    public function afterSave()
+    public function afterSave(): static
     {
         $expression = $this->getData($this->expression);
 
@@ -82,7 +63,7 @@ class CatalogCron extends Value
                 $this->cronStringPath
             )->save();
         } catch (Exception $e) {
-            throw new Exception(__('Some Thing Want Wrong , We can\'t save the cron expression.'));
+            throw new Exception(__('Unable to save the cron expression.'), 0, $e);
         }
 
         return parent::afterSave();

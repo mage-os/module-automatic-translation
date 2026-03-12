@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MageOS\AutomaticTranslation\Service;
@@ -11,19 +12,10 @@ use Exception;
 
 class TranslateParsedContent
 {
-    const WIDGET_PATTERN = '/\{\{widget\s[^}]*\}\}/';
-    const TRANSLATABLE_WIDGET_PARAMS = ['anchor_text', 'title', 'description'];
-    const TRANSLATABLE_REPEATABLE_PARAMS = ['title', 'content', 'button', 'image_alt'];
-    const JSON_ENCODE_FLAGS = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
-
-    /** @var Service */
-    protected Service $serviceHelper;
-
-    /** @var Translator */
-    protected Translator $translator;
-
-    /** @var Json */
-    protected Json $json;
+    const string WIDGET_PATTERN = '/\{\{widget\s[^}]*\}\}/';
+    const array TRANSLATABLE_WIDGET_PARAMS = ['anchor_text', 'title', 'description'];
+    const array TRANSLATABLE_REPEATABLE_PARAMS = ['title', 'content', 'button', 'image_alt'];
+    const int JSON_ENCODE_FLAGS = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
 
     /**
      * @param Service $serviceHelper
@@ -31,13 +23,10 @@ class TranslateParsedContent
      * @param Json $json
      */
     public function __construct(
-        Service $serviceHelper,
-        Translator $translator,
-        Json $json
+        protected Service $serviceHelper,
+        protected Translator $translator,
+        protected Json $json
     ) {
-        $this->serviceHelper = $serviceHelper;
-        $this->translator = $translator;
-        $this->json = $json;
     }
 
     /**
@@ -49,10 +38,10 @@ class TranslateParsedContent
      * @throws Exception
      */
     public function execute(
-        $parsedContent,
+        mixed $parsedContent,
         string $requestPostValue,
         string $destinationLanguage
-    ) {
+    ): mixed {
         if (is_string($parsedContent)) {
             return $this->translateWidgetDirectives($parsedContent, $destinationLanguage);
         }
@@ -192,7 +181,7 @@ class TranslateParsedContent
 
         try {
             $outer = $this->json->unserialize($decoded);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return $contentSettings;
         }
 
@@ -202,7 +191,7 @@ class TranslateParsedContent
 
         try {
             $data = $this->json->unserialize($outer['data']);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return $contentSettings;
         }
 
@@ -217,7 +206,7 @@ class TranslateParsedContent
                 continue;
             }
 
-            if (strncmp($key, 'repeatable_', 11) === 0 && substr($key, -6) === '_items') {
+            if (str_starts_with($key, 'repeatable_') && str_ends_with($key, '_items')) {
                 $original = $value;
                 $value = $this->translateRepeatableItems($value, $destinationLanguage);
                 $this->collectRepeatableTranslations($original, $value, $translations);
@@ -225,8 +214,7 @@ class TranslateParsedContent
             }
 
             foreach (self::TRANSLATABLE_WIDGET_PARAMS as $suffix) {
-                $needle = '_' . $suffix;
-                if (substr($key, -strlen($needle)) === $needle) {
+                if (str_ends_with($key, '_' . $suffix)) {
                     $original = $value;
                     $value = $this->translator->translate($value, $destinationLanguage);
                     if ($original !== $value) {

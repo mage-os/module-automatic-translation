@@ -1,22 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Model\Config\Source;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Framework\Data\OptionSourceInterface;
 
-/**
- * Class SelectAttributes
- */
 class SelectAttributes implements OptionSourceInterface
 {
-    // Attribute types to select
-    private const ATTRIBUTE_TYPES = [
+    const array ATTRIBUTE_TYPES = [
         'select',
         'multiselect'
     ];
-    // Attributes to exclude from the select
-    private const ATTRIBUTES_TO_EXCLUDE = [
+    const array ATTRIBUTES_TO_EXCLUDE = [
         'custom_design',
         'custom_layout',
         'custom_layout_update_file',
@@ -27,16 +24,12 @@ class SelectAttributes implements OptionSourceInterface
         'gift_message_available'
     ];
 
-    protected CollectionFactory $collectionFactory;
-
     /**
-     * SelectAttributes constructor.
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        CollectionFactory $collectionFactory
+        protected CollectionFactory $collectionFactory
     ) {
-        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -44,8 +37,6 @@ class SelectAttributes implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        $attributesArray = [];
-
         $attributes = $this->collectionFactory
             ->create()
             ->addFieldToSelect('attribute_code')
@@ -55,13 +46,9 @@ class SelectAttributes implements OptionSourceInterface
             ->setOrder('frontend_label', 'ASC')
             ->getItems();
 
-        foreach ($attributes as $attribute) {
-            $attributesArray[] = [
-                'value' => $attribute->getAttributeCode(),
-                'label' => $attribute->getFrontendLabel()
-            ];
-        }
-
-        return $attributesArray;
+        return array_map(
+            fn($attribute) => ['value' => $attribute->getAttributeCode(), 'label' => $attribute->getFrontendLabel()],
+            $attributes
+        );
     }
 }

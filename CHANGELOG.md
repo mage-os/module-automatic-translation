@@ -1,4 +1,19 @@
 # Automatic Translation
+## [2.0.0] - 12/03/2026
+### Changed
+- **BREAKING**: Minimum PHP version raised to 8.3
+- Constructor promotion across all classes
+- Typed constants (const string, const array, const int) across all classes
+- Modern PHP 8.0+ functions: str_contains, str_starts_with, str_ends_with replacing legacy equivalents
+- Non-capturing catch blocks where exception variable is unused
+- Explicit return types on all methods
+- Union types and mixed type hints where appropriate
+- First-class callable syntax replacing array-style callables
+- Replaced empty() checks on typed nullable properties with explicit null comparisons
+- Changed private methods/properties to protected for Magento interceptor compatibility
+- Replaced inline FQCNs with use imports for exceptions
+- General code cleanup and refactoring
+
 ## [1.11.2] - 12/03/2026
 ### Fixed
 - Fixed widget content_settings translation using JSON decode/encode instead of unreliable regex on raw encoded string

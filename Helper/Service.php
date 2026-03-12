@@ -1,46 +1,29 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MageOS\AutomaticTranslation\Helper;
 
 use DOMDocument;
 use DOMNode;
-use DOMNodeList;
 use DOMXPath;
 use Exception;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class Service
- * @package MageOS\AutomaticTranslation\Helper
- */
 class Service extends AbstractHelper
 {
     /**
-     * @var StoreManagerInterface
-     */
-    protected StoreManagerInterface $storeManager;
-    /**
-     * @var ModuleConfig
-     */
-    protected ModuleConfig $moduleConfig;
-
-    /**
-     * Service constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param ModuleConfig $moduleConfig
      */
     public function __construct(
         Context $context,
-        StoreManagerInterface $storeManager,
-        ModuleConfig $moduleConfig
+        protected StoreManagerInterface $storeManager,
+        protected ModuleConfig $moduleConfig
     ) {
-        $this->storeManager = $storeManager;
-        $this->moduleConfig = $moduleConfig;
-
         parent::__construct($context);
     }
 
@@ -49,19 +32,7 @@ class Service extends AbstractHelper
      */
     public function getStoresToTranslate(): array
     {
-        $stores = $this->storeManager->getStores();
-        $storeToTranslate = [];
-
-        foreach ($stores as $store) {
-            $storeId = $store->getId();
-            $storeName = $store->getName();
-
-            if ($this->moduleConfig->isEnable((int)$storeId)) {
-                $storeToTranslate[$storeId] = $storeName;
-            }
-        }
-
-        return $storeToTranslate;
+        return $this->getEnabledStores(fn($store) => $store->getName());
     }
 
     /**
@@ -69,18 +40,24 @@ class Service extends AbstractHelper
      */
     public function getStoresLanguages(): array
     {
-        $stores = $this->storeManager->getStores();
-        $storeToTranslate = [];
+        return array_unique(
+            $this->getEnabledStores(fn($store) => $this->moduleConfig->getDestinationLanguage((int)$store->getId()))
+        );
+    }
 
-        foreach ($stores as $store) {
-            $storeId = $store->getId();
-            $storeLanguage = $this->moduleConfig->getDestinationLanguage((int)$storeId);
-
-            if ($this->moduleConfig->isEnable((int)$storeId)) {
-                $storeToTranslate[$storeId] = $storeLanguage;
+    /**
+     * @param callable $valueExtractor
+     * @return array
+     */
+    protected function getEnabledStores(callable $valueExtractor): array
+    {
+        $result = [];
+        foreach ($this->storeManager->getStores() as $store) {
+            if ($this->moduleConfig->isEnable((int)$store->getId())) {
+                $result[$store->getId()] = $valueExtractor($store);
             }
         }
-        return array_unique($storeToTranslate);
+        return $result;
     }
 
     /**
@@ -110,24 +87,13 @@ class Service extends AbstractHelper
         );
 
         $xpath = new DOMXPath($dom);
-        /**
-         * @var DOMNodeList $pagebuilderNodes
-         */
-        $pagebuilderNodes = $xpath->query(
-            '//*[@data-content-type="html"]'
-        );
+        $pagebuilderNodes = $xpath->query('//*[@data-content-type="html"]');
 
         if ($pagebuilderNodes === false) {
             return '<div data-content-type="html" data-appearance="default" data-element="main">' . $string . '</div>';
         }
 
-        /**
-         * @var DOMNode $node
-         */
         foreach ($pagebuilderNodes as $node) {
-            /**
-             * @var DOMNode $childNode
-             */
             $length = $node->childNodes->length;
             for ($nodeIndex = 0; $nodeIndex < $length; $nodeIndex++) {
                 $childNode = $node->childNodes->item($nodeIndex);
@@ -138,8 +104,10 @@ class Service extends AbstractHelper
                 $importedNode = $childDom->importNode($childNode, true);
                 $childDom->appendChild($importedNode);
                 $nodeHtml = html_entity_decode($childDom->saveHTML());
-                $node->replaceChild($dom->createTextNode(str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$nodeHtml)),
-                    $childNode);
+                $node->replaceChild(
+                    $dom->createTextNode(str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$nodeHtml)),
+                    $childNode
+                );
             }
         }
 
@@ -154,17 +122,13 @@ class Service extends AbstractHelper
 
         $resultHtml = preg_replace_callback(
             '/(<div[^>]*data-content-type="html"[^>]*>)(.*?)(<\/div>)/s',
-            function ($matches) {
-                return $matches[1] . html_entity_decode($matches[2], ENT_NOQUOTES, 'UTF-8') . $matches[3];
-            },
+            fn($matches) => $matches[1] . html_entity_decode($matches[2], ENT_NOQUOTES, 'UTF-8') . $matches[3],
             $resultHtml
         ) ?? $resultHtml;
 
         $resultHtml = preg_replace_callback(
             '/="(%7B%7B[^"]*%7D%7D)"/m',
-            function ($matches) {
-                return urldecode($matches[0]);
-            },
+            fn($matches) => urldecode($matches[0]),
             $resultHtml
         ) ?? '';
 
@@ -182,7 +146,7 @@ class Service extends AbstractHelper
      * @param string $string
      * @return array|string
      */
-    public function parsePageBuilderHtmlBox(string $string)
+    public function parsePageBuilderHtmlBox(string $string): array|string
     {
         if ($string !== strip_tags($string)) {
             try {
@@ -191,77 +155,51 @@ class Service extends AbstractHelper
                 $htmlString = preg_replace('/<style.*?\/style>/s', '', $htmlString) ?? '';
                 $dom = new DOMDocument();
                 $dom->loadHTML('<?xml encoding="utf-8" ?>' . $htmlString);
-                $htmlContents = [];
 
                 $xpath = new DOMXPath($dom);
                 $queryResult = $xpath->query(
                     '//*[@data-content-type="html" or @data-content-type="text" or @data-content-type="heading"]'
                 );
 
-                if (
-                    $queryResult !== false
-                    && $queryResult->length > 0
-                ) {
-                    /**
-                     * @var DOMNode $node
-                     */
+                if ($queryResult !== false && $queryResult->length > 0) {
+                    $htmlContents = [];
+                    /** @var DOMNode $node */
                     foreach ($queryResult as $node) {
                         $this->getChildNodesContent($node, $htmlContents);
                     }
-                    usort(
-                        $htmlContents,
-                        [$this, 'compareStringLength']
-                    );
-                    $result = [];
-                    foreach ($htmlContents as $content) {
-                        $result[] = ["source" => $content];
-                    }
-                    return $result;
+                    usort($htmlContents, fn(string $a, string $b) => strlen($b) <=> strlen($a));
+                    return array_map(fn($content) => ['source' => $content], $htmlContents);
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 return $string;
             }
         }
         return $string;
     }
 
-
-    /**
-     * @param string $str1
-     * @param string $str2
-     * @return int
-     */
-    private function compareStringLength(string $str1, string $str2): int
-    {
-        if (strlen($str1) === strlen($str2)) {
-            return 0;
-        }
-        return (strlen($str1) > strlen($str2)) ? -1 : 1;
-    }
-
-
     /**
      * @param DOMNode $node
      * @param array $htmlContents
      */
-    private function getChildNodesContent(DOMNode $node, array &$htmlContents): void
+    protected function getChildNodesContent(DOMNode $node, array &$htmlContents): void
     {
-        if (!in_array($node->nodeName, ['img', '#comment'], true)) {
-            if ($node->hasChildNodes()) {
-                foreach ($node->childNodes as $childNode) {
-                    $this->getChildNodesContent($childNode, $htmlContents);
-                }
-            } else {
-                $textContent = '';
-                if ($node->nodeName === "#text") {
-                    $textContent = trim($node->nodeValue ?? '');
-                } else {
-                    $textContent = trim($node->textContent ?? '');
-                }
-                if (!empty($textContent) && strlen($textContent) > 2) {
-                    $htmlContents[] = $textContent;
-                }
+        if (in_array($node->nodeName, ['img', '#comment'], true)) {
+            return;
+        }
+
+        if ($node->hasChildNodes()) {
+            foreach ($node->childNodes as $childNode) {
+                $this->getChildNodesContent($childNode, $htmlContents);
             }
+            return;
+        }
+
+        $textContent = trim(
+            $node->nodeName === '#text' ? ($node->nodeValue ?? '') : ($node->textContent ?? '')
+        );
+
+        if ($textContent !== '' && strlen($textContent) > 2) {
+            $htmlContents[] = $textContent;
         }
     }
 }

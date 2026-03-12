@@ -1,33 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Model\Translator;
 
 use Magento\Framework\ObjectManagerInterface;
+use MageOS\AutomaticTranslation\Api\TranslatorInterface;
 
-/**
- * Class TranslatorFactory
- */
 class TranslatorFactory
 {
     /**
-     * @var ObjectManagerInterface|null
-     */
-    protected ?ObjectManagerInterface $objectManager = null;
-
-    /**
-     * TranslatorFactory constructor.
      * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
+    public function __construct(
+        protected ObjectManagerInterface $objectManager
+    ) {
     }
 
     /**
-     * @param $instanceName
-     * @return mixed
+     * @param string $instanceName
+     * @return TranslatorInterface
      */
-    public function create($instanceName)
+    public function create(string $instanceName): TranslatorInterface
     {
         return $this->objectManager->create($instanceName);
     }

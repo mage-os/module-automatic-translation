@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Service;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -17,42 +19,9 @@ use MageOS\AutomaticTranslation\Api\TranslateProductsInterface;
 use MageOS\AutomaticTranslation\Helper\ModuleConfig;
 use MageOS\AutomaticTranslation\Helper\Service as ServiceHelper;
 
-/**
- * Class TranslateProducts
- */
 class TranslateProducts implements TranslateProductsInterface
 {
     /**
-     * @var StoreManagerInterface
-     */
-    protected StoreManagerInterface $storeManager;
-    /**
-     * @var ModuleConfig
-     */
-    protected ModuleConfig $moduleConfig;
-    /**
-     * @var ServiceHelper
-     */
-    protected ServiceHelper $serviceHelper;
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    protected SearchCriteriaBuilder $searchCriteriaBuilder;
-    /**
-     * @var ProductRepositoryInterface
-     */
-    protected ProductRepositoryInterface $productRepository;
-    /**
-     * @var FilterBuilder
-     */
-    protected FilterBuilder $filterBuilder;
-    /**
-     * @var ProductTranslatorInterface
-     */
-    protected ProductTranslatorInterface $productTranslator;
-
-    /**
-     * TranslateProducts constructor.
      * @param StoreManagerInterface $storeManager
      * @param ModuleConfig $moduleConfig
      * @param ServiceHelper $serviceHelper
@@ -62,21 +31,14 @@ class TranslateProducts implements TranslateProductsInterface
      * @param ProductTranslatorInterface $productTranslator
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        ModuleConfig $moduleConfig,
-        ServiceHelper $serviceHelper,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        ProductRepositoryInterface $productRepository,
-        FilterBuilder $filterBuilder,
-        ProductTranslatorInterface $productTranslator
+        protected StoreManagerInterface $storeManager,
+        protected ModuleConfig $moduleConfig,
+        protected ServiceHelper $serviceHelper,
+        protected SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected ProductRepositoryInterface $productRepository,
+        protected FilterBuilder $filterBuilder,
+        protected ProductTranslatorInterface $productTranslator
     ) {
-        $this->storeManager = $storeManager;
-        $this->moduleConfig = $moduleConfig;
-        $this->serviceHelper = $serviceHelper;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->productRepository = $productRepository;
-        $this->filterBuilder = $filterBuilder;
-        $this->productTranslator = $productTranslator;
     }
 
     /**
@@ -85,11 +47,11 @@ class TranslateProducts implements TranslateProductsInterface
     public function translateProducts(): void
     {
         $storeToTranslate = $this->serviceHelper->getStoresToTranslate();
+        $sourceLanguage = $this->moduleConfig->getSourceLanguage();
 
         foreach ($storeToTranslate as $storeId => $storeName) {
-            $productsToTranslate = $this->getProductsToTranslate($storeId);
             $targetLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
-            $sourceLanguage = $this->moduleConfig->getSourceLanguage();
+            $productsToTranslate = $this->getProductsToTranslate($storeId);
 
             /** @var $product DataObject|ProductInterface */
             foreach ($productsToTranslate as $product) {
@@ -105,10 +67,10 @@ class TranslateProducts implements TranslateProductsInterface
     }
 
     /**
-     * @param $storeId
+     * @param int $storeId
      * @return array
      */
-    protected function getProductsToTranslate($storeId): array
+    protected function getProductsToTranslate(int $storeId): array
     {
         $searchCriteriaBuilder = $this->searchCriteriaBuilder->addFilter(ProductModel::STORE_ID, $storeId);
 
@@ -139,9 +101,8 @@ class TranslateProducts implements TranslateProductsInterface
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param int $storeId
-     * @return void
      */
-    protected function filterByStatus(SearchCriteriaBuilder $searchCriteriaBuilder, int $storeId = 0)
+    protected function filterByStatus(SearchCriteriaBuilder $searchCriteriaBuilder, int $storeId = 0): void
     {
         if (!$this->moduleConfig->translateDisabledProducts($storeId)) {
             $searchCriteriaBuilder->addFilter(ProductAttributeInterface::CODE_STATUS, Status::STATUS_ENABLED);
@@ -152,7 +113,6 @@ class TranslateProducts implements TranslateProductsInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param int $storeId
      * @param bool $getExpired
-     * @return void
      */
     protected function filterByRetranslationDate(
         SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -183,7 +143,6 @@ class TranslateProducts implements TranslateProductsInterface
 
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @return void
      */
     protected function filterBySkipTranslation(SearchCriteriaBuilder $searchCriteriaBuilder): void
     {

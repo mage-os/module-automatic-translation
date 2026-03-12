@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Model\Config\Source;
 
 use Magento\Config\Model\Config\Source\Locale as ConfigSourceLocale;
 use Magento\Framework\Data\OptionSourceInterface;
 
-/**
- * Class LanguageList
- */
 class LanguageList extends ConfigSourceLocale implements OptionSourceInterface
 {
     /**

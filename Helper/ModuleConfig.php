@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageOS\AutomaticTranslation\Helper;
 
 use DateTime;
@@ -8,49 +10,42 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class ModuleConfig
- * @package MageOS\AutomaticTranslation\Helper
- */
 class ModuleConfig extends AbstractHelper
 {
-    protected const SECTION = 'ai_integration/automatic_translation';
+    const string SECTION = 'ai_integration/automatic_translation';
 
-    protected const GENERAL_GROUP = self::SECTION . '/general';
-    protected const CATALOG_GROUP = self::SECTION . '/catalog';
-    protected const ENGINE_GROUP = self::SECTION . '/translations_engine';
+    const string GENERAL_GROUP = self::SECTION . '/general';
+    const string CATALOG_GROUP = self::SECTION . '/catalog';
+    const string ENGINE_GROUP = self::SECTION . '/translations_engine';
 
-    protected const ENABLE = self::GENERAL_GROUP . '/enable';
-    protected const SOURCE_LANGUAGE = self::GENERAL_GROUP . '/source_language';
-    protected const DESTINATION_LANGUAGE = 'general/locale/code';
+    const string ENABLE = self::GENERAL_GROUP . '/enable';
+    const string SOURCE_LANGUAGE = self::GENERAL_GROUP . '/source_language';
+    const string DESTINATION_LANGUAGE = 'general/locale/code';
 
-    protected const TXT_PRODUCT_ATTR = self::CATALOG_GROUP . '/text_attribute_to_translate';
-    protected const SELECT_PRODUCT_ATTR = self::CATALOG_GROUP . '/select_attribute_to_translate';
-    protected const ENABLE_PERIODIC = self::CATALOG_GROUP . '/enable_periodic_retranslation';
-    protected const RETRANSLATION_PERIOD = self::CATALOG_GROUP . '/retranslation_period';
-    protected const TRANSLATE_DISABLED = self::CATALOG_GROUP . '/translate_disabled';
-    protected const ENABLE_URL_REWRITE = self::CATALOG_GROUP . '/enable_url_rewrite';
+    const string TXT_PRODUCT_ATTR = self::CATALOG_GROUP . '/text_attribute_to_translate';
+    const string SELECT_PRODUCT_ATTR = self::CATALOG_GROUP . '/select_attribute_to_translate';
+    const string ENABLE_PERIODIC = self::CATALOG_GROUP . '/enable_periodic_retranslation';
+    const string RETRANSLATION_PERIOD = self::CATALOG_GROUP . '/retranslation_period';
+    const string TRANSLATE_DISABLED = self::CATALOG_GROUP . '/translate_disabled';
+    const string ENABLE_URL_REWRITE = self::CATALOG_GROUP . '/enable_url_rewrite';
 
-    protected const ENGINE = self::ENGINE_GROUP . '/engine';
-    protected const DEEPL_AUTH_KEY = self::ENGINE_GROUP . '/deepl_auth_key';
-    protected const OPEN_AI_ORG_ID = self::ENGINE_GROUP . '/openai_org_id';
-    protected const OPEN_AI_API_KEY = self::ENGINE_GROUP . '/openai_api_key';
-    protected const OPEN_AI_PROJECT_ID = self::ENGINE_GROUP . '/openai_project_id';
-    protected const OPEN_AI_MODEL = self::ENGINE_GROUP . '/openai_model';
-    protected const GEMINI_API_KEY = self::ENGINE_GROUP . '/gemini_api_key';
-    protected const GEMINI_MODEL = self::ENGINE_GROUP . '/gemini_model';
+    const string ENGINE = self::ENGINE_GROUP . '/engine';
+    const string DEEPL_AUTH_KEY = self::ENGINE_GROUP . '/deepl_auth_key';
+    const string OPEN_AI_ORG_ID = self::ENGINE_GROUP . '/openai_org_id';
+    const string OPEN_AI_API_KEY = self::ENGINE_GROUP . '/openai_api_key';
+    const string OPEN_AI_PROJECT_ID = self::ENGINE_GROUP . '/openai_project_id';
+    const string OPEN_AI_MODEL = self::ENGINE_GROUP . '/openai_model';
+    const string GEMINI_API_KEY = self::ENGINE_GROUP . '/gemini_api_key';
+    const string GEMINI_MODEL = self::ENGINE_GROUP . '/gemini_model';
 
     /**
-     * @var EncryptorInterface
+     * @param EncryptorInterface $encryptor
+     * @param Context $context
      */
-    protected EncryptorInterface $encryptor;
-
     public function __construct(
-        EncryptorInterface $encryptor,
+        protected EncryptorInterface $encryptor,
         Context $context
-    )
-    {
-        $this->encryptor = $encryptor;
+    ) {
         parent::__construct($context);
     }
 
@@ -141,7 +136,6 @@ class ModuleConfig extends AbstractHelper
         );
 
         $translationExpirationDate = new DateTime();
-        $translationExpirationDate->setTimestamp(strtotime('now'));
         $translationExpirationDate->modify('-' . $retranslationDays . ' days');
 
         return $translationExpirationDate->format('Y-m-d H:i:s');

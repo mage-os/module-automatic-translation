@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MageOS\AutomaticTranslation\Plugin;
@@ -9,14 +10,12 @@ use RuntimeException;
 
 class TranslatorChunkPlugin
 {
-    protected TextChunker $textChunker;
-
     /**
      * @param TextChunker $textChunker
      */
-    public function __construct(TextChunker $textChunker)
-    {
-        $this->textChunker = $textChunker;
+    public function __construct(
+        protected TextChunker $textChunker
+    ) {
     }
 
     /**
