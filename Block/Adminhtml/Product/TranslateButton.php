@@ -33,7 +33,7 @@ class TranslateButton extends Generic
     {
         $currentStore = (int)$this->context->getRequestParam("store");
 
-        if (!$this->moduleConfig->isEnable($currentStore ?: null)) {
+        if (!$this->moduleConfig->isEnable($currentStore ?: 0)) {
             return [];
         }
 
