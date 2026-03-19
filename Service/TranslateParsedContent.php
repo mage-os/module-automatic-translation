@@ -43,7 +43,23 @@ class TranslateParsedContent
         string $destinationLanguage
     ): mixed {
         if (is_string($parsedContent)) {
-            return $this->translateWidgetDirectives($parsedContent, $destinationLanguage);
+            [$text, $widgetMap] = $this->extractPlaceholders(
+                $parsedContent,
+                self::WIDGET_PATTERN,
+                'WIDGET_PLACEHOLDER_'
+            );
+
+            $text = $this->translator->translate($text, $destinationLanguage);
+
+            foreach ($widgetMap as $key => $widget) {
+                $text = str_replace(
+                    $key,
+                    $this->translateWidgetParams($widget, $destinationLanguage),
+                    $text
+                );
+            }
+
+            return $text;
         }
 
         $contentSettingsMap = [];
