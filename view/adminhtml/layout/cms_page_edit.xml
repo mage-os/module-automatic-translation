@@ -20,6 +20,7 @@
                                     <item name="meta_title" xsi:type="string">Meta Title</item>
                                     <item name="meta_keywords" xsi:type="string">Meta Keywords</item>
                                     <item name="meta_description" xsi:type="string">Meta Description</item>
+                                    <item name="identifier" xsi:type="string">URL Key</item>
                                 </item>
                             </item>
                         </item>

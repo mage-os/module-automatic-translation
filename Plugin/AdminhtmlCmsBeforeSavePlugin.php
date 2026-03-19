@@ -53,7 +53,7 @@ class AdminhtmlCmsBeforeSavePlugin
                         $destinationLanguage
                     );
 
-                    if ($attributeCode === 'url_key') {
+                    if ($attributeCode === 'identifier') {
                         $requestPostValue[$attributeCode] = strtolower(
                             preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue[$attributeCode])
                         );
