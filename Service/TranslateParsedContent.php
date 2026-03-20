@@ -12,10 +12,10 @@ use Exception;
 
 class TranslateParsedContent
 {
-    const string WIDGET_PATTERN = '/\{\{widget\s[^}]*\}\}/';
-    const array TRANSLATABLE_WIDGET_PARAMS = ['anchor_text', 'title', 'description'];
-    const array TRANSLATABLE_REPEATABLE_PARAMS = ['title', 'content', 'button', 'image_alt'];
-    const int JSON_ENCODE_FLAGS = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+    const WIDGET_PATTERN = '/\{\{widget\s[^}]*\}\}/';
+    const TRANSLATABLE_WIDGET_PARAMS = ['anchor_text', 'title', 'description'];
+    const TRANSLATABLE_REPEATABLE_PARAMS = ['title', 'content', 'button', 'image_alt'];
+    const JSON_ENCODE_FLAGS = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
 
     /**
      * @param Service $serviceHelper
@@ -102,7 +102,7 @@ class TranslateParsedContent
             }
         }
 
-        $result = strpos($requestPostValue, 'data-content-type="html"') !== false
+        $result = str_contains($requestPostValue, 'data-content-type="html"')
             ? $this->serviceHelper->encodePageBuilderHtmlBox($requestPostValue)
             : $requestPostValue;
 

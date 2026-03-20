@@ -9,16 +9,16 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 class TextAttributes implements OptionSourceInterface
 {
-    const string GALLERY_ALT_ATTRIBUTE_CODE = 'gallery_alt';
-    const array GALLERY_ALT_IMAGE_ATTRIBUTE = [
+    const GALLERY_ALT_ATTRIBUTE_CODE = 'gallery_alt';
+    const GALLERY_ALT_IMAGE_ATTRIBUTE = [
         'value' => self::GALLERY_ALT_ATTRIBUTE_CODE,
         'label' => 'Gallery image alt text'
     ];
-    const array ATTRIBUTE_TYPES = [
+    const ATTRIBUTE_TYPES = [
         'text',
         'textarea'
     ];
-    const array ATTRIBUTES_TO_EXCLUDE = [
+    const ATTRIBUTES_TO_EXCLUDE = [
         'sku',
         'tier_price',
         'category_ids',

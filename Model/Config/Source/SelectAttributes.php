@@ -9,11 +9,11 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 class SelectAttributes implements OptionSourceInterface
 {
-    const array ATTRIBUTE_TYPES = [
+    const ATTRIBUTE_TYPES = [
         'select',
         'multiselect'
     ];
-    const array ATTRIBUTES_TO_EXCLUDE = [
+    const ATTRIBUTES_TO_EXCLUDE = [
         'custom_design',
         'custom_layout',
         'custom_layout_update_file',

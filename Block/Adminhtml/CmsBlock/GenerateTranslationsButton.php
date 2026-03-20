@@ -16,7 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 class GenerateTranslationsButton extends GenericButton implements ButtonProviderInterface
 {
-    const string CMSBLOCK_TRANSLATION_CONTROLLER_PATH = 'automatic_translation/cms_block/generate';
+    const CMSBLOCK_TRANSLATION_CONTROLLER_PATH = 'automatic_translation/cms_block/generate';
 
     /**
      * @param Context $context

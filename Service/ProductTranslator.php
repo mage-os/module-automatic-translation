@@ -128,6 +128,7 @@ class ProductTranslator implements ProductTranslatorInterface
      * @param string $targetLanguage
      * @param string $sourceLanguage
      * @throws LocalizedException
+     * @throws Exception
      */
     protected function translateGalleryAlternativeTexts(
         ProductInterface $product,

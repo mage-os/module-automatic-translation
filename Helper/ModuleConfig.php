@@ -12,31 +12,31 @@ use Magento\Store\Model\ScopeInterface;
 
 class ModuleConfig extends AbstractHelper
 {
-    const string SECTION = 'ai_integration/automatic_translation';
+    const SECTION = 'ai_integration/automatic_translation';
 
-    const string GENERAL_GROUP = self::SECTION . '/general';
-    const string CATALOG_GROUP = self::SECTION . '/catalog';
-    const string ENGINE_GROUP = self::SECTION . '/translations_engine';
+    const GENERAL_GROUP = self::SECTION . '/general';
+    const CATALOG_GROUP = self::SECTION . '/catalog';
+    const ENGINE_GROUP = self::SECTION . '/translations_engine';
 
-    const string ENABLE = self::GENERAL_GROUP . '/enable';
-    const string SOURCE_LANGUAGE = self::GENERAL_GROUP . '/source_language';
-    const string DESTINATION_LANGUAGE = 'general/locale/code';
+    const ENABLE = self::GENERAL_GROUP . '/enable';
+    const SOURCE_LANGUAGE = self::GENERAL_GROUP . '/source_language';
+    const DESTINATION_LANGUAGE = 'general/locale/code';
 
-    const string TXT_PRODUCT_ATTR = self::CATALOG_GROUP . '/text_attribute_to_translate';
-    const string SELECT_PRODUCT_ATTR = self::CATALOG_GROUP . '/select_attribute_to_translate';
-    const string ENABLE_PERIODIC = self::CATALOG_GROUP . '/enable_periodic_retranslation';
-    const string RETRANSLATION_PERIOD = self::CATALOG_GROUP . '/retranslation_period';
-    const string TRANSLATE_DISABLED = self::CATALOG_GROUP . '/translate_disabled';
-    const string ENABLE_URL_REWRITE = self::CATALOG_GROUP . '/enable_url_rewrite';
+    const TXT_PRODUCT_ATTR = self::CATALOG_GROUP . '/text_attribute_to_translate';
+    const SELECT_PRODUCT_ATTR = self::CATALOG_GROUP . '/select_attribute_to_translate';
+    const ENABLE_PERIODIC = self::CATALOG_GROUP . '/enable_periodic_retranslation';
+    const RETRANSLATION_PERIOD = self::CATALOG_GROUP . '/retranslation_period';
+    const TRANSLATE_DISABLED = self::CATALOG_GROUP . '/translate_disabled';
+    const ENABLE_URL_REWRITE = self::CATALOG_GROUP . '/enable_url_rewrite';
 
-    const string ENGINE = self::ENGINE_GROUP . '/engine';
-    const string DEEPL_AUTH_KEY = self::ENGINE_GROUP . '/deepl_auth_key';
-    const string OPEN_AI_ORG_ID = self::ENGINE_GROUP . '/openai_org_id';
-    const string OPEN_AI_API_KEY = self::ENGINE_GROUP . '/openai_api_key';
-    const string OPEN_AI_PROJECT_ID = self::ENGINE_GROUP . '/openai_project_id';
-    const string OPEN_AI_MODEL = self::ENGINE_GROUP . '/openai_model';
-    const string GEMINI_API_KEY = self::ENGINE_GROUP . '/gemini_api_key';
-    const string GEMINI_MODEL = self::ENGINE_GROUP . '/gemini_model';
+    const ENGINE = self::ENGINE_GROUP . '/engine';
+    const DEEPL_AUTH_KEY = self::ENGINE_GROUP . '/deepl_auth_key';
+    const OPEN_AI_ORG_ID = self::ENGINE_GROUP . '/openai_org_id';
+    const OPEN_AI_API_KEY = self::ENGINE_GROUP . '/openai_api_key';
+    const OPEN_AI_PROJECT_ID = self::ENGINE_GROUP . '/openai_project_id';
+    const OPEN_AI_MODEL = self::ENGINE_GROUP . '/openai_model';
+    const GEMINI_API_KEY = self::ENGINE_GROUP . '/gemini_api_key';
+    const GEMINI_MODEL = self::ENGINE_GROUP . '/gemini_model';
 
     /**
      * @param EncryptorInterface $encryptor

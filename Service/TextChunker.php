@@ -8,12 +8,12 @@ use RuntimeException;
 
 class TextChunker
 {
-    const int MAX_CHUNK_SIZE = 4500;
-    const int HALF_CHUNK_SIZE = 2250;
+    const MAX_CHUNK_SIZE = 4500;
+    const HALF_CHUNK_SIZE = 2250;
 
-    const string BLOCK_TAG_PATTERN = '#(</(?:p|div|h[1-6]|ul|ol|li|table|tr|blockquote|section|article|header|footer|figure|figcaption)>)#i';
+    const BLOCK_TAG_PATTERN = '#(</(?:p|div|h[1-6]|ul|ol|li|table|tr|blockquote|section|article|header|footer|figure|figcaption)>)#i';
 
-    const array PLAIN_TEXT_PATTERNS = [
+    const PLAIN_TEXT_PATTERNS = [
         '/(\n\n)/',
         '/(\n)/',
         '/((?<=[.!?])\s+)/',
