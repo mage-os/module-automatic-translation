@@ -14,7 +14,7 @@ use MageOS\AutomaticTranslation\Helper\Service;
 
 class GenerateTranslationsButton extends GenericButton implements ButtonProviderInterface
 {
-    const string CMSPAGE_TRANSLATION_CONTROLLER_PATH = 'automatic_translation/cms_page/generate';
+    const CMSPAGE_TRANSLATION_CONTROLLER_PATH = 'automatic_translation/cms_page/generate';
 
     /**
      * @param Context $context

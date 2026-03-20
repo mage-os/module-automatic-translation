@@ -1,4 +1,20 @@
 # Automatic Translation
+## [2.1.0] - 20/03/2026
+### Changed
+- Minimum PHP version lowered from 8.3 to 8.2
+- Removed typed constants (PHP 8.3 feature) for 8.2 compatibility
+
+## [2.0.2] - 20/03/2026
+### Fixed
+- Fixed CMS page plain text fields (title, heading, meta title, meta keywords, meta description) not being translated
+- Added URL key (identifier) to CMS page translatable fields
+- Fixed URL key slug sanitization using correct field name (identifier instead of url_key)
+- Fixed TranslateParsedContent for string input: translates text before handling widget directives
+
+## [2.0.1] - 20/03/2026
+### Fixed
+- Fixed product translate button passing null instead of 0 to isEnable() for default store
+
 ## [2.0.0] - 12/03/2026
 ### Changed
 - **BREAKING**: Minimum PHP version raised to 8.3

@@ -14,7 +14,7 @@ use Exception;
 
 class AdminhtmlCategoryBeforeSavePlugin
 {
-    const array CATEGORY_TRANSLATABLE_ATTRIBUTES = [
+    const CATEGORY_TRANSLATABLE_ATTRIBUTES = [
         'name',
         'description',
         'url_key',

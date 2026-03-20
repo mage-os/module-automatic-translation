@@ -13,13 +13,13 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class MigrateConfigPaths implements DataPatchInterface
 {
-    const array ENCRYPTED_OLD_PATHS = [
+    const ENCRYPTED_OLD_PATHS = [
         'automatic_translation/translations_engine/deepl_auth_key',
         'automatic_translation/translations_engine/openai_api_key',
         'automatic_translation/translations_engine/gemini_api_key',
     ];
 
-    const array MAPPINGS = [
+    const MAPPINGS = [
         'automatic_translation/general/enable' => 'ai_integration/automatic_translation/general/enable',
         'automatic_translation/general/source_language' => 'ai_integration/automatic_translation/general/source_language',
         'automatic_translation/general/destination_language' => 'general/locale/code',

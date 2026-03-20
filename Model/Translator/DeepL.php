@@ -12,7 +12,7 @@ use DeepL\DeepLException;
 
 class DeepL implements TranslatorInterface
 {
-    const array REGIONAL_VARIANTS_LANGUAGES = [
+    const REGIONAL_VARIANTS_LANGUAGES = [
         'en',
         'pt',
         'es',

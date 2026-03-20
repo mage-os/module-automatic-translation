@@ -17,7 +17,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class TranslationStores extends AbstractModifier
 {
-    const string GROUP_CODE = 'translation-stores';
+    const GROUP_CODE = 'translation-stores';
 
     /**
      * @param StoreSwitcher $storeSwitcher
@@ -132,7 +132,6 @@ class TranslationStores extends AbstractModifier
             );
             $productStoreIds = $currentProduct->getStoreIds();
 
-            /** @var Website $website */
             foreach ($this->storeSwitcher->getWebsites() as $website) {
                 $stores = $website->getStores();
                 /** @var Store $store */
