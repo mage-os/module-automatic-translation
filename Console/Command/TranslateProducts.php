@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace MageOS\AutomaticTranslation\Console\Command;
 
-use MageOS\AutomaticTranslation\Service\TranslateSelectAttributes;
+use MageOS\AutomaticTranslation\Api\TranslateProductsInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SelectAttributeTest extends Command
+class TranslateProducts extends Command
 {
     /**
-     * @param TranslateSelectAttributes $translateSelectAttributes
+     * @param TranslateProductsInterface $translateProducts
      * @param string|null $name
      */
     public function __construct(
-        protected TranslateSelectAttributes $translateSelectAttributes,
+        protected TranslateProductsInterface $translateProducts,
         ?string $name = null
     ) {
         parent::__construct($name);
@@ -27,8 +27,8 @@ class SelectAttributeTest extends Command
      */
     protected function configure(): void
     {
-        $this->setName('mage-os:select-attribute:test');
-        $this->setDescription('Test select attribute translation');
+        $this->setName('mage-os:translate:products');
+        $this->setDescription('Translate products');
         parent::configure();
     }
 
@@ -39,7 +39,7 @@ class SelectAttributeTest extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->translateSelectAttributes->translateOptions();
+        $this->translateProducts->translateProducts();
 
         return Command::SUCCESS;
     }
