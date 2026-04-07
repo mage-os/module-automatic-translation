@@ -52,7 +52,7 @@ class AdminhtmlCategoryBeforeSavePlugin
                 return null;
             }
 
-            $storeId = $request->getParam('store_id', 0);
+            $storeId = (int) $request->getParam('store_id', 0);
             $sourceLanguage = $this->moduleConfig->getSourceLanguage();
             $destinationLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
 
