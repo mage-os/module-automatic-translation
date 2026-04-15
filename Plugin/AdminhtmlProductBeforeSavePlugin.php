@@ -50,7 +50,7 @@ class AdminhtmlProductBeforeSavePlugin
                 return null;
             }
 
-            $storeId = $request->getParam('store', 0);
+            $storeId = (int) $request->getParam('store', 0);
             $sourceLanguage = $this->moduleConfig->getSourceLanguage();
             $destinationLanguage = $this->moduleConfig->getDestinationLanguage($storeId);
 

@@ -70,9 +70,9 @@ class GenerateTranslationsButton extends GenericButton implements ButtonProvider
      * @return int|null
      * @throws LocalizedException
      */
-    protected function getCmsBlockId(): ?int
+    protected function getCmsBlockId(): int
     {
-        return $this->blockRepository->getById(
+        return (int) $this->blockRepository->getById(
             $this->context->getRequest()->getParam('block_id')
         )->getId();
     }
