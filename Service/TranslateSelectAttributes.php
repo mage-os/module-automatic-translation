@@ -75,7 +75,7 @@ class TranslateSelectAttributes implements TranslateSelectAttributesInterface
                         continue;
                     }
 
-                    $origLangOptionLabel = $origLangOptions[$option->getValue()];
+                    $origLangOptionLabel = $origLangOptions[(string)$option->getValue()] ?? '';
 
                     if (empty(trim($origLangOptionLabel))) {
                         continue;
@@ -172,7 +172,7 @@ class TranslateSelectAttributes implements TranslateSelectAttributesInterface
                 continue;
             }
 
-            $optionArray[$option->getValue()] = $option->getLabel();
+            $optionArray[(string)$option->getValue()] = $option->getLabel();
         }
 
         return $optionArray;

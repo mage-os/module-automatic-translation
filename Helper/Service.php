@@ -54,7 +54,7 @@ class Service extends AbstractHelper
         $result = [];
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->moduleConfig->isEnable((int)$store->getId())) {
-                $result[$store->getId()] = $valueExtractor($store);
+                $result[(int)$store->getId()] = $valueExtractor($store);
             }
         }
         return $result;

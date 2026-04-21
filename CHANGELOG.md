@@ -6,6 +6,7 @@
 - Cast `DOMDocument::saveHTML()` results to string before passing to `html_entity_decode()` (PHP 8.5 stricter scalar type enforcement)
 - Cast retranslation period to int before building `DateTime::modify()` string to avoid `DateMalformedStringException` in PHP 8.5 when the config value is empty
 - Cast legacy scope value to string before re-encryption in `MigrateConfigPaths` data patch
+- Cast nullable values to string/int before using as array index (PHP 8.5 null array key deprecation)
 ### Changed
 - Allowed PHP range widened to `>=8.2 <8.6` in composer.json
 
