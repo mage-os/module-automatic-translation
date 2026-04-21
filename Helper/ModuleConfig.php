@@ -9,6 +9,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
+use Exception;
 
 class ModuleConfig extends AbstractHelper
 {
@@ -126,10 +127,11 @@ class ModuleConfig extends AbstractHelper
     /**
      * @param int $storeId
      * @return string
+     * @throws Exception
      */
     public function getTranslationExpirationDate(int $storeId = 0): string
     {
-        $retranslationDays = (string)$this->scopeConfig->getValue(
+        $retranslationDays = (int)$this->scopeConfig->getValue(
             self::RETRANSLATION_PERIOD,
             ScopeInterface::SCOPE_STORE,
             $storeId

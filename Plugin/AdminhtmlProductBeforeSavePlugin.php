@@ -89,7 +89,7 @@ class AdminhtmlProductBeforeSavePlugin
 
                 if ($attributeCode === 'url_key') {
                     $requestPostValue["product"][$attributeCode] = strtolower(
-                        preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue["product"][$attributeCode])
+                        (string)preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue["product"][$attributeCode])
                     );
                 }
 
