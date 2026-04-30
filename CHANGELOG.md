@@ -1,4 +1,15 @@
 # Automatic Translation
+## [2.1.2] - 21/04/2026
+### Fixed
+- PHP 8.4 and 8.5 compatibility
+- Hardened `preg_replace` return value handling in admin before-save plugins (`strtolower(null)` becomes a TypeError in PHP 8.5)
+- Cast `DOMDocument::saveHTML()` results to string before passing to `html_entity_decode()` (PHP 8.5 stricter scalar type enforcement)
+- Cast retranslation period to int before building `DateTime::modify()` string to avoid `DateMalformedStringException` in PHP 8.5 when the config value is empty
+- Cast legacy scope value to string before re-encryption in `MigrateConfigPaths` data patch
+- Cast nullable values to string/int before using as array index (PHP 8.5 null array key deprecation)
+### Changed
+- Allowed PHP range widened to `>=8.2 <8.6` in composer.json
+
 ## [2.1.0] - 20/03/2026
 ### Changed
 - Minimum PHP version lowered from 8.3 to 8.2

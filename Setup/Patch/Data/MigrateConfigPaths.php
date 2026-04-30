@@ -92,7 +92,7 @@ class MigrateConfigPaths implements DataPatchInterface
         }
 
         if (in_array($oldPath, self::ENCRYPTED_OLD_PATHS, true)) {
-            $oldValue = $this->encryptor->encrypt($oldValue);
+            $oldValue = $this->encryptor->encrypt((string)$oldValue);
         }
 
         $this->configWriter->save($newPath, $oldValue, $scope, $scopeId);

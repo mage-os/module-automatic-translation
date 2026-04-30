@@ -74,7 +74,7 @@ class AdminhtmlCategoryBeforeSavePlugin
 
                     if ($attributeCode === 'url_key') {
                         $requestPostValue[$attributeCode] = strtolower(
-                            preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue[$attributeCode])
+                            (string)preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue[$attributeCode])
                         );
                     }
 

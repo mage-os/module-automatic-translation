@@ -54,7 +54,7 @@ class Service extends AbstractHelper
         $result = [];
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->moduleConfig->isEnable((int)$store->getId())) {
-                $result[$store->getId()] = $valueExtractor($store);
+                $result[(int)$store->getId()] = $valueExtractor($store);
             }
         }
         return $result;
@@ -103,9 +103,9 @@ class Service extends AbstractHelper
                 $childDom = new DOMDocument();
                 $importedNode = $childDom->importNode($childNode, true);
                 $childDom->appendChild($importedNode);
-                $nodeHtml = html_entity_decode($childDom->saveHTML());
+                $nodeHtml = html_entity_decode((string)$childDom->saveHTML());
                 $node->replaceChild(
-                    $dom->createTextNode(str_replace(['<', '>'], ['&lt;', '&gt;'], (string)$nodeHtml)),
+                    $dom->createTextNode(str_replace(['<', '>'], ['&lt;', '&gt;'], $nodeHtml)),
                     $childNode
                 );
             }
@@ -116,7 +116,7 @@ class Service extends AbstractHelper
 
         if ($root !== null) {
             foreach ($root->childNodes as $node) {
-                $resultHtml .= $dom->saveHTML($node);
+                $resultHtml .= (string)$dom->saveHTML($node);
             }
         }
 

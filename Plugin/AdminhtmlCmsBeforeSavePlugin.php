@@ -55,7 +55,7 @@ class AdminhtmlCmsBeforeSavePlugin
 
                     if ($attributeCode === 'identifier') {
                         $requestPostValue[$attributeCode] = strtolower(
-                            preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue[$attributeCode])
+                            (string)preg_replace('#[^0-9a-z]+#i', '-', $requestPostValue[$attributeCode])
                         );
                     }
                 }
