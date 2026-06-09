@@ -91,6 +91,13 @@ class TranslateProducts implements TranslateProductsInterface
             $products = array_merge($expiredTranslationProduct, $unexpiredButUnskipTranslationProduct);
         } else {
             $this->filterBySkipTranslation($searchCriteriaBuilder);
+
+            $searchCriteriaBuilder->setPageSize(100);
+            $sort = (new \Magento\Framework\Api\SortOrder())
+                ->setField('entity_id')
+                ->setDirection('desc');
+            $searchCriteriaBuilder->setSortOrders([$sort]);
+
             $searchCriteria = $searchCriteriaBuilder->create();
             $products = $this->productRepository->getList($searchCriteria)->getItems();
         }
