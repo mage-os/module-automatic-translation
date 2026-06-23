@@ -1,4 +1,12 @@
 # Automatic Translation
+
+## [2.2.0] - 23/06/2026
+### Fixed
+- Fix cron expression
+### Changed
+- Paginate per 100 to prevent failure on large catalogs
+- Use v2/languages endpoint for Deepl target language normalization
+
 ## [2.1.2] - 21/04/2026
 ### Fixed
 - PHP 8.4 and 8.5 compatibility
