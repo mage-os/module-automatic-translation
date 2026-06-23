@@ -9,7 +9,7 @@
     <!-- CRON VIRTUAL TYPE -->
     <virtualType name="MageOS\AutomaticTranslation\Model\Config\SelectAttributeCron" type="MageOS\AutomaticTranslation\Model\Config\CatalogCron">
         <arguments>
-            <argument name="expression" xsi:type="string">groups/catalog/fields/select_attribute_translation_cron/value</argument>
+            <argument name="expression" xsi:type="string">groups/automatic_translation/groups/catalog/fields/select_attribute_translation_cron/value</argument>
             <argument name="cronStringPath" xsi:type="string">crontab/translate_select_attributes/jobs/mageos_translate_select_attributes/schedule/cron_expr</argument>
         </arguments>
     </virtualType>

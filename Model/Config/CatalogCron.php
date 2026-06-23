@@ -9,10 +9,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
-use Exception;
 
 class CatalogCron extends Value
 {
@@ -38,7 +38,7 @@ class CatalogCron extends Value
         ?AbstractResource $resource = null,
         ?AbstractDb $resourceCollection = null,
         string $modelPath = '',
-        protected string $expression = 'groups/catalog/fields/product_translation_cron/value',
+        protected string $expression = 'groups/automatic_translation/groups/catalog/fields/product_translation_cron/value',
         protected string $cronStringPath = 'crontab/translate_products/jobs/mageos_translate_products/schedule/cron_expr',
         array $data = []
     ) {
@@ -47,7 +47,7 @@ class CatalogCron extends Value
 
     /**
      * @return CatalogCron
-     * @throws Exception
+     * @throws LocalizedException
      */
     public function afterSave(): static
     {
@@ -63,7 +63,7 @@ class CatalogCron extends Value
                 $this->cronStringPath
             )->save();
         } catch (Exception $e) {
-            throw new Exception(__('Unable to save the cron expression.'), 0, $e);
+            throw new LocalizedException(__('Unable to save the cron expression.'), $e);
         }
 
         return parent::afterSave();
