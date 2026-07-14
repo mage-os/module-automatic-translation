@@ -1,7 +1,14 @@
 # Automatic Translation
-## [2.1.3] - 13/07/2026
+## [2.2.1] - 13/07/2026
 ### Fixed
-- Skip loading the product in the translation-stores form modifier when creating a new product (no `id` param), avoiding an `ErrorException` from passing `null` to `ProductRepository::getById()` under PHP 8.5 (null array offset deprecation)
+- Fixed a null argument error when creating a product under PHP 8.5
+
+## [2.2.0] - 23/06/2026
+### Fixed
+- Fix cron expression
+### Changed
+- Paginate per 100 to prevent failure on large catalogs
+- Use v2/languages endpoint for Deepl target language normalization
 
 ## [2.1.2] - 21/04/2026
 ### Fixed

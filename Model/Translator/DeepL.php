@@ -12,12 +12,7 @@ use DeepL\DeepLException;
 
 class DeepL implements TranslatorInterface
 {
-    const REGIONAL_VARIANTS_LANGUAGES = [
-        'en',
-        'pt',
-        'es',
-        'zh'
-    ];
+    protected ?string $normalizedTargetLang = null;
 
     protected ?DeepLTranslator $translator = null;
 
@@ -65,14 +60,27 @@ class DeepL implements TranslatorInterface
      */
     protected function normalizeTargetLang(string $lang): string
     {
-        if (($lang[2] ?? '') !== '_') {
-            return $lang;
+        if (!$this->normalizedTargetLang) {
+            if (($lang[2] ?? '') !== '_') {
+                $this->normalizedTargetLang = $lang;
+                return $this->normalizedTargetLang;
+            }
+
+            $lang = str_replace('_', '-', $lang);
+            $targetLanguages = $this->translator->getTargetLanguages();
+
+            /**
+             * @var \DeepL\Language $targetLanguage
+             */
+            foreach ($targetLanguages as $targetLanguage) {
+                if (strtolower($targetLanguage->code) === strtolower($lang)) {
+                    $this->normalizedTargetLang = $lang;
+                    return $this->normalizedTargetLang;
+                }
+            }
+
+            $this->normalizedTargetLang = substr($lang, 0, 2);
         }
-
-        $lang = str_replace('_', '-', $lang);
-
-        return in_array(substr($lang, 0, 2), self::REGIONAL_VARIANTS_LANGUAGES, true)
-            ? $lang
-            : substr($lang, 0, 2);
+        return $this->normalizedTargetLang;
     }
 }
