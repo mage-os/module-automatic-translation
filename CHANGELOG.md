@@ -1,4 +1,7 @@
 # Automatic Translation
+## [2.2.1] - 13/07/2026
+### Fixed
+- Fixed a null argument error when creating a product under PHP 8.5
 
 ## [2.2.0] - 23/06/2026
 ### Fixed
