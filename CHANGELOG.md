@@ -1,4 +1,8 @@
 # Automatic Translation
+## [2.1.3] - 13/07/2026
+### Fixed
+- Skip loading the product in the translation-stores form modifier when creating a new product (no `id` param), avoiding an `ErrorException` from passing `null` to `ProductRepository::getById()` under PHP 8.5 (null array offset deprecation)
+
 ## [2.1.2] - 21/04/2026
 ### Fixed
 - PHP 8.4 and 8.5 compatibility
