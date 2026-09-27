@@ -19,8 +19,8 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="mageos_automatictranslation_test" xsi:type="object">MageOS\AutomaticTranslation\Console\Command\TestTranslation</item>
-                <item name="mageos_automatictranslation_test_procedure" xsi:type="object">MageOS\AutomaticTranslation\Console\Command\TestProcedure</item>
-                <item name="mageos_automatictranslation_select_attribute_test" xsi:type="object">MageOS\AutomaticTranslation\Console\Command\SelectAttributeTest</item>
+                <item name="mageos_automatictranslation_translate_products" xsi:type="object">MageOS\AutomaticTranslation\Console\Command\TranslateProducts</item>
+                <item name="mageos_automatictranslation_translate_product_select_attribute_options" xsi:type="object">MageOS\AutomaticTranslation\Console\Command\TranslateProductSelectAttributeOptions</item>
             </argument>
         </arguments>
     </type>
