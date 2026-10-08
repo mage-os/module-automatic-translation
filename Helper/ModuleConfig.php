@@ -174,7 +174,12 @@ class ModuleConfig extends AbstractHelper
      */
     public function getOpenAIProjectId(): string
     {
-        return (string)$this->scopeConfig->getValue(self::OPEN_AI_PROJECT_ID, ScopeInterface::SCOPE_STORE, 0);
+        $encryptedProjectId = (string)$this->scopeConfig->getValue(
+            self::OPEN_AI_PROJECT_ID,
+            ScopeInterface::SCOPE_STORE,
+            0
+        );
+        return $this->encryptor->decrypt($encryptedProjectId);
     }
 
     /**
@@ -199,7 +204,7 @@ class ModuleConfig extends AbstractHelper
     public function getGeminiApiKey(): string
     {
         $encryptedApiKey = (string)$this->scopeConfig->getValue(self::GEMINI_API_KEY, ScopeInterface::SCOPE_STORE, 0);
-        return $this->encryptor->decrypt($encryptedApiKey);
+        return (string)$this->encryptor->decrypt($encryptedApiKey);
     }
 
     /**
