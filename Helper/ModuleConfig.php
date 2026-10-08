@@ -204,7 +204,7 @@ class ModuleConfig extends AbstractHelper
     public function getGeminiApiKey(): string
     {
         $encryptedApiKey = (string)$this->scopeConfig->getValue(self::GEMINI_API_KEY, ScopeInterface::SCOPE_STORE, 0);
-        return $this->encryptor->decrypt($encryptedApiKey);
+        return (string)$this->encryptor->decrypt($encryptedApiKey);
     }
 
     /**
