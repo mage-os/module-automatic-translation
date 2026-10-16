@@ -1,4 +1,10 @@
 # Automatic Translation
+## [2.4.0] - 16/10/2026
+### Changed
+- Renamed console commands to match what they do: `mage-os:procedure:test` is now `mage-os:translate:products` and `mage-os:select-attribute:test` is now `mage-os:translate:product-select-attribute-options`
+### Fixed
+- Fixed the OpenAI project ID being sent encrypted to OpenAI, which made every request fail with "Invalid project ID" and left the GPT model dropdown empty
+
 ## [2.3.2] - 16/10/2026
 ### Fixed
 - Fixed a "null as an array offset" error that broke the new category form under PHP 8.5
