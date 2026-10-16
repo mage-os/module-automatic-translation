@@ -124,10 +124,15 @@ class TranslationStores extends AbstractModifier
     protected function getTranslationStores(): array
     {
         $translationStores = [];
+
+        $categoryId = $this->request->getParam("id");
+        if (empty($categoryId)) {
+            // New category form has no "id" param yet; there are no assigned stores to translate.
+            return $translationStores;
+        }
+
         try {
-            $currentCategory = $this->categoryRepository->get(
-                $this->request->getParam("id")
-            );
+            $currentCategory = $this->categoryRepository->get((int)$categoryId);
             $categoryStoreIds = $currentCategory->getStoreIds();
 
             foreach ($this->storeSwitcher->getWebsites() as $website) {
