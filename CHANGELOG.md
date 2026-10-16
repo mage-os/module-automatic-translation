@@ -1,4 +1,8 @@
 # Automatic Translation
+## [2.3.2] - 16/10/2026
+### Fixed
+- Fixed a "null as an array offset" error that broke the new category form under PHP 8.5
+
 ## [2.3.1] - 08/09/2026
 ### Fixed
 - Fixed OpenAI translations returning random text instead of the translated content: the translator now uses the Chat Completions endpoint, replacing the legacy completions one
