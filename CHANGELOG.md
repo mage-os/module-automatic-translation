@@ -1,4 +1,8 @@
 # Automatic Translation
+## [2.4.1] - 09/11/2026
+### Fixed
+- Fixed the DeepL, OpenAI and Gemini API keys staying readable in plain text in `core_config_data` after the config path migration: the new `DeleteLegacyConfigPaths` data patch deletes the legacy `automatic_translation/...` rows, first copying any store-specific value to the new `ai_integration/automatic_translation/...` path when none is stored there
+
 ## [2.4.0] - 16/10/2026
 ### Changed
 - Renamed console commands to match what they do: `mage-os:procedure:test` is now `mage-os:translate:products` and `mage-os:select-attribute:test` is now `mage-os:translate:product-select-attribute-options`
