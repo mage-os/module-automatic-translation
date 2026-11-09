@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MageOS\AutomaticTranslation\Setup\Patch\Data;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -44,110 +44,58 @@ class MigrateConfigPaths implements DataPatchInterface
      * @param WriterInterface $configWriter
      * @param StoreManagerInterface $storeManager
      * @param EncryptorInterface $encryptor
-     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         protected ScopeConfigInterface $scopeConfig,
         protected WriterInterface $configWriter,
         protected StoreManagerInterface $storeManager,
-        protected EncryptorInterface $encryptor,
-        protected ResourceConnection $resourceConnection
+        protected EncryptorInterface $encryptor
     ) {
     }
 
     /**
-     * Move every stored legacy row to its new path in the same scope, then delete the legacy row.
-     *
-     * Only rows that exist in core_config_data are processed, so inherited values are not copied
-     * into lower scopes. The legacy row is always removed, which keeps no plaintext API key behind
-     * and makes the migration safe to run again.
-     *
      * @return void
      */
     public function apply(): void
     {
-        $connection = $this->resourceConnection->getConnection();
-        $table = $this->resourceConnection->getTableName('core_config_data');
+        $scopes = [[ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0]];
 
-        $legacyRows = $connection->fetchAll(
-            $connection->select()
-                ->from($table, ['scope', 'scope_id', 'path', 'value'])
-                ->where('path IN (?)', array_keys(self::MAPPINGS))
-        );
+        foreach ($this->storeManager->getWebsites() as $website) {
+            $scopes[] = [ScopeInterface::SCOPE_WEBSITES, (int)$website->getId()];
+        }
 
-        foreach ($legacyRows as $row) {
-            $this->migrateRow(
-                $row['path'],
-                self::MAPPINGS[$row['path']],
-                $row['value'],
-                (string)$row['scope'],
-                (int)$row['scope_id']
-            );
+        foreach ($this->storeManager->getStores() as $store) {
+            $scopes[] = [ScopeInterface::SCOPE_STORES, (int)$store->getId()];
+        }
+
+        foreach ($scopes as [$scope, $scopeId]) {
+            foreach (self::MAPPINGS as $oldPath => $newPath) {
+                $this->migratePath($oldPath, $newPath, $scope, $scopeId);
+            }
         }
     }
 
     /**
      * @param string $oldPath
      * @param string $newPath
-     * @param string|null $oldValue
      * @param string $scope
      * @param int $scopeId
      * @return void
      */
-    protected function migrateRow(
-        string $oldPath,
-        string $newPath,
-        ?string $oldValue,
-        string $scope,
-        int $scopeId
-    ): void {
-        if ($oldValue !== null && !$this->hasStoredValue($newPath, $scope, $scopeId)) {
-            if (in_array($oldPath, self::ENCRYPTED_OLD_PATHS, true) && !$this->isEncrypted($oldValue)) {
-                $oldValue = $this->encryptor->encrypt($oldValue);
-            }
-
-            $this->configWriter->save($newPath, $oldValue, $scope, $scopeId);
-        }
-
-        $this->configWriter->delete($oldPath, $scope, $scopeId);
-    }
-
-    /**
-     * @param string $path
-     * @param string $scope
-     * @param int $scopeId
-     * @return bool
-     */
-    protected function hasStoredValue(string $path, string $scope, int $scopeId): bool
+    protected function migratePath(string $oldPath, string $newPath, string $scope, int $scopeId): void
     {
-        $connection = $this->resourceConnection->getConnection();
+        $oldValue = $this->scopeConfig->getValue($oldPath, $scope, $scopeId);
+        $newValue = $this->scopeConfig->getValue($newPath, $scope, $scopeId);
 
-        return (bool)$connection->fetchOne(
-            $connection->select()
-                ->from($this->resourceConnection->getTableName('core_config_data'), ['config_id'])
-                ->where('path = ?', $path)
-                ->where('scope = ?', $scope)
-                ->where('scope_id = ?', $scopeId)
-        );
-    }
-
-    /**
-     * Detect a value that Magento already encrypted, so it is not encrypted a second time.
-     *
-     * @param string $value
-     * @return bool
-     */
-    protected function isEncrypted(string $value): bool
-    {
-        if (preg_match('/^\d+:\d+:\S+$/', $value) !== 1) {
-            return false;
+        if ($oldValue === null || $newValue !== null) {
+            return;
         }
 
-        try {
-            return $this->encryptor->decrypt($value) !== '';
-        } catch (\Throwable) {
-            return false;
+        if (in_array($oldPath, self::ENCRYPTED_OLD_PATHS, true)) {
+            $oldValue = $this->encryptor->encrypt((string)$oldValue);
         }
+
+        $this->configWriter->save($newPath, $oldValue, $scope, $scopeId);
     }
 
     /**
